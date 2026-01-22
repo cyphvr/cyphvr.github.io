@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cypher Bot - Your Discord Companion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">CYPHER</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#commands">Commands</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#invite" class="btn-invite">Invite Now</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="glitch" data-text="CYPHER BOT">CYPHER BOT</h1>
+                <p class="hero-subtitle">Decode the Future of Discord</p>
+                <p class="hero-description">
+                    Advanced moderation, powerful utilities, and entertainment—all encrypted in one bot.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#invite" class="btn btn-primary">
+                        <span>Add to Discord</span>
+                        <span class="btn-icon">→</span>
+                    </a>
+                    <a href="#features" class="btn btn-secondary">
+                        <span>Explore Features</span>
+                    </a>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="10000">0</div>
+                        <div class="stat-label">Servers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="500000">0</div>
+                        <div class="stat-label">Users</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="99">0</div>
+                        <div class="stat-label">Uptime %</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="title-line"></span>
+                CORE FEATURES
+                <span class="title-line"></span>
+            </h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Advanced Moderation</h3>
+                    <p>Keep your server safe with auto-moderation, custom filters, and comprehensive logging systems.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3>Fun & Games</h3>
+                    <p>Engage your community with mini-games, trivia, economy system, and interactive entertainment.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎵</div>
+                    <h3>Music Player</h3>
+                    <p>High-quality music streaming with playlist support, filters, and 24/7 playback capability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Customizable</h3>
+                    <p>Tailor every aspect to fit your server with custom commands, welcome messages, and role management.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Analytics</h3>
+                    <p>Track server statistics, member activity, and growth metrics with beautiful visualizations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h3>Notifications</h3>
+                    <p>Get updates from YouTube, Twitch, Twitter, and more with custom notification systems.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="commands" class="commands">
+        <div class="container">
+            <h2 class="section-title">
+                <span class="title-line"></span>
+                POPULAR COMMANDS
+                <span class="title-line"></span>
+            </h2>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/ban</span>
+                        <span class="command-badge">Moderation</span>
+                    </div>
+                    <p class="command-desc">Ban a member from the server with optional reason and message cleanup.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/play</span>
+                        <span class="command-badge">Music</span>
+                    </div>
+                    <p class="command-desc">Play music from YouTube, Spotify, or SoundCloud with queue support.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/poll</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Create interactive polls with custom options and reaction-based voting.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/trivia</span>
+                        <span class="command-badge">Fun</span>
+                    </div>
+                    <p class="command-desc">Start a trivia game with multiple categories and difficulty levels.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/welcome</span>
+                        <span class="command-badge">Setup</span>
+                    </div>
+                    <p class="command-desc">Configure custom welcome messages and auto-role assignment for new members.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/stats</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">View detailed statistics about your server, members, and bot performance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Cypher</h2>
+                    <p>
+                        Cypher is a cutting-edge Discord bot designed to enhance your server experience with 
+                        powerful features and seamless performance. Built with modern technology and a focus 
+                        on reliability, Cypher serves thousands of servers worldwide.
+                    </p>
+                    <p>
+                        Our mission is to provide server owners with the tools they need to create thriving 
+                        communities. From robust moderation to engaging entertainment features, Cypher has 
+                        everything you need in one package.
+                    </p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <span class="check-icon">✓</span>
+                            <span>24/7 Online</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="check-icon">✓</span>
+                            <span>Regular Updates</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="check-icon">✓</span>
+                            <span>Active Support</span>
+                        </div>
+                        <div class="about-feature">
+                            <span class="check-icon">✓</span>
+                            <span>Free to Use</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="code-window">
+                        <div class="code-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <div class="code-content">
+                            <code>
+                                <span class="code-comment">// Initialize Cypher Bot</span><br>
+                                <span class="code-keyword">const</span> cypher = <span class="code-keyword">new</span> <span class="code-class">CypherBot</span>({<br>
+                                &nbsp;&nbsp;prefix: <span class="code-string">'/'</span>,<br>
+                                &nbsp;&nbsp;features: [<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'moderation'</span>,<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'music'</span>,<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'games'</span>,<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-string">'utilities'</span><br>
+                                &nbsp;&nbsp;]<br>
+                                });<br><br>
+                                <span class="code-comment">// Deploy commands</span><br>
+                                cypher.<span class="code-method">deploy</span>();
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="invite" class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Upgrade Your Server?</h2>
+                <p>Join thousands of communities using Cypher Bot today</p>
+                <a href="#" class="btn btn-large">
+                    <span>Add Cypher to Discord</span>
+                    <span class="btn-icon">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <span class="logo-icon">⚡</span>
+                        <span class="logo-text">CYPHER</span>
+                    </div>
+                    <p>Empowering Discord communities since 2024</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#commands">Commands</a></li>
+                        <li><a href="#invite">Invite Bot</a></li>
+                        <li><a href="#">Support Server</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Status Page</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#">Discord Server</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Vote for Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Cypher Bot. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
