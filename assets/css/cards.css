@@ -46,6 +46,120 @@
     margin-bottom: 0.9rem;
 }
 
+/* Reusable square icon badges for inline icons */
+.icon-badge {
+    object-fit: contain;
+    border-radius: 14px;
+    background: radial-gradient(circle at 30% 30%, rgba(45, 212, 255, 0.14), rgba(255, 59, 92, 0.12));
+    box-shadow: 0 10px 26px rgba(255, 59, 92, 0.2);
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.icon-badge--sm {
+    width: 28px;
+    height: 28px;
+    padding: 8px;
+}
+
+.icon-badge--md {
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+}
+
+.icon-badge--lg {
+    width: 56px;
+    height: 56px;
+    padding: 12px;
+}
+
+/* Shared interactive effects for icon badges and feature icons */
+.icon-badge,
+.feature-icon {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    animation: icon-glow 6s ease-in-out infinite;
+    will-change: transform, box-shadow;
+}
+
+.icon-badge:hover,
+.icon-badge:focus-visible,
+.feature-icon:hover,
+.feature-icon:focus-visible {
+    transform: translateY(-2px);
+    box-shadow:
+        0 18px 40px rgba(255, 59, 92, 0.35),
+        0 8px 22px rgba(45, 212, 255, 0.18);
+    filter: saturate(1.04) brightness(1.04);
+    outline: none;
+}
+
+/* Card-level hover scale for entire card containers */
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover,
+.card-hover:focus-within {
+    transform: translateY(-6px) scale(1.08);
+}
+
+@keyframes icon-glow {
+    0%, 100% {
+        box-shadow: 0 10px 26px rgba(255, 59, 92, 0.2);
+    }
+    50% {
+        box-shadow: 0 14px 32px rgba(255, 59, 92, 0.28);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .icon-badge,
+    .feature-icon {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Glossy sheen overlay wrapper */
+.icon-sheen {
+    position: relative;
+    display: inline-block;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.icon-sheen::after {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -60%;
+    width: 40%;
+    height: 140%;
+    background: linear-gradient(75deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.38) 50%, rgba(255,255,255,0) 100%);
+    transform: rotate(15deg);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: sheen-sweep 4s ease-in-out infinite;
+    opacity: 0.22;
+}
+
+.icon-sheen:hover::after,
+.icon-sheen:focus-visible::after {
+    animation-duration: 2s;
+    opacity: 0.38;
+}
+
+@keyframes sheen-sweep {
+    0%, 12% { left: -60%; }
+    50%     { left: 120%; }
+    100%    { left: 120%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .icon-sheen::after { animation: none; }
+}
+
 .feature-card h3 {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.2rem;
