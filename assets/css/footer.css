@@ -32,29 +32,61 @@
 .footer-section a {
     color: var(--text-gray);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-block;
     position: relative;
-    background: linear-gradient(120deg, rgba(150, 160, 180, 0.7), rgba(255, 255, 255, 1), rgba(255, 255, 255, 1), rgba(150, 160, 180, 0.7));
-    background-size: 350% 100%;
-    background-position: 0 0;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: footerGloss 4s linear infinite;
+    padding-bottom: 2px;
+}
+
+.footer-section a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), #ff3b5c);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 8px rgba(255, 59, 92, 0.6);
 }
 
 .footer-section a:hover {
-    animation: none !important;
-    background: none !important;
-    -webkit-background-clip: unset !important;
-    -webkit-text-fill-color: unset !important;
-    background-clip: unset !important;
-    color: var(--primary-color) !important;
+    color: #ff3b5c;
+    transform: translateX(3px);
+    text-shadow: 0 0 16px rgba(255, 59, 92, 0.5);
+}
+
+.footer-section a:hover::after {
+    width: 100%;
 }
 
 .footer-section p {
     color: var(--text-gray);
+}
+
+.binary-roll {
+    color: var(--primary-color);
+    letter-spacing: 0.08em;
+    display: inline-flex;
+    gap: 0.12em;
+}
+
+.binary-roll .binary-char {
+    display: inline-block;
+    min-width: 0.6em;
+    text-shadow: 0 0 10px rgba(45, 212, 255, 0.4);
+    transition: color 0.25s ease, text-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.binary-roll .binary-char.locked {
+    color: var(--primary-color);
+    text-shadow: 0 0 6px rgba(45, 212, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.binary-roll .binary-char.is-space {
+    min-width: 0.35em;
+    text-shadow: none;
 }
 
 .footer-bottom {

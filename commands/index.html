@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commands - Cypher Discord Bot</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="icon" type="image/png" href="images/cypher.png">
+    <link rel="icon" type="image/png" href="/images/cypher.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -39,125 +39,382 @@
         </div>
     </section>
 
-    <section class="commands">
+    <section class="commands" id="commands">
         <div class="container">
             <h2 class="section-title">
                 <span class="title-line"></span>
-                POPULAR COMMANDS
+                COMMANDS
                 <span class="title-line"></span>
             </h2>
+            <h3 id="moderation" style="color: #ff3b5c; margin-bottom: 30px; font-size: 20px;">🛡️ Moderation</h3>
             <div class="commands-grid">
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/avatar</span>
-                        <span class="command-badge">Utility</span>
+                        <span class="command-name">/kick</span>
+                        <span class="command-badge">Moderation</span>
                     </div>
-                    <p class="command-desc">Display the avatar of any user in high quality.</p>
-                </div>
-                <div class="command-card">
-                    <div class="command-header">
-                        <span class="command-name">/banner</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Show a user's profile banner in full resolution.</p>
-                </div>
-                <div class="command-card">
-                    <div class="command-header">
-                        <span class="command-name">/server info</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">Get comprehensive information about your Discord server.</p>
-                </div>
-                <div class="command-card">
-                    <div class="command-header">
-                        <span class="command-name">/google</span>
-                        <span class="command-badge">Search</span>
-                    </div>
-                    <p class="command-desc">Search Google and return results directly in Discord.</p>
+                    <p class="command-desc">Kick a member from the server.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
                         <span class="command-name">/ban</span>
                         <span class="command-badge">Moderation</span>
                     </div>
-                    <p class="command-desc">Ban a member from the server with optional reason and message cleanup.</p>
+                    <p class="command-desc">Ban a member from the server.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/snipe</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Retrieve the most recently deleted or edited message.</p>
-                </div>
-                <div class="command-card">
-                    <div class="command-header">
-                        <span class="command-name">/warn</span>
+                        <span class="command-name">/unban</span>
                         <span class="command-badge">Moderation</span>
                     </div>
-                    <p class="command-desc">Issue a warning to a user with automatic escalation features.</p>
+                    <p class="command-desc">Unban a user from the server.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
                         <span class="command-name">/mute</span>
                         <span class="command-badge">Moderation</span>
                     </div>
-                    <p class="command-desc">Mute a member for a specified duration or indefinitely.</p>
+                    <p class="command-desc">Mute a member in the server.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/kick</span>
+                        <span class="command-name">/unmute</span>
                         <span class="command-badge">Moderation</span>
                     </div>
-                    <p class="command-desc">Remove a user from the server with optional reason.</p>
+                    <p class="command-desc">Unmute a member in the server.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/purge</span>
+                        <span class="command-name">/clean</span>
                         <span class="command-badge">Moderation</span>
                     </div>
-                    <p class="command-desc">Delete multiple messages from a channel at once.</p>
+                    <p class="command-desc">Clean a specified number of messages.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/slowmode</span>
+                        <span class="command-name">/anti-raid</span>
                         <span class="command-badge">Moderation</span>
                     </div>
-                    <p class="command-desc">Set slowmode on a channel to prevent spam.</p>
+                    <p class="command-desc">Enable or disable anti-raid protection.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/stats</span>
-                        <span class="command-badge">Analytics</span>
+                        <span class="command-name">/perspective</span>
+                        <span class="command-badge">Moderation</span>
                     </div>
-                    <p class="command-desc">View detailed server statistics and member activity.</p>
+                    <p class="command-desc">Judge the toxicity of a prompt.</p>
                 </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/analyze</span>
+                        <span class="command-badge">Moderation</span>
+                    </div>
+                    <p class="command-desc">Analyze a word or sentence for toxicity.</p>
+                </div>
+            </div>
+
+            <h3 id="channel" style="color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">📺 Channel Management</h3>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/channel lock</span>
+                        <span class="command-badge">Channel</span>
+                    </div>
+                    <p class="command-desc">Lock a text channel.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/channel unlock</span>
+                        <span class="command-badge">Channel</span>
+                    </div>
+                    <p class="command-desc">Unlock a text channel.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/channel slowmode</span>
+                        <span class="command-badge">Channel</span>
+                    </div>
+                    <p class="command-desc">Set slowmode for the channel.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/channel server-lock</span>
+                        <span class="command-badge">Channel</span>
+                    </div>
+                    <p class="command-desc">Lock the entire server.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/channel lock-vc</span>
+                        <span class="command-badge">Channel</span>
+                    </div>
+                    <p class="command-desc">Lock a voice channel.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/channel vc-move</span>
+                        <span class="command-badge">Channel</span>
+                    </div>
+                    <p class="command-desc">Move members between voice channels.</p>
+                </div>
+            </div>
+
+            <h3 id="information" style="color: #ff3b5c; margin: 50px 0 30px 0; font-size: 20px;">ℹ️ User Information</h3>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/avatar</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">Get a user's avatar in high quality.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/banner</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">Get a user's profile banner.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/info</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">Get detailed information about a user.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/server info</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">Get comprehensive server information.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/server roles</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">View all server roles.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/server emojis</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">View all server emojis.</p>
+                </div>
+            </div>
+
+            <h3 id="utility" style="color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">🔧 Utility</h3>
+            <div class="commands-grid">
                 <div class="command-card">
                     <div class="command-header">
                         <span class="command-name">/ping</span>
                         <span class="command-badge">Utility</span>
                     </div>
-                    <p class="command-desc">Check the bot's latency and response time.</p>
+                    <p class="command-desc">Check bot latency and response time.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/help</span>
-                        <span class="command-badge">Info</span>
+                        <span class="command-name">/quote</span>
+                        <span class="command-badge">Utility</span>
                     </div>
-                    <p class="command-desc">Get a list of all available commands and their descriptions.</p>
+                    <p class="command-desc">Quote a message with custom styling.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/wikipedia</span>
+                        <span class="command-name">/inrole</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">View number of members in a role.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/snipe delete</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Snipe a deleted message.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/snipe edit</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Snipe an edited message.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/timestamp</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Generate timestamps in various formats.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/afk</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Set an AFK status with custom message.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/reminder add</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Set a reminder for later.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/emoji-info</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Get information about an emoji.</p>
+                </div>
+            </div>
+
+            <h3 id="search" style="color: #ff3b5c; margin: 50px 0 30px 0; font-size: 20px;">🔍 Search</h3>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/define</span>
                         <span class="command-badge">Search</span>
                     </div>
-                    <p class="command-desc">Search Wikipedia and get instant information.</p>
+                    <p class="command-desc">Get the definition of a word.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/joke</span>
-                        <span class="command-badge">Entertainment</span>
+                        <span class="command-name">/urban-define</span>
+                        <span class="command-badge">Search</span>
                     </div>
-                    <p class="command-desc">Get a random joke to lighten up the mood.</p>
+                    <p class="command-desc">Get Urban Dictionary definition.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/weather</span>
+                        <span class="command-badge">Search</span>
+                    </div>
+                    <p class="command-desc">Get weather information for a location.</p>
+                </div>
+            </div>
+
+            <h3 id="ai" style="color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">🤖 AI</h3>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/grok</span>
+                        <span class="command-badge">AI</span>
+                    </div>
+                    <p class="command-desc">Chat with Grok AI models.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/grokvision</span>
+                        <span class="command-badge">AI</span>
+                    </div>
+                    <p class="command-desc">Analyze images with Grok AI.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/grokimage</span>
+                        <span class="command-badge">AI</span>
+                    </div>
+                    <p class="command-desc">Generate images with Grok AI.</p>
+                </div>
+            </div>
+
+            <h3 id="member" style="color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">👤 Member</h3>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/member add-role</span>
+                        <span class="command-badge">Member</span>
+                    </div>
+                    <p class="command-desc">Add a role to a member.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/member remove-role</span>
+                        <span class="command-badge">Member</span>
+                    </div>
+                    <p class="command-desc">Remove a role from a member.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/member rename</span>
+                        <span class="command-badge">Member</span>
+                    </div>
+                    <p class="command-desc">Set a member's nickname.</p>
+                </div>
+            </div>
+
+            <h3 id="role" style="color: #ff3b5c; margin: 50px 0 30px 0; font-size: 20px;">🎚️ Role</h3>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/role humans</span>
+                        <span class="command-badge">Role</span>
+                    </div>
+                    <p class="command-desc">Add a role to all humans in the server.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/role kick</span>
+                        <span class="command-badge">Role</span>
+                    </div>
+                    <p class="command-desc">Kick all users within a specific role.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/prefix add</span>
+                        <span class="command-badge">Config</span>
+                    </div>
+                    <p class="command-desc">Add a custom prefix for this server.</p>
+                </div>
+            </div>
+
+            <h3 id="creative" style="color: #ff3b5c; margin: 50px 0 30px 0; font-size: 20px;">🎨 Creative & Fun</h3>
+            <div class="commands-grid">
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/embed create</span>
+                        <span class="command-badge">Creative</span>
+                    </div>
+                    <p class="command-desc">Create customizable embeds.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/tts voice</span>
+                        <span class="command-badge">Fun</span>
+                    </div>
+                    <p class="command-desc">Generate Text-to-Speech audio.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/tts convert</span>
+                        <span class="command-badge">Fun</span>
+                    </div>
+                    <p class="command-desc">Convert text to speech in any language.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/imagefx_1</span>
+                        <span class="command-badge">Fun</span>
+                    </div>
+                    <p class="command-desc">Apply effects to user avatars or images.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/steal</span>
+                        <span class="command-badge">Fun</span>
+                    </div>
+                    <p class="command-desc">Steal an emoji from another server.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/stats</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">View comprehensive bot statistics.</p>
                 </div>
             </div>
         </div>
@@ -170,31 +427,43 @@
                 COMMAND CATEGORIES
                 <span class="title-line"></span>
             </h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-                <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(45, 212, 255, 0.2); border-radius: 12px; padding: 25px; cursor: pointer; transition: all 0.3s;">
-                    <h3 style="color: #ff3b5c; margin-bottom: 10px; font-size: 18px;">ðŸ›¡ï¸ Moderation</h3>
-                    <p style="color: #b7c1d1;">Ban, kick, warn, mute and manage your server effectively.</p>
-                </div>
-                <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(45, 212, 255, 0.2); border-radius: 12px; padding: 25px; cursor: pointer; transition: all 0.3s;">
-                    <h3 style="color: #2dd4ff; margin-bottom: 10px; font-size: 18px;">ðŸ”§ Utility</h3>
-                    <p style="color: #b7c1d1;">Avatar viewing, message sniping, and useful helper commands.</p>
-                </div>
-                <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(45, 212, 255, 0.2); border-radius: 12px; padding: 25px; cursor: pointer; transition: all 0.3s;">
-                    <h3 style="color: #ff3b5c; margin-bottom: 10px; font-size: 18px;">ðŸ” Search</h3>
-                    <p style="color: #b7c1d1;">Google, Wikipedia, and information lookup commands.</p>
-                </div>
-                <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(45, 212, 255, 0.2); border-radius: 12px; padding: 25px; cursor: pointer; transition: all 0.3s;">
-                    <h3 style="color: #2dd4ff; margin-bottom: 10px; font-size: 18px;">ðŸ“Š Analytics</h3>
-                    <p style="color: #b7c1d1;">Track server stats, member activity, and growth metrics.</p>
-                </div>
-                <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(45, 212, 255, 0.2); border-radius: 12px; padding: 25px; cursor: pointer; transition: all 0.3s;">
-                    <h3 style="color: #ff3b5c; margin-bottom: 10px; font-size: 18px;">ðŸŽ® Entertainment</h3>
-                    <p style="color: #b7c1d1;">Jokes, games, and fun features for your community.</p>
-                </div>
-                <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(45, 212, 255, 0.2); border-radius: 12px; padding: 25px; cursor: pointer; transition: all 0.3s;">
-                    <h3 style="color: #2dd4ff; margin-bottom: 10px; font-size: 18px;">â„¹ï¸ Information</h3>
-                    <p style="color: #b7c1d1;">Get help, server info, user details, and more.</p>
-                </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+                <a href="#moderation" style="text-decoration: none;" class="category-card">
+                    <h3 style="color: #ff3b5c; margin-bottom: 8px; font-size: 18px;">🛡️ Moderation</h3>
+                    <p style="color: #b7c1d1;">Kick, ban, mute, anti-raid, and toxicity analysis.</p>
+                </a>
+                <a href="#channel" style="text-decoration: none;" class="category-card">
+                    <h3 style="color: #2dd4ff; margin-bottom: 8px; font-size: 18px;">📺 Channel</h3>
+                    <p style="color: #b7c1d1;">Lock/unlock channels, slowmode, voice channel management.</p>
+                </a>
+                <a href="#information" style="text-decoration: none;" class="category-card">
+                    <h3 style="color: #ff3b5c; margin-bottom: 8px; font-size: 18px;">ℹ️ Information</h3>
+                    <p style="color: #b7c1d1;">Avatar, banner, user info, server details, and more.</p>
+                </a>
+                <a href="#utility" style="text-decoration: none;" class="category-card">
+                    <h3 style="color: #2dd4ff; margin-bottom: 8px; font-size: 18px;">🔧 Utility</h3>
+                    <p style="color: #b7c1d1;">Snipe, quote, timestamp, AFK, reminders, and utilities.</p>
+                </a>
+                <a href="#search" style="text-decoration: none;" class="category-card">
+                    <h3 style="color: #ff3b5c; margin-bottom: 8px; font-size: 18px;">🔍 Search</h3>
+                    <p style="color: #b7c1d1;">Dictionary, Urban, and weather lookups.</p>
+                </a>
+                <a href="#ai" style="text-decoration: none;" class="category-card">
+                    <h3 style="color: #2dd4ff; margin-bottom: 8px; font-size: 18px;">🤖 AI</h3>
+                    <p style="color: #b7c1d1;">Grok chat, vision, and image generation.</p>
+                </a>
+                <a href="#member" style="text-decoration: none;" class="category-card">
+                    <h3 style="color: #ff3b5c; margin-bottom: 8px; font-size: 18px;">👤 Member</h3>
+                    <p style="color: #b7c1d1;">Add/remove roles and rename members.</p>
+                </a>
+                <a href="#role" style="text-decoration: none;" class="category-card">
+                    <h3 style="color: #2dd4ff; margin-bottom: 8px; font-size: 18px;">🎚️ Role</h3>
+                    <p style="color: #b7c1d1;">Bulk role actions and prefixes.</p>
+                </a>
+                <a href="#creative" style="text-decoration: none;" class="category-card">
+                    <h3 style="color: #ff3b5c; margin-bottom: 8px; font-size: 18px;">🎨 Creative</h3>
+                    <p style="color: #b7c1d1;">Embeds, TTS, image effects, emoji stealing.</p>
+                </a>
             </div>
         </div>
     </section>
@@ -206,7 +475,7 @@
                 <p>Add Cypher to your server and start managing it like a pro</p>
                 <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="btn btn-large btn-primary">
                     <span>Invite Cypher Now</span>
-                    <span class="btn-icon">â†’</span>
+                    <span class="btn-icon">→</span>
                 </a>
             </div>
         </div>
@@ -225,7 +494,7 @@
                     <p>Empowering Discord communities since 2023.</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Resources</h4>
+                    <h4 class="binary-roll">Resources</h4>
                     <ul>
                         <li><a href="#">Documentation</a></li>
                         <li><a href="/commands">Commands</a></li>
@@ -233,7 +502,7 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Community</h4>
+                    <h4 class="binary-roll">Community</h4>
                     <ul>
                         <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
                         <li><a href="https://top.gg/bot/1121314550969532476">Vote For Us</a></li>
@@ -241,7 +510,7 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Legal</h4>
+                    <h4 class="binary-roll">Legal</h4>
                     <ul>
                         <li><a href="/tos">Terms of Service</a></li>
                         <li><a href="/privacy">Privacy Policy</a></li>
@@ -249,7 +518,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Cypher. Fast at scale. Clear in every command.</p>
+                <p>&copy; 2026 Cypher. Built for communities. Designed for excellence.</p>
             </div>
         </div>
     </footer>

@@ -12,6 +12,12 @@
     gap: 1rem;
 }
 
+@media (min-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
 .feature-card {
     background: linear-gradient(145deg, rgba(255, 59, 92, 0.12), rgba(18, 18, 18, 0.95));
     padding: 1.5rem;
@@ -75,8 +81,18 @@
 }
 
 .command-card:hover {
-    background: rgba(255, 59, 92, 0.08);
-    transform: translateX(10px);
+    background: linear-gradient(145deg, rgba(255, 59, 92, 0.14), rgba(45, 212, 255, 0.08));
+    transform: translateY(-8px) scale(1.02);
+    border-left-width: 5px;
+    border-left-color: #ff3b5c;
+    box-shadow: 
+        0 20px 40px rgba(255, 59, 92, 0.3),
+        0 8px 16px rgba(45, 212, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.commands h3 {
+    scroll-margin-top: 120px;
 }
 
 .command-header {
@@ -104,4 +120,22 @@
 
 .command-desc {
     color: var(--text-gray);
+}
+
+/* Command Category Cards */
+.category-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(45, 212, 255, 0.2);
+    border-radius: 12px;
+    padding: 25px;
+    display: block;
+    color: inherit;
+    cursor: pointer;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(45, 212, 255, 0.45);
+    box-shadow: 0 12px 26px rgba(45, 212, 255, 0.15);
 }
