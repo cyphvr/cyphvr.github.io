@@ -379,18 +379,18 @@
 
     <script>
         const STATUS_ENDPOINT = 'http://cypher.hype.surf:10001/';
+        const PROXY_ENDPOINT = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(STATUS_ENDPOINT);
         const refreshInterval = 30;
         let secondsRemaining = refreshInterval;
 
-        // Check if bot is running by pinging the health check port
+        // Check if bot is running by pinging the health check port via proxy
         async function checkBotStatus() {
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 5000);
                 
-                const response = await fetch(STATUS_ENDPOINT, {
+                const response = await fetch(PROXY_ENDPOINT, {
                     method: 'GET',
-                    mode: 'cors',
                     cache: 'no-store',
                     signal: controller.signal
                 });
