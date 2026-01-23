@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found - Cypher Discord Bot</title>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="icon" type="image/png" href="/images/cypher.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        // GitHub Pages redirect fix
+        (function() {
+            var redirect = sessionStorage.redirect;
+            delete sessionStorage.redirect;
+            if (redirect && redirect != location.href) {
+                history.replace(redirect);
+            }
+        }());
+    </script>
+</head>
+<body>
+    <div class="aurora"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-logo">
+                <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                    <img src="images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                    <span class="logo-text">Cypher</span>
+                </a>
+            </div>
+            <div class="navbar-menu">
+                <a href="/features" class="navbar-link">Features</a>
+                <a href="/commands" class="navbar-link">Commands</a>
+                <a href="/about" class="navbar-link">About</a>
+                <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="navbar-invite">Invite Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <section style="padding: 150px 0;">
+        <div class="container">
+            <div style="text-align: center;">
+                <h1 class="glitch" data-text="404" style="font-size: 100px; margin-bottom: 20px;">404</h1>
+                <h2 style="font-size: 36px; color: #2dd4ff; margin-bottom: 20px;">Page Not Found</h2>
+                <p style="color: #b7c1d1; font-size: 18px; margin-bottom: 40px;">
+                    Oops! The page you're looking for doesn't exist or has been moved.
+                </p>
+                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                    <a href="/" class="btn btn-primary" style="text-decoration: none;">
+                        <span>Go to Home</span>
+                    </a>
+                    <a href="/features" class="btn btn-secondary" style="text-decoration: none;">
+                        <span>Explore Features</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <button class="back-to-top" id="backToTop"></button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <img src="images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                        <span class="logo-text">Cypher</span>
+                    </div>
+                    <p>Empowering Discord communities since 2023.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="/commands">Commands</a></li>
+                        <li><a href="/features">Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
+                        <li><a href="https://top.gg/bot/1121314550969532476">Vote For Us</a></li>
+                        <li><a href="/status">Status Page</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="/tos">Terms of Service</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Cypher. Fast at scale. Clear in every command.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status - Cypher Discord Bot</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" type="image/png" href="images/cypher.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .status-container {
+            max-width: 900px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        .status-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #2dd4ff;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-summary {
+            background: rgba(255, 59, 92, 0.1);
+            border: 1px solid rgba(45, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .uptime-text {
+            font-size: 18px;
+            color: #2dd4ff;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .service-status {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(45, 212, 255, 0.2);
+        }
+
+        .service-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .service-row:last-child {
+            border-bottom: none;
+        }
+
+        .service-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .service-response {
+            color: #b7c1d1;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-operational {
+            background: rgba(45, 212, 255, 0.2);
+            color: #2dd4ff;
+        }
+
+        .badge-degraded {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .badge-down {
+            background: rgba(255, 59, 92, 0.2);
+            color: #ff3b5c;
+        }
+
+        .incident-list {
+            margin-top: 40px;
+        }
+
+        .incident {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(45, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .incident-title {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .incident-time {
+            color: #b7c1d1;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .incident-status {
+            color: #2dd4ff;
+            font-size: 14px;
+        }
+
+        .no-incidents {
+            text-align: center;
+            padding: 30px;
+            color: #2dd4ff;
+            font-size: 16px;
+        }
+
+        .last-updated {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #b7c1d1;
+            font-size: 14px;
+        }
+
+        .status-history {
+            margin-top: 50px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(45, 212, 255, 0.15);
+        }
+
+        .history-title {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .history-bar {
+            display: flex;
+            height: 30px;
+            border-radius: 6px;
+            overflow: hidden;
+            gap: 2px;
+            margin-bottom: 10px;
+        }
+
+        .history-item {
+            flex: 1;
+            background: #2dd4ff;
+            position: relative;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .history-item:hover {
+            opacity: 0.8;
+        }
+
+        .history-item.degraded {
+            background: #ffc107;
+        }
+
+        .history-item.down {
+            background: #ff3b5c;
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-logo">
+                <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                    <img src="images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                    <span class="logo-text">Cypher</span>
+                </a>
+            </div>
+            <div class="navbar-menu">
+                <a href="/features" class="navbar-link">Features</a>
+                <a href="/commands" class="navbar-link">Commands</a>
+                <a href="/about" class="navbar-link">About</a>
+                <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="navbar-invite">Invite Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="status-container">
+        <div class="status-header">
+            <h1 class="glitch" data-text="Status">Status</h1>
+            <p style="margin-top: 10px; color: #b7c1d1;">Cypher System Status and Availability</p>
+        </div>
+
+        <div class="status-summary">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <span class="status-indicator"></span>
+                <span style="font-size: 18px; font-weight: 600;">All Systems Operational</span>
+            </div>
+            <div class="uptime-text">99.97% Uptime (Last 30 days)</div>
+            <p style="color: #b7c1d1; margin-top: 10px;">All services are running normally</p>
+        </div>
+
+        <h2 style="color: #ffffff; margin-bottom: 20px; font-size: 20px;">Service Status</h2>
+        <div class="service-status">
+            <div class="service-row">
+                <div>
+                    <div class="service-name">Bot API</div>
+                    <div class="service-response">API response time: 45ms</div>
+                </div>
+                <span class="status-badge badge-operational">
+                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
+                    Operational
+                </span>
+            </div>
+            <div class="service-row">
+                <div>
+                    <div class="service-name">Bot Gateway</div>
+                    <div class="service-response">Connected and stable</div>
+                </div>
+                <span class="status-badge badge-operational">
+                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
+                    Operational
+                </span>
+            </div>
+            <div class="service-row">
+                <div>
+                    <div class="service-name">Database</div>
+                    <div class="service-response">Query time: 12ms</div>
+                </div>
+                <span class="status-badge badge-operational">
+                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
+                    Operational
+                </span>
+            </div>
+            <div class="service-row">
+                <div>
+                    <div class="service-name">Cache Server</div>
+                    <div class="service-response">Cache hit rate: 98.2%</div>
+                </div>
+                <span class="status-badge badge-operational">
+                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
+                    Operational
+                </span>
+            </div>
+            <div class="service-row">
+                <div>
+                    <div class="service-name">Web Portal</div>
+                    <div class="service-response">Response time: 38ms</div>
+                </div>
+                <span class="status-badge badge-operational">
+                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
+                    Operational
+                </span>
+            </div>
+        </div>
+
+        <h2 style="color: #ffffff; margin-bottom: 20px; font-size: 20px;">Recent Incidents</h2>
+        <div class="incident-list">
+            <div class="no-incidents">
+                ✓ No incidents in the last 30 days. Great work!
+            </div>
+        </div>
+
+        <div class="status-history">
+            <div class="history-title">30-Day Uptime History</div>
+            <div class="history-bar">
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+                <div class="history-item"></div>
+            </div>
+            <p style="color: #b7c1d1; font-size: 14px; text-align: center;">Green = Operational | Yellow = Degraded | Red = Down</p>
+        </div>
+
+        <div class="last-updated">
+            Last updated: <span id="lastUpdated">Just now</span> | Refresh in <span id="refreshIn">30</span>s
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop"></button>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <img src="images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                        <span class="logo-text">Cypher</span>
+                    </div>
+                    <p>Empowering Discord communities since 2023.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="/commands">Commands</a></li>
+                        <li><a href="/features">Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
+                        <li><a href="https://top.gg/bot/1121314550969532476">Vote For Us</a></li>
+                        <li><a href="/status">Status Page</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="/tos">Terms of Service</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Cypher. Fast at scale. Clear in every command.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Update last updated time
+        const refreshInterval = 30;
+        let secondsRemaining = refreshInterval;
+
+        setInterval(() => {
+            secondsRemaining--;
+            if (secondsRemaining <= 0) {
+                secondsRemaining = refreshInterval;
+                document.getElementById('lastUpdated').textContent = 'Just now';
+            } else {
+                document.getElementById('refreshIn').textContent = secondsRemaining;
+            }
+        }, 1000);
+    </script>
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
