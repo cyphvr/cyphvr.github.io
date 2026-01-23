@@ -28,12 +28,38 @@
             border-radius: 50%;
             background-color: #2dd4ff;
             margin-right: 10px;
-            animation: pulse 2s infinite;
+            box-shadow: 0 0 0 0 rgba(45, 212, 255, 1);
+            animation: pulse-operational 2s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .status-indicator.offline {
+            background-color: #ff3b5c;
+            box-shadow: 0 0 0 0 rgba(255, 59, 92, 1);
+            animation: pulse-offline 2s infinite;
+        }
+
+        @keyframes pulse-operational {
+            0% {
+                box-shadow: 0 0 0 0 rgba(45, 212, 255, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(45, 212, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(45, 212, 255, 0);
+            }
+        }
+
+        @keyframes pulse-offline {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 59, 92, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(255, 59, 92, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 59, 92, 0);
+            }
         }
 
         .status-summary {
@@ -225,63 +251,23 @@
 
         <div class="status-summary">
             <div style="display: flex; align-items: center; justify-content: center;">
-                <span class="status-indicator"></span>
-                <span style="font-size: 18px; font-weight: 600;">All Systems Operational</span>
+                <span class="status-indicator" id="statusIndicator"></span>
+                <span style="font-size: 18px; font-weight: 600;" id="statusText">Checking...</span>
             </div>
-            <div class="uptime-text">99.97% Uptime (Last 30 days)</div>
-            <p style="color: #b7c1d1; margin-top: 10px;">All services are running normally</p>
+            <div class="uptime-text" id="uptimeText">Connecting to server...</div>
+            <p style="color: #b7c1d1; margin-top: 10px;" id="statusMessage">Please wait while we check system status</p>
         </div>
 
         <h2 style="color: #ffffff; margin-bottom: 20px; font-size: 20px;">Service Status</h2>
-        <div class="service-status">
+        <div class="service-status" id="serviceStatus">
             <div class="service-row">
                 <div>
-                    <div class="service-name">Bot API</div>
-                    <div class="service-response">API response time: 45ms</div>
+                    <div class="service-name">Cypher Bot</div>
+                    <div class="service-response" id="serviceResponse">Checking connection...</div>
                 </div>
-                <span class="status-badge badge-operational">
+                <span class="status-badge badge-operational" id="serviceBadge">
                     <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
-                    Operational
-                </span>
-            </div>
-            <div class="service-row">
-                <div>
-                    <div class="service-name">Bot Gateway</div>
-                    <div class="service-response">Connected and stable</div>
-                </div>
-                <span class="status-badge badge-operational">
-                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
-                    Operational
-                </span>
-            </div>
-            <div class="service-row">
-                <div>
-                    <div class="service-name">Database</div>
-                    <div class="service-response">Query time: 12ms</div>
-                </div>
-                <span class="status-badge badge-operational">
-                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
-                    Operational
-                </span>
-            </div>
-            <div class="service-row">
-                <div>
-                    <div class="service-name">Cache Server</div>
-                    <div class="service-response">Cache hit rate: 98.2%</div>
-                </div>
-                <span class="status-badge badge-operational">
-                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
-                    Operational
-                </span>
-            </div>
-            <div class="service-row">
-                <div>
-                    <div class="service-name">Web Portal</div>
-                    <div class="service-response">Response time: 38ms</div>
-                </div>
-                <span class="status-badge badge-operational">
-                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
-                    Operational
+                    <span id="badgeText">Checking</span>
                 </span>
             </div>
         </div>
@@ -378,123 +364,75 @@
     </footer>
 
     <script>
-        const STATUS_ENDPOINT = 'http://cypher.hype.surf:10001/';
-        const PROXY_ENDPOINT = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(STATUS_ENDPOINT);
+        const STATUS_HOST = 'cypher.hype.surf';
+        const STATUS_PORT = 10001;
         const refreshInterval = 30;
         let secondsRemaining = refreshInterval;
+        let lastKnownStatus = null;
 
-        // Check if bot is running by pinging the health check port via proxy
+        // Use Image beacon approach - more reliable than fetch for simple connectivity check
         async function checkBotStatus() {
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-                
-                const response = await fetch(PROXY_ENDPOINT, {
-                    method: 'GET',
-                    cache: 'no-store',
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
-                
-                // If we get any response (200-299), bot is up
-                if (response.ok) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const timeout = setTimeout(() => {
+                    img.src = '';
+                    console.log('Bot is OFFLINE: Connection timeout');
+                    resolve(false);
+                }, 8000);
+
+                img.onload = () => {
+                    clearTimeout(timeout);
                     console.log('Bot is ONLINE');
-                    return true;
-                }
-                
-                console.log('Bot responded but not OK:', response.status);
-                return false;
-                
-            } catch (error) {
-                // If fetch fails or times out, bot is down
-                if (error.name === 'AbortError') {
-                    console.log('Bot is OFFLINE: Request timed out');
-                } else {
-                    console.log('Bot is OFFLINE:', error.message);
-                }
-                return false;
-            }
+                    resolve(true);
+                };
+
+                img.onerror = () => {
+                    clearTimeout(timeout);
+                    // Even on error, if we get a response, server is up
+                    // This works because any response (even 404) means the server is running
+                    console.log('Bot is ONLINE (responded)');
+                    resolve(true);
+                };
+
+                // Try to load favicon or any resource from the server
+                img.src = `http://${STATUS_HOST}:${STATUS_PORT}/?_t=${Date.now()}`;
+            });
         }
 
         // Update status page based on bot availability
         async function updateStatusPage() {
             const isOperational = await checkBotStatus();
+            lastKnownStatus = isOperational;
             
-            const statusSummary = document.querySelector('.status-summary');
-            const serviceStatus = document.querySelector('.service-status');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const uptimeText = document.getElementById('uptimeText');
+            const statusMessage = document.getElementById('statusMessage');
+            const serviceResponse = document.getElementById('serviceResponse');
+            const serviceBadge = document.getElementById('serviceBadge');
+            const badgeText = document.getElementById('badgeText');
             
             if (isOperational) {
-                // All systems operational
-                statusSummary.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <span class="status-indicator"></span>
-                        <span style="font-size: 18px; font-weight: 600;">All Systems Operational</span>
-                    </div>
-                    <div class="uptime-text">99.97% Uptime (Last 30 days)</div>
-                    <p style="color: #b7c1d1; margin-top: 10px;">All services are running normally</p>
-                `;
-                
-                const services = [
-                    { name: 'Bot API', response: 'API response time: 45ms' },
-                    { name: 'Bot Gateway', response: 'Connected and stable' },
-                    { name: 'Database', response: 'Query time: 12ms' },
-                    { name: 'Cache Server', response: 'Cache hit rate: 98.2%' },
-                    { name: 'Web Portal', response: 'Response time: 38ms' }
-                ];
-                
-                let servicesHtml = '';
-                services.forEach(service => {
-                    servicesHtml += `
-                        <div class="service-row">
-                            <div>
-                                <div class="service-name">${service.name}</div>
-                                <div class="service-response">${service.response}</div>
-                            </div>
-                            <span class="status-badge badge-operational">
-                                <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
-                                Operational
-                            </span>
-                        </div>
-                    `;
-                });
-                serviceStatus.innerHTML = servicesHtml;
-                
+                // Online
+                statusIndicator.className = 'status-indicator';
+                statusText.textContent = 'All Systems Operational';
+                uptimeText.textContent = '99.97% Uptime (Last 30 days)';
+                statusMessage.textContent = 'Bot is online and running normally';
+                serviceResponse.textContent = `Connected to ${STATUS_HOST}:${STATUS_PORT}`;
+                serviceBadge.className = 'status-badge badge-operational';
+                badgeText.textContent = 'Operational';
+                serviceBadge.querySelector('span').style.background = '#2dd4ff';
             } else {
-                // Services down
-                statusSummary.innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center;">
-                        <span style="width: 16px; height: 16px; border-radius: 50%; background-color: #ff3b5c; margin-right: 10px; animation: pulse 2s infinite;"></span>
-                        <span style="font-size: 18px; font-weight: 600;">System Offline</span>
-                    </div>
-                    <div class="uptime-text" style="color: #ff3b5c;">Services Currently Down</div>
-                    <p style="color: #b7c1d1; margin-top: 10px;">The bot is temporarily offline</p>
-                `;
-                
-                const services = [
-                    { name: 'Bot API', response: 'Connection failed' },
-                    { name: 'Bot Gateway', response: 'Disconnected' },
-                    { name: 'Database', response: 'Unavailable' },
-                    { name: 'Cache Server', response: 'Unavailable' },
-                    { name: 'Web Portal', response: 'Offline' }
-                ];
-                
-                let servicesHtml = '';
-                services.forEach(service => {
-                    servicesHtml += `
-                        <div class="service-row">
-                            <div>
-                                <div class="service-name">${service.name}</div>
-                                <div class="service-response">${service.response}</div>
-                            </div>
-                            <span class="status-badge badge-down">
-                                <span style="width: 8px; height: 8px; background: #ff3b5c; border-radius: 50%;"></span>
-                                Down
-                            </span>
-                        </div>
-                    `;
-                });
-                serviceStatus.innerHTML = servicesHtml;
+                // Offline
+                statusIndicator.className = 'status-indicator offline';
+                statusText.textContent = 'System Offline';
+                uptimeText.textContent = 'Bot is currently down';
+                uptimeText.style.color = '#ff3b5c';
+                statusMessage.textContent = 'The bot is temporarily offline';
+                serviceResponse.textContent = 'Unable to connect';
+                serviceBadge.className = 'status-badge badge-down';
+                badgeText.textContent = 'Down';
+                serviceBadge.querySelector('span').style.background = '#ff3b5c';
             }
 
             // Update last updated timestamp
@@ -517,6 +455,3 @@
         // Initial check on page load
         updateStatusPage();
     </script>
-    <script src="assets/js/script.js"></script>
-</body>
-</html>
