@@ -12,72 +12,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Fetch server count from static JSON updated by GitHub Actions
-async function fetchServerCount() {
-    try {
-        const response = await fetch('/assets/data/bot-stats.json', { cache: 'no-store' });
-        if (response.ok) {
-            const data = await response.json();
-            const serverCount = document.getElementById('servers-count');
-            if (serverCount && typeof data.guildCount === 'number') {
-                serverCount.textContent = data.guildCount.toLocaleString();
-            }
-        }
-    } catch (error) {
-        console.error('Failed to fetch server count:', error);
-        const serverCount = document.getElementById('servers-count');
-        if (serverCount) {
-            serverCount.textContent = '0';
-        }
-    }
-}
-
-// Fetch server count when page loads
-window.addEventListener('load', fetchServerCount);
-
-// Animated counter for stats
-function animateCounter(element, target) {
-    let current = 0;
-    const increment = target / 100;
-    const duration = 2000;
-    const stepTime = duration / 100;
-
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target.toLocaleString();
-            clearInterval(timer);
-        } else {
-            element.textContent = Math.floor(current).toLocaleString();
-        }
-    }, stepTime);
-}
-
-// Intersection Observer for counter animation
-const observerOptions = {
-    threshold: 0.5,
-    rootMargin: '0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting && !entry.target.classList.contains('observed')) {
-            entry.target.classList.add('observed');
-            const statNumbers = entry.target.querySelectorAll('.stat-number');
-            statNumbers.forEach(stat => {
-                const target = parseInt(stat.getAttribute('data-target'));
-                if (!isNaN(target)) {
-                    animateCounter(stat, target);
-                }
-            });
-        }
-    });
-}, observerOptions);
-
-const statsSection = document.querySelector('.stats');
-if (statsSection) {
-    observer.observe(statsSection);
-}
+// Stats removed; no server count fetch or counter animations
 
 // Navbar scroll effect
 const navbar = document.querySelector('.navbar');

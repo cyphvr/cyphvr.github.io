@@ -24,6 +24,29 @@ body {
     line-height: 1.6;
 }
 
+.aurora {
+    position: fixed;
+    inset: -5% -5% auto -5%;
+    height: 90vh;
+    background: radial-gradient(circle at 20% 20%, rgba(45, 212, 255, 0.18), transparent 35%),
+                radial-gradient(circle at 80% 10%, rgba(255, 59, 92, 0.16), transparent 45%),
+                radial-gradient(circle at 60% 75%, rgba(255, 59, 92, 0.24), transparent 50%);
+    filter: blur(48px) saturate(120%);
+    opacity: 0.95;
+    pointer-events: none;
+    animation: auroraFloat 16s ease-in-out infinite alternate;
+    z-index: 0;
+}
+
+@keyframes auroraFloat {
+    from {
+        transform: translate3d(-20px, 0, 0) scale(1.02);
+    }
+    to {
+        transform: translate3d(20px, -10px, 0) scale(1.07);
+    }
+}
+
 /* Animated Background Stars */
 @keyframes animStar {
     from {
@@ -372,8 +395,16 @@ body {
 
 /* Sections */
 section {
-    padding: 6rem 0;
+    padding: 5rem 0;
     position: relative;
+}
+
+.features {
+    padding-bottom: 3.5rem;
+}
+
+.commands {
+    padding-top: 2.5rem;
 }
 
 .section-title {
@@ -401,60 +432,50 @@ section {
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
 }
 
-/* Feature cards tilt red with subtle cyan accents */
 .feature-card {
-    background: rgba(255, 107, 107, 0.15);
+    background: linear-gradient(145deg, rgba(255, 59, 92, 0.12), rgba(18, 18, 18, 0.95));
     padding: 1.5rem;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 59, 92, 0.3);
-    transition: all 0.3s ease;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 59, 92, 0.28);
+    transition: all 0.25s ease;
     position: relative;
     overflow: hidden;
-    max-width: 280px;
-    margin: 0 auto;
-}
-
-.feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 59, 92, 0.14), transparent);
-    transition: left 0.5s;
-}
-
-.feature-card:hover::before {
-    left: 100%;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
 }
 
 .feature-card:hover {
-    transform: translateY(-10px);
-    border-color: var(--primary-color);
-    box-shadow: 0 10px 40px rgba(255, 59, 92, 0.28);
+    transform: translateY(-8px);
+    border-color: rgba(255, 59, 92, 0.5);
+    box-shadow: 0 16px 36px rgba(255, 59, 92, 0.25);
 }
 
 .feature-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+    border-radius: 14px;
+    padding: 10px;
+    background: radial-gradient(circle at 30% 30%, rgba(45, 212, 255, 0.14), rgba(255, 59, 92, 0.12));
+    box-shadow: 0 10px 26px rgba(255, 59, 92, 0.2);
+    margin-bottom: 0.9rem;
 }
 
 .feature-card h3 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    letter-spacing: 0.01em;
 }
 
 .feature-card p {
     color: var(--text-gray);
-    line-height: 1.8;
-    font-size: 0.95rem;
+    line-height: 1.6;
+    font-size: 0.94rem;
 }
 
 /* Commands */
@@ -633,8 +654,11 @@ section {
 .footer-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
+    gap: 1rem 1.25rem;
     margin-bottom: 2rem;
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .footer-section h4 {
