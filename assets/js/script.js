@@ -54,22 +54,14 @@ if (statsSection) {
     observer.observe(statsSection);
 }
 
-// Parallax effect for hero section
+// Navbar scroll effect
+const navbar = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero');
-    if (hero) {
-        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-    }
-});
-
-// Add active class to navbar on scroll
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.background = 'rgba(10, 14, 39, 0.95)';
+    if (!navbar) return;
+    if (window.scrollY > 30) {
+        navbar.classList.add('scrolled');
     } else {
-        navbar.style.background = 'rgba(10, 14, 39, 0.8)';
+        navbar.classList.remove('scrolled');
     }
 });
 
@@ -152,6 +144,24 @@ if (subtitle) {
     setTimeout(typeWriter, 1000);
 }
 
+// Back to Top Button
+const backToTopButton = document.getElementById('backToTop');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTopButton.classList.add('show');
+    } else {
+        backToTopButton.classList.remove('show');
+    }
+});
+
+backToTopButton.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
 // Button click effects
 document.querySelectorAll('.btn').forEach(button => {
     button.addEventListener('click', function(e) {
@@ -215,5 +225,5 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-console.log('%c🔥 Cypher Bot Website 🔥', 'font-size: 20px; font-weight: bold; color: #00f7ff;');
-console.log('%cLooking for easter eggs? Try the Konami code! ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA', 'color: #ff00f7;');
+console.log('%c🔥 Cypher Bot Website 🔥', 'font-size: 20px; font-weight: bold; color: #ff3b5c;');
+console.log('%cLooking for easter eggs? Try the Konami code! ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA', 'color: #2dd4ff;');

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cypher Bot - Your Discord Companion</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Cypher Discord Bot</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" type="image/png" href="images/cypher.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -16,23 +17,23 @@
 
     <nav class="navbar">
         <div class="container">
-            <div class="logo">
-                <span class="logo-icon">⚡</span>
-                <span class="logo-text">CYPHER</span>
+            <div class="navbar-logo">
+                <img src="images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                <span class="logo-text">Cypher</span>
             </div>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#commands">Commands</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#invite" class="btn-invite">Invite Now</a></li>
-            </ul>
+            <div class="navbar-menu">
+                <a href="#features" class="navbar-link">Features</a>
+                <a href="#commands" class="navbar-link">Commands</a>
+                <a href="#about" class="navbar-link">About</a>
+                <a href="#invite" class="navbar-invite">Invite Now</a>
+            </div>
         </div>
     </nav>
 
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1 class="glitch" data-text="CYPHER BOT">CYPHER BOT</h1>
+                <h1 class="glitch" data-text="Cypher">Cypher</h1>
                 <p class="hero-subtitle">Decode the Future of Discord</p>
                 <p class="hero-description">
                     Advanced moderation, powerful utilities, and entertainment—all encrypted in one bot.
@@ -137,13 +138,6 @@
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/trivia</span>
-                        <span class="command-badge">Fun</span>
-                    </div>
-                    <p class="command-desc">Start a trivia game with multiple categories and difficulty levels.</p>
-                </div>
-                <div class="command-card">
-                    <div class="command-header">
                         <span class="command-name">/welcome</span>
                         <span class="command-badge">Setup</span>
                     </div>
@@ -226,25 +220,27 @@
     <section id="invite" class="cta">
         <div class="container">
             <div class="cta-content">
-                <h2>Ready to Upgrade Your Server?</h2>
-                <p>Join thousands of communities using Cypher Bot today</p>
-                <a href="#" class="btn btn-large">
-                    <span>Add Cypher to Discord</span>
+                <h2>Ready to Elevate Your Discord Experience?</h2>
+                <p>Transform your server with Cypher's powerful features</p>
+                <a href="#" class="btn btn-large btn-primary">
+                    <span>✨ Invite Cypher Now</span>
                     <span class="btn-icon">→</span>
                 </a>
             </div>
         </div>
     </section>
 
+    <button class="back-to-top" id="backToTop"></button>
+
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="logo">
-                        <span class="logo-icon">⚡</span>
-                        <span class="logo-text">CYPHER</span>
+                        <img src="images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                        <span class="logo-text">Cypher</span>
                     </div>
-                    <p>Empowering Discord communities since 2024</p>
+                    <p>Empowering Discord communities since 2023</p>
                 </div>
                 <div class="footer-section">
                     <h4>Quick Links</h4>
@@ -269,7 +265,6 @@
                     <ul>
                         <li><a href="#">Discord Server</a></li>
                         <li><a href="#">GitHub</a></li>
-                        <li><a href="#">Twitter</a></li>
                         <li><a href="#">Vote for Us</a></li>
                     </ul>
                 </div>
@@ -280,6 +275,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
