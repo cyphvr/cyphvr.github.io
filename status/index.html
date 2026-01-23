@@ -14,6 +14,8 @@
             max-width: 900px;
             margin: 80px auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 10;
         }
 
         .status-header {
@@ -73,7 +75,7 @@
 
         .uptime-text {
             font-size: 18px;
-            color: #2dd4ff;
+            color: #2dd4ff !important;
             font-weight: 600;
             margin: 10px 0;
         }
@@ -100,11 +102,11 @@
 
         .service-name {
             font-weight: 600;
-            color: #ffffff;
+            color: #ffffff !important;
         }
 
         .service-response {
-            color: #b7c1d1;
+            color: #b7c1d1 !important;
             font-size: 14px;
         }
 
@@ -146,13 +148,13 @@
         }
 
         .incident-title {
-            color: #ffffff;
+            color: #ffffff !important;
             font-weight: 600;
             margin-bottom: 8px;
         }
 
         .incident-time {
-            color: #b7c1d1;
+            color: #b7c1d1 !important;
             font-size: 14px;
             margin-bottom: 10px;
         }
@@ -165,7 +167,7 @@
         .no-incidents {
             text-align: center;
             padding: 30px;
-            color: #2dd4ff;
+            color: #2dd4ff !important;
             font-size: 16px;
         }
 
@@ -174,7 +176,7 @@
             margin-top: 40px;
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #b7c1d1;
+            color: #b7c1d1 !important;
             font-size: 14px;
         }
 
@@ -458,4 +460,5 @@
 
         // Initial check on page load
         updateStatusPage();
-    </script>
+    </script></body>
+</html>
