@@ -385,18 +385,30 @@
         // Check if bot is running by pinging the health check port
         async function checkBotStatus() {
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                
                 const response = await fetch(STATUS_ENDPOINT, {
                     method: 'GET',
                     mode: 'cors',
-                    timeout: 5000
+                    cache: 'no-store',
+                    signal: controller.signal
                 });
                 
-                // If we get a response, bot is up
-                return response.ok;
+                clearTimeout(timeoutId);
+                
+                // If we get any response (200-299), bot is up
+                if (response.ok) {
+                    console.log('Bot is ONLINE');
+                    return true;
+                }
+                
+                console.log('Bot responded but not OK:', response.status);
+                return false;
                 
             } catch (error) {
                 // If fetch fails, bot is down
-                console.error('Bot health check failed:', error);
+                console.log('Bot is OFFLINE:', error.message);
                 return false;
             }
         }
