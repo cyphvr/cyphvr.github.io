@@ -12,6 +12,29 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Fetch server count from static JSON updated by GitHub Actions
+async function fetchServerCount() {
+    try {
+        const response = await fetch('/assets/data/bot-stats.json', { cache: 'no-store' });
+        if (response.ok) {
+            const data = await response.json();
+            const serverCount = document.getElementById('servers-count');
+            if (serverCount && typeof data.guildCount === 'number') {
+                serverCount.textContent = data.guildCount.toLocaleString();
+            }
+        }
+    } catch (error) {
+        console.error('Failed to fetch server count:', error);
+        const serverCount = document.getElementById('servers-count');
+        if (serverCount) {
+            serverCount.textContent = '0';
+        }
+    }
+}
+
+// Fetch server count when page loads
+window.addEventListener('load', fetchServerCount);
+
 // Animated counter for stats
 function animateCounter(element, target) {
     let current = 0;
@@ -38,13 +61,15 @@ const observerOptions = {
 
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !entry.target.classList.contains('observed')) {
+            entry.target.classList.add('observed');
             const statNumbers = entry.target.querySelectorAll('.stat-number');
             statNumbers.forEach(stat => {
                 const target = parseInt(stat.getAttribute('data-target'));
-                animateCounter(stat, target);
+                if (!isNaN(target)) {
+                    animateCounter(stat, target);
+                }
             });
-            observer.unobserve(entry.target);
         }
     });
 }, observerOptions);
@@ -65,14 +90,22 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Glitch effect enhancement
+// Glitch effect enhancement - smooth animation
 const glitchElement = document.querySelector('.glitch');
 if (glitchElement) {
-    setInterval(() => {
-        glitchElement.style.textShadow = Math.random() > 0.95 
-            ? '2px 2px var(--primary-color), -2px -2px var(--secondary-color)' 
-            : 'none';
-    }, 100);
+    let glitchTimeout;
+    const animateGlitch = () => {
+        if (Math.random() > 0.95) {
+            glitchElement.style.textShadow = '2px 2px var(--primary-color), -2px -2px var(--secondary-color)';
+            glitchTimeout = setTimeout(() => {
+                glitchElement.style.textShadow = 'none';
+                glitchTimeout = setTimeout(animateGlitch, 100);
+            }, 50);
+        } else {
+            glitchTimeout = setTimeout(animateGlitch, 100);
+        }
+    };
+    animateGlitch();
 }
 
 // Add hover effect to feature cards
@@ -224,6 +257,3 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
-console.log('%c🔥 Cypher Bot Website 🔥', 'font-size: 20px; font-weight: bold; color: #ff3b5c;');
-console.log('%cLooking for easter eggs? Try the Konami code! ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA', 'color: #2dd4ff;');

@@ -25,7 +25,7 @@
                 <a href="#features" class="navbar-link">Features</a>
                 <a href="#commands" class="navbar-link">Commands</a>
                 <a href="#about" class="navbar-link">About</a>
-                <a href="#invite" class="navbar-invite">Invite Now</a>
+                <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="navbar-invite">Invite Now</a>
             </div>
         </div>
     </nav>
@@ -39,9 +39,9 @@
                     Advanced moderation, powerful utilities, and entertainment—all encrypted in one bot.
                 </p>
                 <div class="hero-buttons">
-                    <a href="#invite" class="btn btn-primary">
+                    <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="btn btn-primary">
                         <span>Add to Discord</span>
-                        <span class="btn-icon">→</span>
+                        <span class="https://discord.com/oauth2/authorize?client_id=1121314550969532476">→</span>
                     </a>
                     <a href="#features" class="btn btn-secondary">
                         <span>Explore Features</span>
@@ -49,16 +49,12 @@
                 </div>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-number" data-target="10000">0</div>
+                        <div class="stat-number" id="servers-count">0</div>
                         <div class="stat-label">Servers</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" data-target="500000">0</div>
-                        <div class="stat-label">Users</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-target="99">0</div>
-                        <div class="stat-label">Uptime %</div>
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Uptime</div>
                     </div>
                 </div>
             </div>
@@ -74,32 +70,32 @@
             </h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
+                    <img src="images/Advanced Moderation.png" alt="Advanced Moderation" class="feature-icon" width="120" height="120">
                     <h3>Advanced Moderation</h3>
                     <p>Keep your server safe with auto-moderation, custom filters, and comprehensive logging systems.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🎮</div>
-                    <h3>Fun & Games</h3>
-                    <p>Engage your community with mini-games, trivia, economy system, and interactive entertainment.</p>
+                    <img src="images/Search.png" alt="Search" class="feature-icon" width="120" height="120">
+                    <h3>Search</h3>
+                    <p>Powerful search capabilities to find information across the web instantly within Discord.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🎵</div>
-                    <h3>Music Player</h3>
-                    <p>High-quality music streaming with playlist support, filters, and 24/7 playback capability.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚙️</div>
+                    <img src="images/Customizable.png" alt="Customizable" class="feature-icon" width="120" height="120">
                     <h3>Customizable</h3>
                     <p>Tailor every aspect to fit your server with custom commands, welcome messages, and role management.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📊</div>
+                    <img src="images/Analytics.png" alt="Analytics" class="feature-icon" width="120" height="120">
                     <h3>Analytics</h3>
                     <p>Track server statistics, member activity, and growth metrics with beautiful visualizations.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🔔</div>
+                    <img src="images/Music.png" alt="Music Player" class="feature-icon" width="120" height="120">
+                    <h3>Music Player</h3>
+                    <p>High-quality music streaming with playlist support, filters, and 24/7 playback capability.</p>
+                </div>
+                <div class="feature-card">
+                    <img src="images/Notifications.gif" alt="Notifications" class="feature-icon" width="120" height="120">
                     <h3>Notifications</h3>
                     <p>Get updates from YouTube, Twitch, Twitter, and more with custom notification systems.</p>
                 </div>
@@ -117,6 +113,41 @@
             <div class="commands-grid">
                 <div class="command-card">
                     <div class="command-header">
+                        <span class="command-name">/avatar</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Display the avatar of any user in high quality.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/banner</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Show a user's profile banner in full resolution.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/server info</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">Get comprehensive information about your Discord server.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/google</span>
+                        <span class="command-badge">Search</span>
+                    </div>
+                    <p class="command-desc">Search Google and return results directly in Discord.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/define</span>
+                        <span class="command-badge">Search</span>
+                    </div>
+                    <p class="command-desc">Get definitions and meanings of any word instantly.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
                         <span class="command-name">/ban</span>
                         <span class="command-badge">Moderation</span>
                     </div>
@@ -124,31 +155,24 @@
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/play</span>
-                        <span class="command-badge">Music</span>
+                        <span class="command-name">/mute</span>
+                        <span class="command-badge">Moderation</span>
                     </div>
-                    <p class="command-desc">Play music from YouTube, Spotify, or SoundCloud with queue support.</p>
+                    <p class="command-desc">Mute a member to prevent them from sending messages.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/poll</span>
+                        <span class="command-name">/kick</span>
+                        <span class="command-badge">Moderation</span>
+                    </div>
+                    <p class="command-desc">Kick a member from the server with optional reason.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/snipe</span>
                         <span class="command-badge">Utility</span>
                     </div>
-                    <p class="command-desc">Create interactive polls with custom options and reaction-based voting.</p>
-                </div>
-                <div class="command-card">
-                    <div class="command-header">
-                        <span class="command-name">/welcome</span>
-                        <span class="command-badge">Setup</span>
-                    </div>
-                    <p class="command-desc">Configure custom welcome messages and auto-role assignment for new members.</p>
-                </div>
-                <div class="command-card">
-                    <div class="command-header">
-                        <span class="command-name">/stats</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">View detailed statistics about your server, members, and bot performance.</p>
+                    <p class="command-desc">Retrieve the most recently deleted or edited message.</p>
                 </div>
             </div>
         </div>
@@ -222,8 +246,8 @@
             <div class="cta-content">
                 <h2>Ready to Elevate Your Discord Experience?</h2>
                 <p>Transform your server with Cypher's powerful features</p>
-                <a href="#" class="btn btn-large btn-primary">
-                    <span>✨ Invite Cypher Now</span>
+                <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="btn btn-large btn-primary">
+                    <span>Invite Cypher Now</span>
                     <span class="btn-icon">→</span>
                 </a>
             </div>
@@ -240,37 +264,34 @@
                         <img src="images/cypher.png" alt="Cypher Logo" class="logo-icon">
                         <span class="logo-text">Cypher</span>
                     </div>
-                    <p>Empowering Discord communities since 2023</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#commands">Commands</a></li>
-                        <li><a href="#invite">Invite Bot</a></li>
-                        <li><a href="#">Support Server</a></li>
-                    </ul>
+                    <p>Empowering Discord communities since 2023.</p>
                 </div>
                 <div class="footer-section">
                     <h4>Resources</h4>
                     <ul>
                         <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Status Page</a></li>
+                        <li><a href="#commands">Commands</a></li>
+                        <li><a href="#features">Features</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Community</h4>
                     <ul>
-                        <li><a href="#">Discord Server</a></li>
-                        <li><a href="#">GitHub</a></li>
-                        <li><a href="#">Vote for Us</a></li>
+                        <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
+                        <li><a href="#">Vote For Us</a></li>
+                        <li><a href="#">Status Page</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Cypher Bot. All rights reserved.</p>
+                <p>&copy; 2026 Cypher. Fast at scale. Clear in every command.</p>
             </div>
         </div>
     </footer>
