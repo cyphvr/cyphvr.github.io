@@ -387,7 +387,7 @@
         async function checkBotStatus() {
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
                 
                 const response = await fetch(PROXY_ENDPOINT, {
                     method: 'GET',
@@ -407,8 +407,12 @@
                 return false;
                 
             } catch (error) {
-                // If fetch fails, bot is down
-                console.log('Bot is OFFLINE:', error.message);
+                // If fetch fails or times out, bot is down
+                if (error.name === 'AbortError') {
+                    console.log('Bot is OFFLINE: Request timed out');
+                } else {
+                    console.log('Bot is OFFLINE:', error.message);
+                }
                 return false;
             }
         }
