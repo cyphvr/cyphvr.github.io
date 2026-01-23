@@ -1,0 +1,105 @@
+/* Animations & Keyframes */
+.aurora {
+    position: fixed;
+    inset: -5% -5% auto -5%;
+    height: 90vh;
+    background: radial-gradient(circle at 20% 20%, rgba(45, 212, 255, 0.18), transparent 35%),
+                radial-gradient(circle at 80% 10%, rgba(255, 59, 92, 0.16), transparent 45%),
+                radial-gradient(circle at 60% 75%, rgba(255, 59, 92, 0.24), transparent 50%);
+    filter: blur(48px) saturate(120%);
+    opacity: 0.95;
+    pointer-events: none;
+    animation: auroraFloat 16s ease-in-out infinite alternate;
+    z-index: 0;
+}
+
+@keyframes auroraFloat {
+    from {
+        transform: translate3d(-20px, 0, 0) scale(1.02);
+    }
+    to {
+        transform: translate3d(20px, -10px, 0) scale(1.07);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glitch {
+    0%, 90%, 100% {
+        text-shadow: none;
+    }
+    93% {
+        text-shadow: 2px 2px var(--primary-color), -2px -2px var(--secondary-color);
+    }
+    96% {
+        text-shadow: -2px -2px var(--primary-color), 2px 2px var(--secondary-color);
+    }
+}
+
+@keyframes buttonGlow {
+    0%, 100% {
+        box-shadow: 0 12px 28px rgba(255, 59, 92, 0.4), 0 0 20px rgba(255, 59, 92, 0.2);
+    }
+    50% {
+        box-shadow: 0 12px 28px rgba(255, 59, 92, 0.6), 0 0 35px rgba(255, 59, 92, 0.35);
+    }
+}
+
+@keyframes buttonShine {
+    0% {
+        left: -100%;
+    }
+    50% {
+        left: 100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+@keyframes floatButton {
+    0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 8px 20px rgba(255, 59, 92, 0.4);
+    }
+    50% {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 30px rgba(255, 59, 92, 0.6);
+    }
+}
+
+@keyframes arrowBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes footerGloss {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -350% 0;
+    }
+}
+
+/* Disabled star animations */
+.stars, .stars2, .stars3 {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    pointer-events: none;
+}

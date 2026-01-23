@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status - Cypher Discord Bot</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="images/cypher.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -230,7 +230,7 @@
         <div class="container">
             <div class="navbar-logo">
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                    <img src="images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                    <img src="../images/cypher.png" alt="Cypher Logo" class="logo-icon">
                     <span class="logo-text">Cypher</span>
                 </a>
             </div>
@@ -275,7 +275,7 @@
         <h2 style="color: #ffffff; margin-bottom: 20px; font-size: 20px;">Recent Incidents</h2>
         <div class="incident-list">
             <div class="no-incidents">
-                ✓ No incidents in the last 30 days. Great work!
+                âœ“ No incidents in the last 30 days. Great work!
             </div>
         </div>
 
@@ -328,7 +328,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="logo">
-                        <img src="images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                        <img src="../images/cypher.png" alt="Cypher Logo" class="logo-icon">
                         <span class="logo-text">Cypher</span>
                     </div>
                     <p>Empowering Discord communities since 2023.</p>
@@ -370,33 +370,37 @@
         let secondsRemaining = refreshInterval;
         let lastKnownStatus = null;
 
-        // Use Image beacon approach - more reliable than fetch for simple connectivity check
+        // Use fetch with CORS to check actual bot status from JSON response
         async function checkBotStatus() {
-            return new Promise((resolve) => {
-                const img = new Image();
-                const timeout = setTimeout(() => {
-                    img.src = '';
-                    console.log('Bot is OFFLINE: Connection timeout');
-                    resolve(false);
-                }, 8000);
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 8000);
 
-                img.onload = () => {
-                    clearTimeout(timeout);
+                const response = await fetch(`http://${STATUS_HOST}:${STATUS_PORT}/`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeout);
+
+                // Try to parse JSON response
+                const data = await response.json();
+                
+                // Check if bot is actually online based on success field
+                if (data.success === true) {
                     console.log('Bot is ONLINE');
-                    resolve(true);
-                };
+                    return true;
+                } else {
+                    console.log('Bot is OFFLINE (server responded but bot not ready)');
+                    return false;
+                }
 
-                img.onerror = () => {
-                    clearTimeout(timeout);
-                    // Even on error, if we get a response, server is up
-                    // This works because any response (even 404) means the server is running
-                    console.log('Bot is ONLINE (responded)');
-                    resolve(true);
-                };
-
-                // Try to load favicon or any resource from the server
-                img.src = `http://${STATUS_HOST}:${STATUS_PORT}/?_t=${Date.now()}`;
-            });
+            } catch (error) {
+                console.log('Bot is OFFLINE:', error.message);
+                return false;
+            }
         }
 
         // Update status page based on bot availability

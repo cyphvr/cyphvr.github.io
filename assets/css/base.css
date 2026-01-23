@@ -1,0 +1,34 @@
+/* Base Styles & Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #ff3b5c; /* dominant red */
+    --secondary-color: #2dd4ff; /* bright cyan accent */
+    --bg-dark: #0f0f0f; /* warm neutral black */
+    --bg-darker: #0a0a0a; /* deeper neutral black */
+    --text-light: #ffffff;
+    --text-gray: #b7c1d1;
+    --card-bg: rgba(255, 255, 255, 0.04);
+    --gradient-1: linear-gradient(135deg, #ff3b5c 0%, #ff1f4b 60%, #2dd4ff 100%);
+    --gradient-2: linear-gradient(135deg, #912d58 0%, #ff3b5c 70%, #2dd4ff 100%);
+}
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}

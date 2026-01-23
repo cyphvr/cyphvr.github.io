@@ -1,0 +1,107 @@
+/* Card Components */
+
+/* Feature Cards */
+.features {
+    background: var(--bg-darker);
+    padding-bottom: 3.5rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.feature-card {
+    background: linear-gradient(145deg, rgba(255, 59, 92, 0.12), rgba(18, 18, 18, 0.95));
+    padding: 1.5rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 59, 92, 0.28);
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 59, 92, 0.5);
+    box-shadow: 0 16px 36px rgba(255, 59, 92, 0.25);
+}
+
+.feature-icon {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+    border-radius: 14px;
+    padding: 10px;
+    background: radial-gradient(circle at 30% 30%, rgba(45, 212, 255, 0.14), rgba(255, 59, 92, 0.12));
+    box-shadow: 0 10px 26px rgba(255, 59, 92, 0.2);
+    margin-bottom: 0.9rem;
+}
+
+.feature-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    letter-spacing: 0.01em;
+}
+
+.feature-card p {
+    color: var(--text-gray);
+    line-height: 1.6;
+    font-size: 0.94rem;
+}
+
+/* Command Cards */
+.commands {
+    background: var(--bg-darker);
+    padding-top: 2.5rem;
+}
+
+.commands-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.command-card {
+    background: #2a1505;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 3px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.command-card:hover {
+    background: rgba(255, 59, 92, 0.08);
+    transform: translateX(10px);
+}
+
+.command-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.command-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.3rem;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.command-badge {
+    background: var(--gradient-1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--bg-dark);
+}
+
+.command-desc {
+    color: var(--text-gray);
+}
