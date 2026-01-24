@@ -387,17 +387,9 @@
 
                 clearTimeout(timeout);
 
-                // Try to parse JSON response
+                // Parse JSON and only consider success flag
                 const data = await response.json();
-                
-                // Check if bot is actually online based on success field
-                if (data.success === true) {
-                    console.log('Bot is ONLINE');
-                    return true;
-                } else {
-                    console.log('Bot is OFFLINE (server responded but bot not ready)');
-                    return false;
-                }
+                return data && data.success === true;
 
             } catch (error) {
                 console.log('Bot is OFFLINE:', error.message);
@@ -423,6 +415,7 @@
                 statusIndicator.className = 'status-indicator';
                 statusText.textContent = 'All Systems Operational';
                 uptimeText.textContent = '24/7 Uptime (Always on)';
+                uptimeText.style.color = '#2dd4ff';
                 statusMessage.textContent = 'Bot is online and running normally';
                 serviceResponse.textContent = `Connected to ${STATUS_HOST}:${STATUS_PORT}`;
                 serviceBadge.className = 'status-badge badge-operational';
