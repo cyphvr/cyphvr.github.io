@@ -368,38 +368,66 @@
     <script>
         const STATUS_HOST = 'cypher.hype.surf';
         const STATUS_PORT = 10001;
+        const STATUS_PROXY_URL = ''; // set to your own HTTPS proxy (recommended)
+        const STATUS_HTTP_URL = `http://${STATUS_HOST}:${STATUS_PORT}/`;
+        const STATUS_HTTPS_URL = `https://${STATUS_HOST}:${STATUS_PORT}/`;
+        const PUBLIC_CORS_PROXY = `https://corsproxy.io/?${encodeURIComponent(STATUS_HTTP_URL)}`; // fallback proxy
+        const PAGE_IS_HTTPS = window.location.protocol === 'https:';
         const refreshInterval = 30;
         let secondsRemaining = refreshInterval;
         let lastKnownStatus = null;
 
-        // Use fetch with CORS to check actual bot status from JSON response
-        async function checkBotStatus() {
-            try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 8000);
-
-                const response = await fetch(`http://${STATUS_HOST}:${STATUS_PORT}/`, {
-                    method: 'GET',
-                    mode: 'cors',
-                    cache: 'no-store',
-                    signal: controller.signal
-                });
-
-                clearTimeout(timeout);
-
-                // Parse JSON and only consider success flag
-                const data = await response.json();
-                return data && data.success === true;
-
-            } catch (error) {
-                console.log('Bot is OFFLINE:', error.message);
-                return false;
+        function buildHealthEndpoints() {
+            const list = [];
+            if (STATUS_PROXY_URL) list.push(STATUS_PROXY_URL); // preferred HTTPS proxy
+            if (PAGE_IS_HTTPS) {
+                list.push(STATUS_HTTPS_URL); // direct HTTPS if available
+            } else {
+                list.push(STATUS_HTTP_URL); // direct HTTP allowed on HTTP page
             }
+            return list;
+        }
+
+        // Try endpoints in order until one returns success:true
+        async function checkBotStatus() {
+            const endpoints = buildHealthEndpoints();
+            let lastError = 'Unable to reach health endpoint (check CORS/HTTPS configuration)';
+
+            for (const url of endpoints) {
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 5000);
+
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors',
+                        cache: 'no-store',
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeout);
+
+                    const data = await response.json();
+                    if (data && data.success === true) {
+                        console.log('Bot is ONLINE via', url);
+                        return { isUp: true, endpoint: url };
+                    }
+
+                    lastError = `Health endpoint did not return success:true`;
+                } catch (error) {
+                    // Silently fail and try next endpoint
+                    lastError = 'Health endpoint is unreachable';
+                }
+            }
+
+            console.log('Bot is OFFLINE:', lastError);
+            return { isUp: false, reason: lastError };
         }
 
         // Update status page based on bot availability
         async function updateStatusPage() {
-            const isOperational = await checkBotStatus();
+            const result = await checkBotStatus();
+            const isOperational = result.isUp;
             lastKnownStatus = isOperational;
             
             const statusIndicator = document.getElementById('statusIndicator');
@@ -417,7 +445,7 @@
                 uptimeText.textContent = '24/7 Uptime (Always on)';
                 uptimeText.style.color = '#2dd4ff';
                 statusMessage.textContent = 'Bot is online and running normally';
-                serviceResponse.textContent = `Connected to ${STATUS_HOST}:${STATUS_PORT}`;
+                serviceResponse.textContent = result.endpoint ? `Connected via ${result.endpoint}` : `Connected to ${STATUS_HOST}:${STATUS_PORT}`;
                 serviceBadge.className = 'status-badge badge-operational';
                 badgeText.textContent = 'Operational';
                 serviceBadge.querySelector('span').style.background = '#2dd4ff';
@@ -427,7 +455,7 @@
                 statusText.textContent = 'System Offline';
                 uptimeText.textContent = 'Bot is currently down';
                 uptimeText.style.color = '#ff3b5c';
-                statusMessage.textContent = 'The bot is temporarily offline';
+                statusMessage.textContent = result && result.reason ? result.reason : 'The bot is temporarily offline';
                 serviceResponse.textContent = 'Unable to connect';
                 serviceBadge.className = 'status-badge badge-down';
                 badgeText.textContent = 'Down';
