@@ -266,8 +266,8 @@
         // Fetch Discord bot server count from Vercel API endpoint
         async function fetchServerCount() {
             try {
-                // Replace 'YOUR-VERCEL-PROJECT' with your actual Vercel project URL after deployment
-                const API_URL = 'https://YOUR-VERCEL-PROJECT.vercel.app/api/server-count';
+                // Vercel API endpoint for Discord server count
+                const API_URL = 'https://cyphvr-github-io.vercel.app/api/server-count';
                 
                 const response = await fetch(API_URL, {
                     method: 'GET'
