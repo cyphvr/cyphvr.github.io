@@ -18,10 +18,10 @@ export default async function handler(req, res) {
     }
     
     try {
-        const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+        const BOT_TOKEN = process.env.BOT_TOKEN;
         
         if (!BOT_TOKEN) {
-            console.error('DISCORD_BOT_TOKEN not configured');
+            console.error('BOT_TOKEN not configured');
             return res.status(500).json({ error: 'Bot token not configured' });
         }
         
