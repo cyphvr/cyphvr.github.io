@@ -366,37 +366,53 @@
     </footer>
 
     <script>
-        const STATUS_HOST = 'cypher.hype.surf';
-        const STATUS_PORT = 10001;
-        const STATUS_PROXY_URL = ''; // set to your own HTTPS proxy (recommended)
-        const STATUS_HTTP_URL = `http://${STATUS_HOST}:${STATUS_PORT}/`;
-        const STATUS_HTTPS_URL = `https://${STATUS_HOST}:${STATUS_PORT}/`;
-        const PUBLIC_CORS_PROXY = `https://corsproxy.io/?${encodeURIComponent(STATUS_HTTP_URL)}`; // fallback proxy
-        const PAGE_IS_HTTPS = window.location.protocol === 'https:';
-        const refreshInterval = 30;
-        let secondsRemaining = refreshInterval;
+        // ========================================
+        // Configuration
+        // ========================================
+        const CONFIG = {
+            host: 'cypher.hype.surf',
+            port: 10001,
+            proxyUrl: '', // Optional: Set to your HTTPS proxy endpoint (e.g., 'https://cypher.hype.surf/health')
+            refreshInterval: 30, // seconds
+            timeout: 5000 // milliseconds
+        };
+
+        // ========================================
+        // State Management
+        // ========================================
+        let secondsRemaining = CONFIG.refreshInterval;
         let lastKnownStatus = null;
 
+        // ========================================
+        // Health Check Logic
+        // ========================================
         function buildHealthEndpoints() {
-            const list = [];
-            if (STATUS_PROXY_URL) list.push(STATUS_PROXY_URL); // preferred HTTPS proxy
-            if (PAGE_IS_HTTPS) {
-                list.push(STATUS_HTTPS_URL); // direct HTTPS if available
-            } else {
-                list.push(STATUS_HTTP_URL); // direct HTTP allowed on HTTP page
+            const endpoints = [];
+            const isHttps = window.location.protocol === 'https:';
+            
+            // Prioritize custom HTTPS proxy if configured
+            if (CONFIG.proxyUrl) {
+                endpoints.push(CONFIG.proxyUrl);
             }
-            return list;
+            
+            // Add direct endpoints based on page protocol
+            if (isHttps) {
+                endpoints.push(`https://${CONFIG.host}:${CONFIG.port}/`);
+            } else {
+                endpoints.push(`http://${CONFIG.host}:${CONFIG.port}/`);
+            }
+            
+            return endpoints;
         }
 
-        // Try endpoints in order until one returns success:true
         async function checkBotStatus() {
             const endpoints = buildHealthEndpoints();
-            let lastError = 'Unable to reach health endpoint (check CORS/HTTPS configuration)';
+            let lastError = 'Unable to reach health endpoint. Check CORS/HTTPS configuration.';
 
             for (const url of endpoints) {
                 try {
                     const controller = new AbortController();
-                    const timeout = setTimeout(() => controller.abort(), 5000);
+                    const timeout = setTimeout(() => controller.abort(), CONFIG.timeout);
 
                     const response = await fetch(url, {
                         method: 'GET',
@@ -408,78 +424,107 @@
                     clearTimeout(timeout);
 
                     const data = await response.json();
+                    
+                    // Only consider bot online if success is explicitly true
                     if (data && data.success === true) {
-                        console.log('Bot is ONLINE via', url);
+                        console.log('✓ Bot is ONLINE via', url);
                         return { isUp: true, endpoint: url };
                     }
 
-                    lastError = `Health endpoint did not return success:true`;
+                    lastError = 'Health endpoint did not return success:true';
                 } catch (error) {
-                    // Silently fail and try next endpoint
                     lastError = 'Health endpoint is unreachable';
+                    // Continue to next endpoint
                 }
             }
 
-            console.log('Bot is OFFLINE:', lastError);
+            console.log('✗ Bot is OFFLINE:', lastError);
             return { isUp: false, reason: lastError };
         }
 
-        // Update status page based on bot availability
-        async function updateStatusPage() {
-            const result = await checkBotStatus();
-            const isOperational = result.isUp;
-            lastKnownStatus = isOperational;
-            
-            const statusIndicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-            const uptimeText = document.getElementById('uptimeText');
-            const statusMessage = document.getElementById('statusMessage');
-            const serviceResponse = document.getElementById('serviceResponse');
-            const serviceBadge = document.getElementById('serviceBadge');
-            const badgeText = document.getElementById('badgeText');
-            
-            if (isOperational) {
-                // Online
-                statusIndicator.className = 'status-indicator';
-                statusText.textContent = 'All Systems Operational';
-                uptimeText.textContent = '24/7 Uptime (Always on)';
-                uptimeText.style.color = '#2dd4ff';
-                statusMessage.textContent = 'Bot is online and running normally';
-                serviceResponse.textContent = result.endpoint ? `Connected via ${result.endpoint}` : `Connected to ${STATUS_HOST}:${STATUS_PORT}`;
-                serviceBadge.className = 'status-badge badge-operational';
-                badgeText.textContent = 'Operational';
-                serviceBadge.querySelector('span').style.background = '#2dd4ff';
-            } else {
-                // Offline
-                statusIndicator.className = 'status-indicator offline';
-                statusText.textContent = 'System Offline';
-                uptimeText.textContent = 'Bot is currently down';
-                uptimeText.style.color = '#ff3b5c';
-                statusMessage.textContent = result && result.reason ? result.reason : 'The bot is temporarily offline';
-                serviceResponse.textContent = 'Unable to connect';
-                serviceBadge.className = 'status-badge badge-down';
-                badgeText.textContent = 'Down';
-                serviceBadge.querySelector('span').style.background = '#ff3b5c';
-            }
+        // ========================================
+        // UI Update Functions
+        // ========================================
+        function updateOnlineStatus(result) {
+            const elements = {
+                indicator: document.getElementById('statusIndicator'),
+                text: document.getElementById('statusText'),
+                uptime: document.getElementById('uptimeText'),
+                message: document.getElementById('statusMessage'),
+                response: document.getElementById('serviceResponse'),
+                badge: document.getElementById('serviceBadge'),
+                badgeText: document.getElementById('badgeText')
+            };
 
-            // Update last updated timestamp
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById('lastUpdated').textContent = timeString;
-            secondsRemaining = refreshInterval;
+            elements.indicator.className = 'status-indicator';
+            elements.text.textContent = 'All Systems Operational';
+            elements.uptime.textContent = '24/7 Uptime (Always on)';
+            elements.uptime.style.color = '#2dd4ff';
+            elements.message.textContent = 'Bot is online and running normally';
+            elements.response.textContent = result.endpoint 
+                ? `Connected via ${result.endpoint}` 
+                : `Connected to ${CONFIG.host}:${CONFIG.port}`;
+            elements.badge.className = 'status-badge badge-operational';
+            elements.badgeText.textContent = 'Operational';
+            elements.badge.querySelector('span').style.background = '#2dd4ff';
         }
 
-        // Update countdown timer and refresh status
-        setInterval(() => {
-            secondsRemaining--;
-            if (secondsRemaining <= 0) {
-                updateStatusPage();
-            } else {
-                document.getElementById('refreshIn').textContent = secondsRemaining;
-            }
-        }, 1000);
+        function updateOfflineStatus(result) {
+            const elements = {
+                indicator: document.getElementById('statusIndicator'),
+                text: document.getElementById('statusText'),
+                uptime: document.getElementById('uptimeText'),
+                message: document.getElementById('statusMessage'),
+                response: document.getElementById('serviceResponse'),
+                badge: document.getElementById('serviceBadge'),
+                badgeText: document.getElementById('badgeText')
+            };
 
-        // Initial check on page load
+            elements.indicator.className = 'status-indicator offline';
+            elements.text.textContent = 'System Offline';
+            elements.uptime.textContent = 'Bot is currently down';
+            elements.uptime.style.color = '#ff3b5c';
+            elements.message.textContent = result?.reason || 'The bot is temporarily offline';
+            elements.response.textContent = 'Unable to connect';
+            elements.badge.className = 'status-badge badge-down';
+            elements.badgeText.textContent = 'Down';
+            elements.badge.querySelector('span').style.background = '#ff3b5c';
+        }
+
+        async function updateStatusPage() {
+            const result = await checkBotStatus();
+            lastKnownStatus = result.isUp;
+
+            if (result.isUp) {
+                updateOnlineStatus(result);
+            } else {
+                updateOfflineStatus(result);
+            }
+
+            // Update timestamp
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
+            secondsRemaining = CONFIG.refreshInterval;
+        }
+
+        // ========================================
+        // Auto-Refresh Timer
+        // ========================================
+        function startRefreshTimer() {
+            setInterval(() => {
+                secondsRemaining--;
+                if (secondsRemaining <= 0) {
+                    updateStatusPage();
+                } else {
+                    document.getElementById('refreshIn').textContent = secondsRemaining;
+                }
+            }, 1000);
+        }
+
+        // ========================================
+        // Initialize
+        // ========================================
         updateStatusPage();
+        startRefreshTimer();
     </script></body>
 </html>
