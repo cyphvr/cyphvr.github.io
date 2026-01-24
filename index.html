@@ -38,6 +38,12 @@
                 <p class="hero-description">
                     Advanced moderation, powerful utilities, and entertainment—all encrypted in one bot.
                 </p>
+                <div class="server-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="serverCount">Loading...</span>
+                        <span class="stat-label">Servers</span>
+                    </div>
+                </div>
                 <div class="hero-buttons">
                     <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="btn btn-primary">
                         <span>Add to Discord</span>
@@ -256,5 +262,33 @@
     </footer>
 
     <script type="module" src="assets/js/main.js"></script>
+    <script>
+        // Fetch Discord bot server count from Vercel API endpoint
+        async function fetchServerCount() {
+            try {
+                // Replace 'YOUR-VERCEL-PROJECT' with your actual Vercel project URL after deployment
+                const API_URL = 'https://YOUR-VERCEL-PROJECT.vercel.app/api/server-count';
+                
+                const response = await fetch(API_URL, {
+                    method: 'GET'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const serverCount = data.count;
+                    document.getElementById('serverCount').textContent = `${serverCount} Servers`;
+                } else {
+                    console.error('Failed to fetch server count:', response.status);
+                    document.getElementById('serverCount').textContent = '1000+ Servers';
+                }
+            } catch (error) {
+                console.error('Error fetching server count:', error);
+                document.getElementById('serverCount').textContent = '1000+ Servers';
+            }
+        }
+        
+        // Fetch server count when page loads
+        document.addEventListener('DOMContentLoaded', fetchServerCount);
+    </script>
 </body>
 </html>
