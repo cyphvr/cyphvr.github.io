@@ -2,17 +2,3 @@
 .env
 .env.local
 .env.*.local
-
-# Node modules (if using build tools)
-node_modules/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Editor directories
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
