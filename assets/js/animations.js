@@ -18,21 +18,27 @@ export function initAnimations() {
         animateGlitch();
     }
 
-    // Add typing effect to hero subtitle (optional)
+    // Add typing effect to hero subtitle (with blinking underscore that never disappears)
     const subtitle = document.querySelector('.hero-subtitle');
     if (subtitle) {
         const text = subtitle.textContent;
         subtitle.textContent = '';
         let i = 0;
-        
+        let textNode = document.createTextNode('');
+        let cursorSpan = document.createElement('span');
+        cursorSpan.className = 'typing-cursor';
+        cursorSpan.textContent = '_';
+        subtitle.appendChild(textNode);
+        subtitle.appendChild(cursorSpan);
+
         const typeWriter = () => {
             if (i < text.length) {
-                subtitle.textContent += text.charAt(i);
+                textNode.textContent = text.substring(0, i + 1);
                 i++;
                 setTimeout(typeWriter, 100);
             }
         };
-        
+
         setTimeout(typeWriter, 1000);
     }
 
@@ -66,13 +72,13 @@ export function initAnimations() {
                 if (span.classList.contains('is-space')) return;
 
                 span.classList.remove('locked');
-                let cycles = 10 + Math.floor(Math.random() * 6);
+                let cycles = 4 + Math.floor(Math.random() * 3); // Reduced intensity
 
                 const shuffle = () => {
                     if (cycles > 0) {
                         span.textContent = Math.random() > 0.5 ? '0' : '1';
                         cycles--;
-                        setTimeout(shuffle, 32 + Math.random() * 24);
+                        setTimeout(shuffle, 48 + Math.random() * 32); // Slightly slower
                     } else {
                         span.textContent = span.dataset.final || '';
                         span.classList.add('locked');

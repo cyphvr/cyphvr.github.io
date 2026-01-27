@@ -65,7 +65,7 @@
 }
 
 .binary-roll {
-    color: var(--primary-color);
+    /* color: var(--primary-color); */
     letter-spacing: 0.08em;
     display: inline-flex;
     gap: 0.12em;

@@ -21,7 +21,12 @@
                     <span class="logo-text">Cypher</span>
                 </a>
             </div>
-            <div class="navbar-menu">
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-menu" id="navbarMenu">
                 <a href="/features" class="navbar-link">Features</a>
                 <a href="/commands" class="navbar-link">Commands</a>
                 <a href="/about" class="navbar-link">About</a>
@@ -32,9 +37,9 @@
 
     <section style="padding: 100px 0 50px;">
         <div class="container">
-            <h1 class="glitch" data-text="Commands" style="text-align: center; margin-bottom: 30px;">Commands</h1>
+            <h1 class="glitch" data-text="Commands" style="text-align: center; margin-bottom: 30px; font-size:2.8rem;">Commands</h1>
             <p style="text-align: center; font-size: 18px; color: #b7c1d1; margin-bottom: 60px;">
-                Explore all the powerful commands available in Cypher
+             Explore all the powerful commands available in Cypher
             </p>
         </div>
     </section>
@@ -43,11 +48,11 @@
         <div class="container">
             <h2 class="section-title">
                 <span class="title-line"></span>
-                COMMANDS
+                <span class="title-text glossy-text">COMMANDS</span>
                 <span class="title-line"></span>
             </h2>
             <h3 id="moderation" style="display: flex; align-items: center; gap: 12px; color: #ff3b5c; margin-bottom: 30px; font-size: 20px;">
-                <span class="icon-sheen"><img src="../images/Moderation.png" alt="Moderation" class="icon-badge icon-badge--md"></span>
+                <span class="icon-sheen"><img src="../images/Advanced Moderation.png" alt="Moderation" class="icon-badge icon-badge--md"></span>
                 Moderation
             </h3>
             <div class="commands-grid">
@@ -193,10 +198,31 @@
                 </div>
                 <div class="command-card">
                     <div class="command-header">
+                        <span class="command-name">/server icon</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">Get the server's icon.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/server banner</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">Get the server's banner.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
                         <span class="command-name">/server info</span>
                         <span class="command-badge">Info</span>
                     </div>
                     <p class="command-desc">Get comprehensive server information.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/server role-info</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">Get information about a server role.</p>
                 </div>
                 <div class="command-card">
                     <div class="command-header">
@@ -211,6 +237,13 @@
                         <span class="command-badge">Info</span>
                     </div>
                     <p class="command-desc">View all server emojis.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/server banlist</span>
+                        <span class="command-badge">Info</span>
+                    </div>
+                    <p class="command-desc">View the server's ban list.</p>
                 </div>
             </div>
 
@@ -256,6 +289,13 @@
                 </div>
                 <div class="command-card">
                     <div class="command-header">
+                        <span class="command-name">/snipe react</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Snipe a reaction to a message.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
                         <span class="command-name">/timestamp</span>
                         <span class="command-badge">Utility</span>
                     </div>
@@ -277,10 +317,31 @@
                 </div>
                 <div class="command-card">
                     <div class="command-header">
+                        <span class="command-name">/reminder remove</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Remove a reminder.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/reminder list</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">List all reminders.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
                         <span class="command-name">/emoji-info</span>
                         <span class="command-badge">Utility</span>
                     </div>
                     <p class="command-desc">Get information about an emoji.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/steal</span>
+                        <span class="command-badge">Utility</span>
+                    </div>
+                    <p class="command-desc">Steal an emoji from another server.</p>
                 </div>
             </div>
 
@@ -309,6 +370,27 @@
                         <span class="command-badge">Search</span>
                     </div>
                     <p class="command-desc">Get weather information for a location.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/google</span>
+                        <span class="command-badge">Search</span>
+                    </div>
+                    <p class="command-desc">Search Google and return results directly in Discord.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/youtube</span>
+                        <span class="command-badge">Search</span>
+                    </div>
+                    <p class="command-desc">Search YouTube for videos.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/reverse-image</span>
+                        <span class="command-badge">Search</span>
+                    </div>
+                    <p class="command-desc">Reverse image search using Google or other engines.</p>
                 </div>
             </div>
 
@@ -366,6 +448,13 @@
                     </div>
                     <p class="command-desc">Set a member's nickname.</p>
                 </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/member reset-nick</span>
+                        <span class="command-badge">Member</span>
+                    </div>
+                    <p class="command-desc">Reset a member's nickname.</p>
+                </div>
             </div>
 
             <h3 id="role" style="display: flex; align-items: center; gap: 12px; color: #ff3b5c; margin: 50px 0 30px 0; font-size: 20px;">
@@ -387,12 +476,40 @@
                     </div>
                     <p class="command-desc">Kick all users within a specific role.</p>
                 </div>
+            </div>
+
+            <h3 id="config" style="display: flex; align-items: center; gap: 12px; color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">
+                <span class="icon-sheen"><img src="../images/Config.png" alt="Config" class="icon-badge icon-badge--md"></span>
+                Config
+            </h3>
+            <div class="commands-grid">
                 <div class="command-card">
                     <div class="command-header">
                         <span class="command-name">/prefix add</span>
                         <span class="command-badge">Config</span>
                     </div>
                     <p class="command-desc">Add a custom prefix for this server.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/prefix remove</span>
+                        <span class="command-badge">Config</span>
+                    </div>
+                    <p class="command-desc">Remove a custom prefix from this server.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/prefix list</span>
+                        <span class="command-badge">Config</span>
+                    </div>
+                    <p class="command-desc">List current prefixes for this server.</p>
+                </div>
+                <div class="command-card">
+                    <div class="command-header">
+                        <span class="command-name">/prefix reset</span>
+                        <span class="command-badge">Config</span>
+                    </div>
+                    <p class="command-desc">Reset all custom prefixes for this server.</p>
                 </div>
             </div>
 
@@ -431,13 +548,6 @@
                 </div>
                 <div class="command-card">
                     <div class="command-header">
-                        <span class="command-name">/steal</span>
-                        <span class="command-badge">Fun</span>
-                    </div>
-                    <p class="command-desc">Steal an emoji from another server.</p>
-                </div>
-                <div class="command-card">
-                    <div class="command-header">
                         <span class="command-name">/stats</span>
                         <span class="command-badge">Info</span>
                     </div>
@@ -451,13 +561,13 @@
         <div class="container">
             <h2 class="section-title">
                 <span class="title-line"></span>
-                COMMAND CATEGORIES
+                <span class="title-text glossy-text">COMMAND CATEGORIES</span>
                 <span class="title-line"></span>
             </h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
                 <a href="#moderation" style="text-decoration: none;" class="category-card">
                     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><img src="../images/Moderation.png" alt="Moderation" class="icon-badge icon-badge--sm"></span>
+                        <span class="icon-sheen"><img src="../images/Advanced Moderation.png" alt="Moderation" class="icon-badge icon-badge--sm"></span>
                         <h3 style="color: #ff3b5c; margin: 0; font-size: 18px;">Moderation</h3>
                     </div>
                     <p style="color: #b7c1d1;">Kick, ban, mute, anti-raid, and toxicity analysis.</p>
@@ -528,8 +638,12 @@
                 <h2>Ready to Use These Commands?</h2>
                 <p>Add Cypher to your server and start managing it like a pro</p>
                 <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="btn btn-large btn-primary">
-                    <span>Invite Cypher Now</span>
-                    <span class="btn-icon">→</span>
+                                        <span>Invite Cypher Now</span>
+                                        <span class="btn-icon" style="font-size:1.2em;display:inline-flex;align-items:center;vertical-align:middle;color:#fff;">
+                                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6 4L12 9L6 14" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </span>
                 </a>
             </div>
         </div>
@@ -559,7 +673,7 @@
                     <h4 class="binary-roll">Community</h4>
                     <ul>
                         <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
-                        <li><a href="https://top.gg/bot/1121314550969532476">Vote For Us</a></li>
+                        <li><a href="https://top.gg/bot/1121314550969532476/vote">Vote For Us</a></li>
                         <li><a href="/status">Status Page</a></li>
                     </ul>
                 </div>
@@ -578,5 +692,14 @@
     </footer>
 
     <script type="module" src="../assets/js/main.js"></script>
+    <script>
+        // Disable right-click and drag on all images
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('img').forEach(function(img) {
+                img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+                img.addEventListener('dragstart', function(e) { e.preventDefault(); });
+            });
+        });
+    </script>
 </body>
 </html>

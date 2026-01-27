@@ -57,8 +57,9 @@
 
 .server-stats {
     display: flex;
-    gap: 2rem;
+    gap: 3rem;
     justify-content: center;
+    align-items: flex-end;
     margin: 2rem 0;
 }
 
@@ -67,18 +68,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-end;
     gap: 0.5rem;
+    min-height: 80px;
 }
 
 .stat-value {
     font-family: 'Orbitron', sans-serif;
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
     background: var(--gradient-1);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: pulse 2s ease-in-out infinite;
+}
+
+.stat-value-sm {
+    font-size: 1.9rem;
 }
 
 .stat-number {

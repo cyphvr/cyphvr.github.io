@@ -15,11 +15,102 @@ section {
     gap: 2rem;
 }
 
+.title-text {
+    display: inline-block;
+    letter-spacing: 0.2em;
+}
+
+.section-title {
+    position: relative;
+}
+
+.glossy-text {
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #ff3b5c 50%, #2dd4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(255, 59, 92, 0.3));
+    overflow: hidden;
+}
+
+.glossy-text::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.7) 40%, transparent 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    pointer-events: none;
+    z-index: 2;
+    mask-image: linear-gradient(120deg, transparent 35%, #fff 50%, transparent 65%);
+    -webkit-mask-image: linear-gradient(120deg, transparent 35%, #fff 50%, transparent 65%);
+    animation: animatedGlossMove 2.2s linear infinite;
+}
+
+@keyframes animatedGlossMove {
+    0% { left: -100%; opacity: 0.2; }
+    10% { opacity: 0.7; }
+    50% { left: 100%; opacity: 0.7; }
+    100% { left: 100%; opacity: 0.2; }
+}
+
+/* Blinking cursor for hero subtitle */
+.typing-cursor {
+    display: inline-block;
+    animation: blink-cursor 1s steps(1) infinite;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    vertical-align: baseline;
+}
+
+@keyframes blink-cursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes glossShine {
+    0% { background-position: -100% 0; }
+    50% { background-position: 200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+h2:not(.section-title) {
+    position: relative;
+}
+
 .title-line {
     flex: 1;
     max-width: 200px;
     height: 2px;
-    background: var(--gradient-1);
+    background: linear-gradient(90deg, 
+        rgba(255, 59, 92, 0.2) 0%, 
+        rgba(45, 212, 255, 0.5) 25%,
+        rgba(255, 59, 92, 0.6) 50%,
+        rgba(45, 212, 255, 0.5) 75%,
+        rgba(255, 59, 92, 0.2) 100%);
+    background-size: 200% 100%;
+    animation: title-line-glide 3s linear infinite;
+    position: relative;
+}
+
+.title-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: blur(4px);
+    opacity: 0.6;
+}
+
+@keyframes title-line-glide {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
 }
 
 /* About Section */
@@ -38,10 +129,13 @@ section {
     font-family: 'Orbitron', sans-serif;
     font-size: 2.5rem;
     margin-bottom: 1.5rem;
-    background: var(--gradient-1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #111 !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: unset !important;
+    background-clip: unset !important;
+    position: relative;
+    z-index: 2;
 }
 
 .about-text p {

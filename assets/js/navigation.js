@@ -16,6 +16,9 @@ export function initNavigation() {
 
     // Navbar scroll effect
     const navbar = document.querySelector('.navbar');
+    const navbarMenu = document.getElementById('navbarMenu');
+    const navbarToggle = document.getElementById('navbarToggle');
+
     window.addEventListener('scroll', () => {
         if (!navbar) return;
         if (window.scrollY > 30) {
@@ -23,5 +26,29 @@ export function initNavigation() {
         } else {
             navbar.classList.remove('scrolled');
         }
+    });
+
+    // Mobile menu toggle
+    if (navbar && navbarMenu && navbarToggle) {
+        navbarToggle.addEventListener('click', () => {
+            const isOpen = navbarMenu.classList.toggle('open');
+            navbar.classList.toggle('menu-open', isOpen);
+            navbarToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        navbarMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navbarMenu.classList.remove('open');
+                navbar.classList.remove('menu-open');
+                navbarToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
+
+    // Navbar link float animation
+    const navLinks = document.querySelectorAll('.navbar-link');
+    navLinks.forEach((link, index) => {
+        // Add staggered float effect
+        link.style.animation = `navFloat 3s ease-in-out ${index * 0.1}s infinite`;
     });
 }

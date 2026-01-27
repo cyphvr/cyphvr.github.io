@@ -12,10 +12,15 @@
     <style>
         .legal-container {
             max-width: 900px;
-            margin: 80px auto;
-            padding: 0 20px 60px;
+            margin: 120px auto 10px auto;
+            padding: 0 20px 0px;
             position: relative;
             z-index: 10;
+        }
+        @media (max-width: 600px) {
+            .legal-container {
+                margin-top: 80px;
+            }
         }
 
         .legal-content {
@@ -79,7 +84,12 @@
                     <span class="logo-text">Cypher</span>
                 </a>
             </div>
-            <div class="navbar-menu">
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-menu" id="navbarMenu">
                 <a href="/features" class="navbar-link">Features</a>
                 <a href="/commands" class="navbar-link">Commands</a>
                 <a href="/about" class="navbar-link">About</a>
@@ -89,7 +99,7 @@
     </nav>
 
     <div class="legal-container">
-        <h1 class="glitch" data-text="Terms of Service" style="text-align: center; margin-bottom: 10px;">Terms of Service</h1>
+        <h1 class="glitch" data-text="Terms of Service" style="text-align: center; margin-bottom: 10px; font-size:2.8rem;">Terms of Service</h1>
         <div class="last-updated">Last Updated: January 23, 2026</div>
 
         <div class="legal-content">
@@ -260,5 +270,14 @@
     </footer>
 
     <script type="module" src="../assets/js/main.js"></script>
+    <script>
+        // Disable right-click and drag on all images
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('img').forEach(function(img) {
+                img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+                img.addEventListener('dragstart', function(e) { e.preventDefault(); });
+            });
+        });
+    </script>
 </body>
 </html>

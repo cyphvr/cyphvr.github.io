@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿    <script>
+        // Disable right-click and drag on all images
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('img').forEach(function(img) {
+                img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+                img.addEventListener('dragstart', function(e) { e.preventDefault(); });
+            });
+        });
+    </script>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -236,7 +245,12 @@
                     <span class="logo-text">Cypher</span>
                 </a>
             </div>
-            <div class="navbar-menu">
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-menu" id="navbarMenu">
                 <a href="/features" class="navbar-link">Features</a>
                 <a href="/commands" class="navbar-link">Commands</a>
                 <a href="/about" class="navbar-link">About</a>
