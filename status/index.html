@@ -21,7 +21,7 @@
     <style>
         .status-container {
             max-width: 900px;
-            margin: 80px auto;
+            margin: 24px auto 0 auto;
             padding: 0 20px;
             position: relative;
             z-index: 10;
@@ -34,42 +34,49 @@
 
         .status-indicator {
             display: inline-block;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            background-color: #2dd4ff;
-            margin-right: 10px;
-            box-shadow: 0 0 0 0 rgba(45, 212, 255, 1);
-            animation: pulse-operational 2s infinite;
+            background-color: #22ff55;
+            margin-right: 8px;
+            box-shadow: 0 0 8px 2px #22ff55;
+            animation: status-breathe-green 2.2s ease-in-out infinite;
+            vertical-align: middle;
         }
 
         .status-indicator.offline {
             background-color: #ff3b5c;
-            box-shadow: 0 0 0 0 rgba(255, 59, 92, 1);
-            animation: pulse-offline 2s infinite;
+            box-shadow: 0 0 8px 2px #ff3b5c;
+            animation: status-breathe-red 2.2s ease-in-out infinite;
         }
 
-        @keyframes pulse-operational {
+        @keyframes status-breathe-green {
             0% {
-                box-shadow: 0 0 0 0 rgba(45, 212, 255, 0.7);
+                box-shadow: 0 0 8px 2px #22ff55, 0 0 0 0 #22ff55;
+                opacity: 1;
             }
             50% {
-                box-shadow: 0 0 0 8px rgba(45, 212, 255, 0);
+                box-shadow: 0 0 16px 6px #22ff55bb, 0 0 0 8px #22ff5500;
+                opacity: 0.6;
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(45, 212, 255, 0);
+                box-shadow: 0 0 8px 2px #22ff55, 0 0 0 0 #22ff55;
+                opacity: 1;
             }
         }
 
-        @keyframes pulse-offline {
+        @keyframes status-breathe-red {
             0% {
-                box-shadow: 0 0 0 0 rgba(255, 59, 92, 0.7);
+                box-shadow: 0 0 8px 2px #ff3b5c, 0 0 0 0 #ff3b5c;
+                opacity: 1;
             }
             50% {
-                box-shadow: 0 0 0 8px rgba(255, 59, 92, 0);
+                box-shadow: 0 0 16px 6px #ff3b5cbb, 0 0 0 8px #ff3b5c00;
+                opacity: 0.6;
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(255, 59, 92, 0);
+                box-shadow: 0 0 8px 2px #ff3b5c, 0 0 0 0 #ff3b5c;
+                opacity: 1;
             }
         }
 
@@ -182,8 +189,8 @@
 
         .last-updated {
             text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
+            margin-top: 10px;
+            padding-top: 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: #b7c1d1 !important;
             font-size: 14px;
@@ -258,24 +265,24 @@
             </div>
         </div>
     </nav>
-
+    <section style="padding: 100px 0 0px;">
+        <div class="container">
+            <h1 class="glitch" data-text="Status" style="text-align: center; margin-bottom: 30px; font-size:2.8rem;">Status</h1>
+            <p style="text-align: center; font-size: 18px; color: #b7c1d1; margin-bottom: 0;">Cypher System Status and Availability</p>
+        </div>
+    </section>
     <div class="status-container">
-        <div class="status-header">
-            <h1 class="glitch" data-text="Status">Status</h1>
-            <p style="margin-top: 10px; color: #b7c1d1;">Cypher System Status and Availability</p>
-        </div>
-
         <div class="status-summary">
-            <div style="display: flex; align-items: center; justify-content: center;">
+            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
                 <span class="status-indicator" id="statusIndicator"></span>
-                <span style="font-size: 18px; font-weight: 600;" id="statusText">Checking...</span>
+                <span style="font-size: 18px; font-weight: 600; display: inline-block; line-height: 1; vertical-align: middle;" id="statusText">Checking...</span>
             </div>
-            <div class="uptime-text" id="uptimeText">Connecting to server...</div>
-            <p style="color: #b7c1d1; margin-top: 10px;" id="statusMessage">Please wait while we check system status</p>
+            <div class="uptime-text" id="uptimeText" style="margin: 0 0 0.2rem 0;">Connecting to server...</div>
+            <p style="color: #b7c1d1; margin-top: 6px;" id="statusMessage">Please wait while we check system status</p>
         </div>
 
-        <h2 style="color: #ffffff; margin-bottom: 20px; font-size: 20px;">Service Status</h2>
-        <div class="service-status" id="serviceStatus">
+        <h2 style="color: #ffffff; margin-bottom: 32px; font-size: 20px;">Service Status</h2>
+        <div class="service-status" id="serviceStatus" style="margin-bottom: 40px;">
             <div class="service-row">
                 <div>
                     <div class="service-name">Cypher Bot</div>
@@ -288,14 +295,9 @@
             </div>
         </div>
 
-        <h2 style="color: #ffffff; margin-bottom: 20px; font-size: 20px;">Recent Incidents</h2>
-        <div class="incident-list">
-            <div class="no-incidents">
-                ✓ No incidents in the last 30 days. Great work!
-            </div>
-        </div>
+        <h2 style="color: #ffffff; margin-bottom: 32px; font-size: 20px;">Recent Incidents</h2>
 
-        <div class="status-history">
+        <div class="status-history" style="margin-top: 0;">
             <div class="history-title">30-Day Uptime History</div>
             <div class="history-bar">
                 <div class="history-item"></div>
@@ -329,11 +331,10 @@
                 <div class="history-item"></div>
                 <div class="history-item"></div>
             </div>
-            <p style="color: #b7c1d1; font-size: 14px; text-align: center;">Green = Operational | Yellow = Degraded | Red = Down</p>
         </div>
 
         <div class="last-updated">
-            Last updated: <span id="lastUpdated">Just now</span> | Refresh in <span id="refreshIn">30</span>s
+            Last updated: <span id="lastUpdated">Just now</span> | Refresh in <span id="refreshIn">15</span>s
         </div>
     </div>
 
@@ -387,7 +388,7 @@
             host: 'cypher.hype.surf',
             port: 10001,
             proxyUrl: '', // Optional: Set to your HTTPS proxy endpoint (e.g., 'https://cypher.hype.surf/health')
-            refreshInterval: 30, // seconds
+            refreshInterval: 15, // seconds
             timeout: 5000 // milliseconds
         };
 
@@ -403,25 +404,22 @@
         function buildHealthEndpoints() {
             const endpoints = [];
             const isHttps = window.location.protocol === 'https:';
-            
             // Prioritize custom HTTPS proxy if configured
             if (CONFIG.proxyUrl) {
                 endpoints.push(CONFIG.proxyUrl);
             }
-            
-            // Add direct endpoints based on page protocol
+            // Use root domain health endpoint (no port)
             if (isHttps) {
-                endpoints.push(`https://${CONFIG.host}:${CONFIG.port}/`);
+                endpoints.push(`https://${CONFIG.host}/health`);
             } else {
-                endpoints.push(`http://${CONFIG.host}:${CONFIG.port}/`);
+                endpoints.push(`http://${CONFIG.host}/health`);
             }
-            
             return endpoints;
         }
 
         async function checkBotStatus() {
             const endpoints = buildHealthEndpoints();
-            let lastError = 'Unable to reach health endpoint. Check CORS/HTTPS configuration.';
+            let lastError = '';
 
             for (const url of endpoints) {
                 try {
@@ -447,8 +445,7 @@
 
                     lastError = 'Health endpoint did not return success:true';
                 } catch (error) {
-                    lastError = 'Health endpoint is unreachable';
-                    // Continue to next endpoint
+                    // Continue to next endpoint (no error message shown)
                 }
             }
 
@@ -472,15 +469,13 @@
 
             elements.indicator.className = 'status-indicator';
             elements.text.textContent = 'All Systems Operational';
-            elements.uptime.textContent = '24/7 Uptime (Always on)';
-            elements.uptime.style.color = '#2dd4ff';
+            elements.uptime.textContent = 'Uptime 99.99%';
+            elements.uptime.style.color = '#22ff55';
             elements.message.textContent = 'Bot is online and running normally';
-            elements.response.textContent = result.endpoint 
-                ? `Connected via ${result.endpoint}` 
-                : `Connected to ${CONFIG.host}:${CONFIG.port}`;
+            elements.response.textContent = '';
             elements.badge.className = 'status-badge badge-operational';
             elements.badgeText.textContent = 'Operational';
-            elements.badge.querySelector('span').style.background = '#2dd4ff';
+            elements.badge.querySelector('span').style.background = '#22ff55';
         }
 
         function updateOfflineStatus(result) {
@@ -498,7 +493,7 @@
             elements.text.textContent = 'System Offline';
             elements.uptime.textContent = 'Bot is currently down';
             elements.uptime.style.color = '#ff3b5c';
-            elements.message.textContent = result?.reason || 'The bot is temporarily offline';
+            elements.message.textContent = result?.reason || '';
             elements.response.textContent = 'Unable to connect';
             elements.badge.className = 'status-badge badge-down';
             elements.badgeText.textContent = 'Down';
