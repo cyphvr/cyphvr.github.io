@@ -51,4 +51,20 @@ export function initNavigation() {
         // Add staggered float effect
         link.style.animation = `navFloat 3s ease-in-out ${index * 0.1}s infinite`;
     });
+
+        // Ensure mobile menu opens exactly under navbar
+        function setMenuTop() {
+            const navbar = document.querySelector('.navbar');
+            const navbarMenu = document.getElementById('navbarMenu');
+            if (!navbar || !navbarMenu) return;
+            if (window.innerWidth <= 768) {
+                const navbarHeight = navbar.offsetHeight;
+                navbarMenu.style.top = navbarHeight + 'px';
+            } else {
+                navbarMenu.style.top = '';
+            }
+        }
+        window.addEventListener('resize', setMenuTop);
+        window.addEventListener('DOMContentLoaded', setMenuTop);
+        setMenuTop();
 }

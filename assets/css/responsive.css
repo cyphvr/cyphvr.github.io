@@ -15,13 +15,13 @@
     }
 
     .navbar-menu {
-        position: absolute;
-        top: 100%;
+        position: fixed;
         left: 0;
+        top: 70px; /* Adjust to match your navbar height */
         width: 100%;
         flex-direction: column;
         align-items: stretch;
-        background: rgba(10, 12, 26, 0.98);
+        background: #181c2f;
         backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         padding: 0;
@@ -31,6 +31,7 @@
         transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), padding 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
         opacity: 0;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        z-index: 9999;
     }
 
     .navbar-menu.open {
@@ -39,10 +40,17 @@
         opacity: 1;
     }
 
-    .navbar-link,
+    .navbar-link {
+        width: 100%;
+        text-align: center;
+        padding: 0.95rem 1.1rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        animation: none !important;
+    }
     .navbar-invite {
         width: 100%;
-        text-align: left;
+        text-align: center;
         padding: 0.95rem 1.1rem;
         border-radius: 8px;
         margin-bottom: 0.5rem;
@@ -121,7 +129,7 @@
     }
 
     .navbar-menu {
-        background: rgba(10, 12, 26, 0.98);
+        background: #181c2f;
     }
 
     .footer-content {
