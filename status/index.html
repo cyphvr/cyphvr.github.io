@@ -386,8 +386,9 @@
         // ========================================
         const CONFIG = {
             host: 'cypher.hype.surf',
-            port: 10001,
-            proxyUrl: '', // Optional: Set to your HTTPS proxy endpoint (e.g., 'https://cypher.hype.surf/health')
+            port: 10001, // Backend port, but proxy handles HTTPS
+            // Always use the HTTPS proxy endpoint for health checks
+            proxyUrl: 'https://cypher.hype.surf/health',
             refreshInterval: 15, // seconds
             timeout: 5000 // milliseconds
         };
@@ -402,19 +403,8 @@
         // Health Check Logic
         // ========================================
         function buildHealthEndpoints() {
-            const endpoints = [];
-            const isHttps = window.location.protocol === 'https:';
-            // Prioritize custom HTTPS proxy if configured
-            if (CONFIG.proxyUrl) {
-                endpoints.push(CONFIG.proxyUrl);
-            }
-            // Use root domain health endpoint (no port)
-            if (isHttps) {
-                endpoints.push(`https://${CONFIG.host}/health`);
-            } else {
-                endpoints.push(`http://${CONFIG.host}/health`);
-            }
-            return endpoints;
+            // Only use the HTTPS proxy endpoint for health checks
+            return [CONFIG.proxyUrl];
         }
 
         async function checkBotStatus() {
