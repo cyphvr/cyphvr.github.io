@@ -1,6 +1,6 @@
-import http from 'http';
+const http = require('http');
 
-export default function handler(req, res) {
+module.exports = async (req, res) => {
   if (req.method !== 'GET') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
@@ -12,9 +12,9 @@ export default function handler(req, res) {
     proxyRes.on('end', () => {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Content-Type', proxyRes.headers['content-type'] || 'application/json');
-      res.status(proxyRes.statusCode).end(data);
+      res.status(proxyRes.statusCode).send(data);
     });
   }).on('error', (err) => {
     res.status(502).json({ error: 'Bad gateway', details: err.message });
   });
-}
+};
