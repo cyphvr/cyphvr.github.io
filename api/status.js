@@ -1,4 +1,4 @@
-const http = require('http');
+const https = require('https');
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  http.get('http://cypher.hype.surf:10001', (proxyRes) => {
+  https.get('https://cypher-bot-gamma.vercel.app/api/status', (proxyRes) => {
     let data = '';
     proxyRes.on('data', chunk => data += chunk);
     proxyRes.on('end', () => {
