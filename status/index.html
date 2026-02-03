@@ -387,8 +387,8 @@
         const CONFIG = {
             host: 'cypher.hype.surf',
             port: 10001, // Backend port, but proxy handles HTTPS
-            // Always use the HTTPS proxy endpoint for health checks
-            proxyUrl: 'https://cypher.hype.surf/health',
+            // Use the Vercel proxy endpoint for health checks
+            proxyUrl: 'https://cypher-bot-gamma.vercel.app/api/status',
             refreshInterval: 15, // seconds
             timeout: 5000 // milliseconds
         };
