@@ -1,4 +1,4 @@
-﻿<script>
+﻿    <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('img').forEach(function(img) {
                 img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
@@ -485,27 +485,10 @@
                     content: `<@&${ROLE_ID}>`,
                     embeds: [{
                         author: {
-                            name: `${BOT_NAME} Monitoring server thinks the bot is down.`,
+                            name: `${BOT_NAME} Down`,
                             icon_url: 'https://i.imgur.com/hIxdlCa.png'
                         },
                         color: 16711680
-                    }]
-                })
-            });
-        }
-
-        function sendDiscordUpAlert() {
-            fetch(DISCORD_WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    content: `<@&${ROLE_ID}>`,
-                    embeds: [{
-                        author: {
-                            name: `${BOT_NAME} Monitoring server thinks the bot is up.`,
-                            icon_url: 'https://i.imgur.com/sKbzMUI.gif'
-                        },
-                        color: 65280
                     }]
                 })
             });
@@ -519,7 +502,6 @@
             } else if (!isDown && wasDown) {
                 clearInterval(downInterval);
                 downInterval = null;
-                sendDiscordUpAlert();
                 wasDown = false;
             }
         }
