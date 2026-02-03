@@ -12,7 +12,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status - Cypher Discord Bot</title>
-    <script src="config.js"></script>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -381,6 +380,14 @@
     </footer>
 
     <script>
+        // Public URLs - safe to expose
+        const VERCEL_STATUS_API_URL = 'https://cypher-bot-gamma.vercel.app/api/status';
+        const VERCEL_SERVER_COUNT_API_URL = 'https://cypher-bot-gamma.vercel.app/api/server-count';
+
+        // Sensitive values loaded from server-side endpoint
+        let WEBHOOK_URL = '';
+        let ROLE = '';
+
         const CONFIG = {
             host: 'cypher.hype.surf',
             port: 10001,
@@ -478,12 +485,23 @@
 
         const BOT_NAME = 'Cypher';
 
+        async function loadSensitiveConfig() {
+            try {
+                const response = await fetch('/api/config');
+                const config = await response.json();
+                WEBHOOK_URL = config.WEBHOOK_URL;
+                ROLE = config.ROLE;
+            } catch (error) {
+                console.error('Failed to load config:', error);
+            }
+        }
+
         function sendDiscordAlert() {
-            fetch(DISCORD_WEBHOOK_URL, {
+            fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    content: `<@&${ROLE_ID}>`,
+                    content: `<@&${ROLE}>`,
                     embeds: [{
                         author: {
                             name: `${BOT_NAME} Monitoring thinks the bot is down.`,
@@ -534,7 +552,10 @@
             }, 1000);
         }
 
-        updateStatusPage();
-        startRefreshTimer();
+        // Load config before starting status checks
+        loadSensitiveConfig().then(() => {
+            updateStatusPage();
+            startRefreshTimer();
+        });
     </script></body>
 </html>
