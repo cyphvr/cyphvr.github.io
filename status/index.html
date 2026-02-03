@@ -12,6 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status - Cypher Discord Bot</title>
+    <script src="config.js"></script>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -383,7 +384,7 @@
         const CONFIG = {
             host: 'cypher.hype.surf',
             port: 10001,
-            proxyUrl: 'https://cypher-bot-gamma.vercel.app/api/status',
+            proxyUrl: VERCEL_STATUS_API_URL,
             refreshInterval: 60,
             timeout: 5000
         };
@@ -472,6 +473,39 @@
             elements.badge.querySelector('span').style.background = '#ff3b5c';
         }
 
+        let downInterval = null;
+        let wasDown = false;
+
+        const BOT_NAME = 'Cypher';
+        function sendDiscordAlert() {
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    content: `<@&${ROLE_ID}>`,
+                    embeds: [{
+                        author: {
+                            name: `${BOT_NAME} Down`,
+                            icon_url: 'https://i.imgur.com/hIxdlCa.png'
+                        },
+                        color: 16711680
+                    }]
+                })
+            });
+        }
+
+        function handleStatus(isDown) {
+            if (isDown && !wasDown) {
+                sendDiscordAlert();
+                downInterval = setInterval(sendDiscordAlert, 60000);
+                wasDown = true;
+            } else if (!isDown && wasDown) {
+                clearInterval(downInterval);
+                downInterval = null;
+                wasDown = false;
+            }
+        }
+
         async function updateStatusPage() {
             const result = await checkBotStatus();
             lastKnownStatus = result.isUp;
@@ -481,6 +515,8 @@
             } else {
                 updateOfflineStatus(result);
             }
+
+            handleStatus(!result.isUp);
 
             const now = new Date();
             document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
