@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
     proxyRes.on('end', () => {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Content-Type', proxyRes.headers['content-type'] || 'application/json');
-      res.status(proxyRes.statusCode).end(data);
+      res.status(proxyRes.statusCode).send(data);
     });
   }).on('error', (err) => {
     res.status(502).json({ error: 'Bad gateway', details: err.message });
