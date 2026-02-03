@@ -1,3 +1,4 @@
+const { SERVER_COUNT_API } = require('../status/config');
 let cachedCount = null;
 let cachedAt = 0;
 const CACHE_DURATION = 300 * 1000;
@@ -28,7 +29,7 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'Bot token not configured' });
         }
 
-        const response = await fetch('https://discord.com/api/v10/users/@me/guilds', {
+        const response = await fetch(SERVER_COUNT_API, {
             method: 'GET',
             headers: {
                 'Authorization': `Bot ${BOT_TOKEN}`
