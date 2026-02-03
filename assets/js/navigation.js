@@ -1,6 +1,4 @@
-// Navigation functionality
 export function initNavigation() {
-    // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -14,7 +12,6 @@ export function initNavigation() {
         });
     });
 
-    // Navbar scroll effect
     const navbar = document.querySelector('.navbar');
     const navbarMenu = document.getElementById('navbarMenu');
     const navbarToggle = document.getElementById('navbarToggle');
@@ -28,7 +25,6 @@ export function initNavigation() {
         }
     });
 
-    // Mobile menu toggle
     if (navbar && navbarMenu && navbarToggle) {
         navbarToggle.addEventListener('click', () => {
             const isOpen = navbarMenu.classList.toggle('open');
@@ -45,14 +41,11 @@ export function initNavigation() {
         });
     }
 
-    // Navbar link float animation
     const navLinks = document.querySelectorAll('.navbar-link');
     navLinks.forEach((link, index) => {
-        // Add staggered float effect
         link.style.animation = `navFloat 3s ease-in-out ${index * 0.1}s infinite`;
     });
 
-        // Ensure mobile menu opens exactly under navbar
         function setMenuTop() {
             const navbar = document.querySelector('.navbar');
             const navbarMenu = document.getElementById('navbarMenu');

@@ -1,6 +1,4 @@
-// Button interactions
 export function initButtons() {
-    // Back to Top Button
     const backToTopButton = document.getElementById('backToTop');
 
     if (backToTopButton) {
@@ -20,10 +18,8 @@ export function initButtons() {
         });
     }
 
-    // Button click ripple effects
     document.querySelectorAll('.btn').forEach(button => {
         button.addEventListener('click', function(e) {
-            // Create ripple effect
             const ripple = document.createElement('span');
             const rect = this.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
@@ -41,7 +37,6 @@ export function initButtons() {
         });
     });
 
-    // Add CSS for ripple effect dynamically
     const style = document.createElement('style');
     style.textContent = `
         .ripple {

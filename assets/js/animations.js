@@ -1,6 +1,4 @@
-// Animation effects
 export function initAnimations() {
-    // Glitch effect enhancement - smooth animation
     const glitchElement = document.querySelector('.glitch');
     if (glitchElement) {
         let glitchTimeout;
@@ -18,7 +16,6 @@ export function initAnimations() {
         animateGlitch();
     }
 
-    // Add typing effect to hero subtitle (with blinking underscore that never disappears)
     const subtitle = document.querySelector('.hero-subtitle');
     if (subtitle) {
         const text = subtitle.textContent;
@@ -42,7 +39,6 @@ export function initAnimations() {
         setTimeout(typeWriter, 1000);
     }
 
-    // Rolling binary effect for footer section titles (scramble → settle effect)
     const binaryTargets = document.querySelectorAll('.binary-roll');
     binaryTargets.forEach((el) => {
         const original = el.textContent.trim();
@@ -72,13 +68,13 @@ export function initAnimations() {
                 if (span.classList.contains('is-space')) return;
 
                 span.classList.remove('locked');
-                let cycles = 4 + Math.floor(Math.random() * 3); // Reduced intensity
+                let cycles = 4 + Math.floor(Math.random() * 3);
 
                 const shuffle = () => {
                     if (cycles > 0) {
                         span.textContent = Math.random() > 0.5 ? '0' : '1';
                         cycles--;
-                        setTimeout(shuffle, 48 + Math.random() * 32); // Slightly slower
+                        setTimeout(shuffle, 48 + Math.random() * 32);
                     } else {
                         span.textContent = span.dataset.final || '';
                         span.classList.add('locked');

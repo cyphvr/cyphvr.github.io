@@ -1,4 +1,3 @@
-/* Make 'Explore Features' button text white by default and black on hover */
 a.btn-secondary[href$="/features"],
 a.btn-secondary[href$="/features"] * {
     color: #fff !important;
@@ -7,12 +6,10 @@ a.btn-secondary[href$="/features"]:hover,
 a.btn-secondary[href$="/features"]:hover * {
     color: #111 !important;
 }
-/* Force black text for binary-roll inside primary button (with extra specificity) */
 .btn-primary > .star-icon + .binary-roll,
 .btn-primary .binary-roll {
     color: #111 !important;
 }
-/* Force sparkle icon (stars) to always be white and visible, overriding any other CSS */
 .sparkle-icon svg,
 .sparkle-icon svg * {
     color: #fff !important;
@@ -20,7 +17,6 @@ a.btn-secondary[href$="/features"]:hover * {
     stroke: #fff !important;
     opacity: 1 !important;
 }
-/* Button Styles */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -60,7 +56,6 @@ a.btn-primary, a.btn-primary *, a.btn.btn-primary, a.btn.btn-primary * {
     color: #111 !important;
 }
 
-/* Force black text for Add to Discord, Explore Features, and About Cypher */
 a.btn-primary, a.btn-primary *, a.btn.btn-primary, a.btn.btn-primary *,
 .about .binary-roll, .about .binary-roll * {
     color: #111 !important;
@@ -119,25 +114,19 @@ a.btn-primary, a.btn-primary *, a.btn.btn-primary, a.btn.btn-primary *,
     padding: 0.7rem 1.4rem;
 }
 
-/* Reduce Invite Cypher Now button size */
 a.btn-primary.btn-large, a.btn.btn-primary.btn-large {
     padding: 0.7rem 1.4rem !important;
     font-size: 1rem !important;
 }
 
-/* Force white text for Invite to Discord and Explore Features */
-
-/* OVERRIDE: Allow custom color for Invite to Discord button */
 a.btn-primary, a.btn-primary *, a.btn.btn-primary, a.btn.btn-primary * {
     color: inherit !important;
 }
 
-/* Force red text for About Cypher */
 .about .binary-roll, .about .binary-roll * {
     color: var(--primary-color) !important;
 }
 
-/* Back to Top Button */
 .back-to-top {
     position: fixed;
     bottom: 35px;

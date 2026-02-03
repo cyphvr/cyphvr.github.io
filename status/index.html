@@ -1,5 +1,4 @@
 ﻿    <script>
-        // Disable right-click and drag on all images
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('img').forEach(function(img) {
                 img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
@@ -381,29 +380,17 @@
     </footer>
 
     <script>
-        // ========================================
-        // Configuration
-        // ========================================
         const CONFIG = {
             host: 'cypher.hype.surf',
-            port: 10001, // Backend port, but proxy handles HTTPS
-            // Use the Vercel proxy endpoint for health checks
+            port: 10001,
             proxyUrl: 'https://cypher-bot-gamma.vercel.app/api/status',
-            refreshInterval: 15, // seconds
-            timeout: 5000 // milliseconds
+            refreshInterval: 60,
+            timeout: 5000
         };
 
-        // ========================================
-        // State Management
-        // ========================================
         let secondsRemaining = CONFIG.refreshInterval;
         let lastKnownStatus = null;
-
-        // ========================================
-        // Health Check Logic
-        // ========================================
         function buildHealthEndpoints() {
-            // Only use the HTTPS proxy endpoint for health checks
             return [CONFIG.proxyUrl];
         }
 
@@ -427,7 +414,6 @@
 
                     const data = await response.json();
                     
-                    // Only consider bot online if success is explicitly true
                     if (data && data.success === true) {
                         console.log('✓ Bot is ONLINE via', url);
                         return { isUp: true, endpoint: url };
@@ -435,7 +421,6 @@
 
                     lastError = 'Health endpoint did not return success:true';
                 } catch (error) {
-                    // Continue to next endpoint (no error message shown)
                 }
             }
 
@@ -443,9 +428,6 @@
             return { isUp: false, reason: lastError };
         }
 
-        // ========================================
-        // UI Update Functions
-        // ========================================
         function updateOnlineStatus(result) {
             const elements = {
                 indicator: document.getElementById('statusIndicator'),
@@ -500,15 +482,10 @@
                 updateOfflineStatus(result);
             }
 
-            // Update timestamp
             const now = new Date();
             document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
             secondsRemaining = CONFIG.refreshInterval;
         }
-
-        // ========================================
-        // Auto-Refresh Timer
-        // ========================================
         function startRefreshTimer() {
             setInterval(() => {
                 secondsRemaining--;
@@ -520,9 +497,6 @@
             }, 1000);
         }
 
-        // ========================================
-        // Initialize
-        // ========================================
         updateStatusPage();
         startRefreshTimer();
     </script></body>

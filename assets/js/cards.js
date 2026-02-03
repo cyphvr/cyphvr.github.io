@@ -1,6 +1,4 @@
-// Card interaction effects
 export function initCards() {
-    // Add hover effect to feature cards
     const featureCards = document.querySelectorAll('.feature-card');
     featureCards.forEach(card => {
         card.addEventListener('mouseenter', function() {
@@ -12,7 +10,6 @@ export function initCards() {
         });
     });
 
-    // Command card animation on scroll
     const commandObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {
@@ -32,7 +29,6 @@ export function initCards() {
         commandObserver.observe(card);
     });
 
-    // Feature card animation on scroll
     const featureObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, index) => {
             if (entry.isIntersecting) {

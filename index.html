@@ -298,7 +298,6 @@
 
     <script type="module" src="assets/js/main.js"></script>
         <script>
-            // Disable right-click and drag on all images
             document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('img').forEach(function(img) {
                     img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
@@ -307,10 +306,8 @@
             });
         </script>
     <script>
-        // Fetch Discord bot server count from Vercel API endpoint
         async function fetchServerCount() {
             try {
-                // Vercel API endpoint for Discord server count
                 const API_URL = 'https://cypher-bot-gamma.vercel.app/api/server-count';
                 
                 const response = await fetch(API_URL, {
@@ -331,7 +328,6 @@
             }
         }
         
-        // Fetch server count when page loads
         document.addEventListener('DOMContentLoaded', fetchServerCount);
     </script>
 </body>

@@ -1,4 +1,3 @@
-/* Hero Section Styles */
 .hero {
     min-height: 100vh;
     display: flex;
@@ -47,7 +46,6 @@
     margin-bottom: 4rem;
 }
 
-/* Stats */
 .stats {
     display: flex;
     gap: 4rem;

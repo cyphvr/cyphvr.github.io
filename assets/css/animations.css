@@ -1,5 +1,3 @@
-/* Animations & Keyframes */
-
 .aurora {
     position: fixed;
     inset: 0;
@@ -9,7 +7,6 @@
     overflow: hidden;
     filter: brightness(1.18) saturate(1.25) contrast(1.12);
 }
-
 
 .aurora::before {
     content: '';
@@ -23,7 +20,6 @@
     filter: blur(48px) brightness(1.18) saturate(1.18);
     animation: meshFloat 14s ease-in-out infinite;
 }
-
 
 .aurora::after {
     content: '';
@@ -146,7 +142,6 @@
     }
 }
 
-/* Disabled star animations */
 .stars, .stars2, .stars3 {
     display: none !important;
     opacity: 0 !important;

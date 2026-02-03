@@ -1,11 +1,9 @@
-/* Responsive button sizing for mobile */
 @media (max-width: 600px) {
     .btn {
         font-size: 1rem;
         padding: 0.7rem 1.1rem;
     }
 }
-/* Responsive Styles */
 
 @media (max-width: 768px) {
     .navbar-toggle {
@@ -17,7 +15,7 @@
     .navbar-menu {
         position: fixed;
         left: 0;
-        top: 70px; /* Adjust to match your navbar height */
+        top: 70px;
         width: 100%;
         flex-direction: column;
         align-items: stretch;
