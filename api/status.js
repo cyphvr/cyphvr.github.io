@@ -1,4 +1,5 @@
-const { STATUS_API } = require('../status/config');
+
+const { VERCEL_STATUS_API_URL } = require('../status/config');
 const http = require('http');
 
 module.exports = async (req, res) => {
@@ -7,7 +8,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  http.get(STATUS_API, (proxyRes) => {
+  http.get(VERCEL_STATUS_API_URL, (proxyRes) => {
     let data = '';
     proxyRes.on('data', chunk => data += chunk);
     proxyRes.on('end', () => {

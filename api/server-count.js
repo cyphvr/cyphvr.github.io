@@ -1,4 +1,5 @@
-const { SERVER_COUNT_API } = require('../status/config');
+
+const { VERCEL_SERVER_COUNT_API_URL, ROLE_ID, DISCORD_WEBHOOK_URL } = require('../status/config');
 let cachedCount = null;
 let cachedAt = 0;
 const CACHE_DURATION = 300 * 1000;
@@ -29,7 +30,8 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'Bot token not configured' });
         }
 
-        const response = await fetch(SERVER_COUNT_API, {
+
+        const response = await fetch(VERCEL_SERVER_COUNT_API_URL, {
             method: 'GET',
             headers: {
                 'Authorization': `Bot ${BOT_TOKEN}`
