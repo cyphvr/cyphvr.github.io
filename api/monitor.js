@@ -1,14 +1,10 @@
 import https from 'https';
 
 export const config = {
-  crons: ['*/1 * * * *']
+  maxDuration: 60
 };
 
 export default async function handler(req, res) {
-  if (req.headers['x-vercel-cron-secret'] !== process.env.CRON_SECRET) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
   try {
     const statusResponse = await fetch('https://cypher-bot-gamma.vercel.app/api/status');
     const statusData = await statusResponse.json();
