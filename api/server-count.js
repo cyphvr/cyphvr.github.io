@@ -2,7 +2,7 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Cache-Control', 'public, max-age=300');
+    res.setHeader('Cache-Control', 'public, max-age=1800, s-maxage=1800');
     
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
@@ -28,7 +28,13 @@ export default async function handler(req, res) {
         });
         
         if (!response.ok) {
-            console.error('Discord API error:', response.status, response.statusText);
+            const errorText = await response.text();
+            console.error('Discord API error:', response.status, response.statusText, errorText);
+            
+            if (response.status === 429) {
+                return res.status(200).json({ count: 0, cached: true, error: 'Rate limited' });
+            }
+            
             return res.status(500).json({ error: 'Failed to fetch from Discord API' });
         }
         
