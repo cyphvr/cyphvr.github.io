@@ -489,6 +489,10 @@
 
         function handleStatus(isDown) {
             if (isInitialLoad) {
+                if (isDown && wasDown) {
+                    // Bot is still down after page reload, restart the alert interval
+                    downInterval = setInterval(sendDiscordAlert, 60000);
+                }
                 wasDown = isDown;
                 localStorage.setItem('wasDown', isDown ? 'true' : 'false');
                 return;
