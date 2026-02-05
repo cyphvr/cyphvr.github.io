@@ -522,11 +522,16 @@
             }
 
             handleStatus(!result.isUp);
-            isInitialLoad = false;
 
             const now = new Date();
             document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
-            secondsRemaining = CONFIG.refreshInterval;
+            
+            if (!isInitialLoad) {
+                secondsRemaining = CONFIG.refreshInterval;
+                localStorage.setItem('secondsRemaining', secondsRemaining);
+            }
+            
+            isInitialLoad = false;
         }
         function startRefreshTimer() {
             setInterval(() => {
