@@ -473,7 +473,7 @@
         }
 
         let downInterval = null;
-        let wasDown = false;
+        let wasDown = localStorage.getItem('botWasDown') === 'true';
 
         const BOT_NAME = 'Cypher';
         function sendDiscordAlert() {
@@ -491,10 +491,12 @@
                 sendDiscordAlert();
                 downInterval = setInterval(sendDiscordAlert, 60000);
                 wasDown = true;
+                localStorage.setItem('botWasDown', 'true');
             } else if (!isDown && wasDown) {
                 clearInterval(downInterval);
                 downInterval = null;
                 wasDown = false;
+                localStorage.setItem('botWasDown', 'false');
             }
         }
 
