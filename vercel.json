@@ -6,8 +6,8 @@
   },
   "redirects": [
     {
-      "source": "/:path+/",
-      "destination": "/:path+",
+      "source": "/(.*)/",
+      "destination": "/$1",
       "permanent": true
     }
   ]
