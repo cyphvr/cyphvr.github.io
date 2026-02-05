@@ -12,7 +12,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status - Cypher Discord Bot</title>
-    <script src="config.js"></script>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -384,7 +383,7 @@
         const CONFIG = {
             host: 'cypher.hype.surf',
             port: 10001,
-            proxyUrl: VERCEL_STATUS_API_URL,
+            proxyUrl: 'https://cypher-bot-gamma.vercel.app/api/status',
             refreshInterval: 60,
             timeout: 5000
         };
@@ -477,21 +476,28 @@
         let wasDown = false;
 
         const BOT_NAME = 'Cypher';
-        function sendDiscordAlert() {
-            fetch(DISCORD_WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    content: `<@&${ROLE_ID}>`,
-                    embeds: [{
-                        author: {
-                            name: `${BOT_NAME} Monitoring thinks the bot is down.`,
-                            icon_url: 'https://i.imgur.com/ZDYu6Kp.png'
-                        },
-                        color: 16732280
-                    }]
-                })
-            });
+        async function sendDiscordAlert() {
+            try {
+                const credentialsResponse = await fetch('https://cypher-bot-gamma.vercel.app/api/credentials');
+                const { WEBHOOK_URL, ROLE } = await credentialsResponse.json();
+                
+                fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: `<@&${ROLE}>`,
+                        embeds: [{
+                            author: {
+                                name: `${BOT_NAME} Monitoring thinks the bot is down.`,
+                                icon_url: 'https://i.imgur.com/ZDYu6Kp.png'
+                            },
+                            color: 16732280
+                        }]
+                    })
+                });
+            } catch (error) {
+                console.log('Error sending alert:', error);
+            }
         }
 
         function handleStatus(isDown) {
