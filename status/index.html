@@ -521,17 +521,18 @@
                 updateOfflineStatus(result);
             }
 
+            const wasInitialLoad = isInitialLoad;
+            isInitialLoad = false;
+            
             handleStatus(!result.isUp);
 
             const now = new Date();
             document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
             
-            if (!isInitialLoad) {
+            if (!wasInitialLoad) {
                 secondsRemaining = CONFIG.refreshInterval;
                 localStorage.setItem('secondsRemaining', secondsRemaining);
             }
-            
-            isInitialLoad = false;
         }
         function startRefreshTimer() {
             setInterval(() => {
