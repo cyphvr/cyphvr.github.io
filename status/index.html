@@ -390,6 +390,7 @@
 
         let secondsRemaining = parseInt(localStorage.getItem('secondsRemaining')) || CONFIG.refreshInterval;
         let lastKnownStatus = null;
+        document.getElementById('refreshIn').textContent = secondsRemaining;
         function buildHealthEndpoints() {
             return [CONFIG.proxyUrl];
         }
@@ -475,7 +476,7 @@
         let downInterval = null;
         let wasDown = localStorage.getItem('wasDown') === 'true';
         let isInitialLoad = true;
-        let lastAlertTime = parseInt(localStorage.getItem('lastAlertTime')) || Date.now();
+        let lastAlertTime = parseInt(localStorage.getItem('lastAlertTime')) || 0;
 
         const BOT_NAME = 'Cypher';
         function sendDiscordAlert() {
@@ -545,6 +546,8 @@
             }
         }
         function startRefreshTimer() {
+            document.getElementById('refreshIn').textContent = secondsRemaining;
+            
             setInterval(() => {
                 secondsRemaining--;
                 localStorage.setItem('secondsRemaining', secondsRemaining);
