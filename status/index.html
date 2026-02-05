@@ -553,17 +553,39 @@
             }
         }
         function startRefreshTimer() {
-            document.getElementById('refreshIn').textContent = secondsRemaining;
+            let lastRefreshTime = parseInt(localStorage.getItem('lastRefreshTimestamp')) || Date.now();
+            localStorage.setItem('lastRefreshTimestamp', lastRefreshTime);
             
-            setInterval(() => {
-                secondsRemaining--;
-                localStorage.setItem('secondsRemaining', secondsRemaining);
-                if (secondsRemaining <= 0) {
+            function checkRefreshDue() {
+                const now = Date.now();
+                const elapsedSeconds = Math.floor((now - lastRefreshTime) / 1000);
+                
+                if (elapsedSeconds >= CONFIG.refreshInterval) {
+                    lastRefreshTime = now;
+                    localStorage.setItem('lastRefreshTimestamp', now);
                     updateStatusPage();
                 } else {
+                    secondsRemaining = CONFIG.refreshInterval - elapsedSeconds;
                     document.getElementById('refreshIn').textContent = secondsRemaining;
                 }
-            }, 1000);
+            }
+            
+            checkRefreshDue();
+            
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    checkRefreshDue();
+                }
+            });
+            
+            function updateTimer() {
+                if (!document.hidden) {
+                    checkRefreshDue();
+                }
+                requestAnimationFrame(updateTimer);
+            }
+            
+            updateTimer();
         }
 
         startRefreshTimer();
