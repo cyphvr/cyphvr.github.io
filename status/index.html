@@ -389,8 +389,17 @@
         };
 
         let secondsRemaining = parseInt(localStorage.getItem('secondsRemaining')) || CONFIG.refreshInterval;
-        let lastKnownStatus = null;
+        let lastKnownStatus = localStorage.getItem('lastKnownStatus') === 'true';
         document.getElementById('refreshIn').textContent = secondsRemaining;
+        
+        function displayCachedStatus() {
+            if (lastKnownStatus) {
+                updateOnlineStatus({ isUp: true });
+            } else {
+                updateOfflineStatus({ isUp: false });
+            }
+        }
+        displayCachedStatus();
         function buildHealthEndpoints() {
             return [CONFIG.proxyUrl];
         }
@@ -512,6 +521,7 @@
         async function updateStatusPage() {
             const result = await checkBotStatus();
             lastKnownStatus = result.isUp;
+            localStorage.setItem('lastKnownStatus', result.isUp ? 'true' : 'false');
 
             if (result.isUp) {
                 updateOnlineStatus(result);
