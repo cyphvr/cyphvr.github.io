@@ -388,7 +388,7 @@
             timeout: 5000
         };
 
-        let secondsRemaining = CONFIG.refreshInterval;
+        let secondsRemaining = parseInt(localStorage.getItem('secondsRemaining')) || CONFIG.refreshInterval;
         let lastKnownStatus = null;
         function buildHealthEndpoints() {
             return [CONFIG.proxyUrl];
@@ -473,10 +473,16 @@
         }
 
         let downInterval = null;
-        let wasDown = localStorage.getItem('botWasDown') === 'true';
+        let wasDown = localStorage.getItem('wasDown') === 'true';
+        let isInitialLoad = true;
+        let lastAlertTime = parseInt(localStorage.getItem('lastAlertTime')) || Date.now();
 
         const BOT_NAME = 'Cypher';
         function sendDiscordAlert() {
+            const now = Date.now();
+            localStorage.setItem('lastAlertTime', now);
+            lastAlertTime = now;
+            
             fetch('https://cypher-bot-gamma.vercel.app/api/alert', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -487,16 +493,31 @@
         }
 
         function handleStatus(isDown) {
+            if (isInitialLoad) {
+                if (isDown && wasDown) {
+                    const timeSinceLastAlert = Date.now() - lastAlertTime;
+                    const timeUntilNextAlert = Math.max(0, 60000 - timeSinceLastAlert);
+                    
+                    setTimeout(() => {
+                        sendDiscordAlert();
+                        downInterval = setInterval(sendDiscordAlert, 60000);
+                    }, timeUntilNextAlert);
+                }
+                wasDown = isDown;
+                localStorage.setItem('wasDown', isDown ? 'true' : 'false');
+                return;
+            }
+
             if (isDown && !wasDown) {
                 sendDiscordAlert();
                 downInterval = setInterval(sendDiscordAlert, 60000);
                 wasDown = true;
-                localStorage.setItem('botWasDown', 'true');
+                localStorage.setItem('wasDown', 'true');
             } else if (!isDown && wasDown) {
                 clearInterval(downInterval);
                 downInterval = null;
                 wasDown = false;
-                localStorage.setItem('botWasDown', 'false');
+                localStorage.setItem('wasDown', 'false');
             }
         }
 
@@ -510,15 +531,23 @@
                 updateOfflineStatus(result);
             }
 
+            const wasInitialLoad = isInitialLoad;
+            isInitialLoad = false;
+            
             handleStatus(!result.isUp);
 
             const now = new Date();
             document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
-            secondsRemaining = CONFIG.refreshInterval;
+            
+            if (!wasInitialLoad) {
+                secondsRemaining = CONFIG.refreshInterval;
+                localStorage.setItem('secondsRemaining', secondsRemaining);
+            }
         }
         function startRefreshTimer() {
             setInterval(() => {
                 secondsRemaining--;
+                localStorage.setItem('secondsRemaining', secondsRemaining);
                 if (secondsRemaining <= 0) {
                     updateStatusPage();
                 } else {
