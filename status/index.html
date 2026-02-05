@@ -390,6 +390,7 @@
 
         let secondsRemaining = parseInt(localStorage.getItem('secondsRemaining')) || CONFIG.refreshInterval;
         let lastKnownStatus = localStorage.getItem('lastKnownStatus') === 'true';
+        let lastUpdatedTime = localStorage.getItem('lastUpdatedTime') || 'Just now';
         document.getElementById('refreshIn').textContent = secondsRemaining;
         
         function displayCachedStatus() {
@@ -398,6 +399,7 @@
             } else {
                 updateOfflineStatus({ isUp: false });
             }
+            document.getElementById('lastUpdated').textContent = lastUpdatedTime;
         }
         displayCachedStatus();
         function buildHealthEndpoints() {
@@ -540,7 +542,10 @@
             }
 
             const now = new Date();
-            document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
+            const timeString = now.toLocaleTimeString();
+            document.getElementById('lastUpdated').textContent = timeString;
+            lastUpdatedTime = timeString;
+            localStorage.setItem('lastUpdatedTime', timeString);
             
             if (!wasInitialLoad) {
                 secondsRemaining = CONFIG.refreshInterval;
