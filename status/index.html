@@ -474,6 +474,7 @@
 
         let downInterval = null;
         let wasDown = false;
+        let isInitialLoad = true;
 
         const BOT_NAME = 'Cypher';
         function sendDiscordAlert() {
@@ -487,6 +488,11 @@
         }
 
         function handleStatus(isDown) {
+            if (isInitialLoad) {
+                wasDown = isDown;
+                return;
+            }
+
             if (isDown && !wasDown) {
                 sendDiscordAlert();
                 downInterval = setInterval(sendDiscordAlert, 60000);
@@ -509,6 +515,7 @@
             }
 
             handleStatus(!result.isUp);
+            isInitialLoad = false;
 
             const now = new Date();
             document.getElementById('lastUpdated').textContent = now.toLocaleTimeString();
