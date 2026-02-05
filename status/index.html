@@ -475,9 +475,14 @@
         let downInterval = null;
         let wasDown = localStorage.getItem('wasDown') === 'true';
         let isInitialLoad = true;
+        let lastAlertTime = parseInt(localStorage.getItem('lastAlertTime')) || 0;
 
         const BOT_NAME = 'Cypher';
         function sendDiscordAlert() {
+            const now = Date.now();
+            localStorage.setItem('lastAlertTime', now);
+            lastAlertTime = now;
+            
             fetch('https://cypher-bot-gamma.vercel.app/api/alert', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -491,10 +496,14 @@
             if (isInitialLoad) {
                 if (isDown && wasDown) {
                     // Bot is still down after page reload, restart the alert interval
-                    downInterval = setInterval(sendDiscordAlert, 60000);
+                    const timeSinceLastAlert = Date.now() - lastAlertTime;
+                    const timeUntilNextAlert = Math.max(0, 60000 - timeSinceLastAlert);
+                    
+                    setTimeout(() => {
+                        sendDiscordAlert();
+                        downInterval = setInterval(sendDiscordAlert, 60000);
+                    }, timeUntilNextAlert);
                 }
-                wasDown = isDown;
-                localStorage.setItem('wasDown', isDown ? 'true' : 'false');
                 return;
             }
 
