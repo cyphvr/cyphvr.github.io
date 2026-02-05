@@ -476,28 +476,14 @@
         let wasDown = false;
 
         const BOT_NAME = 'Cypher';
-        async function sendDiscordAlert() {
-            try {
-                const credentialsResponse = await fetch('https://cypher-bot-gamma.vercel.app/api/credentials');
-                const { WEBHOOK_URL, ROLE } = await credentialsResponse.json();
-                
-                fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        content: `<@&${ROLE}>`,
-                        embeds: [{
-                            author: {
-                                name: `${BOT_NAME} Monitoring thinks the bot is down.`,
-                                icon_url: 'https://i.imgur.com/ZDYu6Kp.png'
-                            },
-                            color: 16732280
-                        }]
-                    })
-                });
-            } catch (error) {
-                console.log('Error sending alert:', error);
-            }
+        function sendDiscordAlert() {
+            fetch('https://cypher-bot-gamma.vercel.app/api/alert', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    botName: BOT_NAME
+                })
+            }).catch(error => console.log('Error sending alert:', error));
         }
 
         function handleStatus(isDown) {
