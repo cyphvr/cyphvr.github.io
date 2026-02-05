@@ -532,13 +532,16 @@
             }
 
             const wasInitialLoad = isInitialLoad;
+            const wasPreviouslyDown = wasDown;
             
             handleStatus(!result.isUp);
             
             isInitialLoad = false;
 
-            if (!wasInitialLoad && !result.isUp) {
-                sendDiscordAlert();
+            if (!result.isUp) {
+                if (wasInitialLoad || !wasPreviouslyDown) {
+                    sendDiscordAlert();
+                }
             }
 
             const now = new Date();
@@ -554,7 +557,10 @@
         }
         function startRefreshTimer() {
             let lastRefreshTime = parseInt(localStorage.getItem('lastRefreshTimestamp')) || Date.now();
-            localStorage.setItem('lastRefreshTimestamp', lastRefreshTime);
+            
+            if (!localStorage.getItem('lastRefreshTimestamp')) {
+                localStorage.setItem('lastRefreshTimestamp', lastRefreshTime);
+            }
             
             function checkRefreshDue() {
                 const now = Date.now();
