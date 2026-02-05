@@ -1,3 +1,5 @@
+const https = require('https');
+
 module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -21,27 +23,43 @@ module.exports = async (req, res) => {
 
         const { botName } = req.body;
 
-        const response = await fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                content: `<@&${ROLE}>`,
-                embeds: [{
-                    author: {
-                        name: `${botName || 'Cypher'} Monitoring thinks the bot is down.`,
-                        icon_url: 'https://i.imgur.com/ZDYu6Kp.png'
-                    },
-                    color: 16732280
-                }]
-            })
+        const payload = JSON.stringify({
+            content: `<@&${ROLE}>`,
+            embeds: [{
+                author: {
+                    name: `${botName || 'Cypher'} Monitoring thinks the bot is down.`,
+                    icon_url: 'https://i.imgur.com/ZDYu6Kp.png'
+                },
+                color: 16732280
+            }]
         });
 
-        if (response.ok) {
-            res.status(200).json({ success: true });
-        } else {
-            res.status(500).json({ error: 'Failed to send Discord alert' });
-        }
+        const url = new URL(WEBHOOK_URL);
+        const options = {
+            hostname: url.hostname,
+            path: url.pathname + url.search,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(payload)
+            }
+        };
+
+        const request = https.request(options, (response) => {
+            if (response.statusCode >= 200 && response.statusCode < 300) {
+                res.status(200).json({ success: true });
+            } else {
+                res.status(500).json({ error: 'Failed to send Discord alert' });
+            }
+        });
+
+        request.on('error', (error) => {
+            res.status(500).json({ error: 'Failed to send alert' });
+        });
+
+        request.write(payload);
+        request.end();
     } catch (error) {
-        res.status(500).json({ error: 'Failed to send alert' });
+        res.status(500).json({ error: 'Failed to send alert', details: error.message });
     }
 };
