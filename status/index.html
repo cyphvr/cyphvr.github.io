@@ -388,7 +388,7 @@
             timeout: 5000
         };
 
-        let secondsRemaining = CONFIG.refreshInterval;
+        let secondsRemaining = parseInt(localStorage.getItem('secondsRemaining')) || CONFIG.refreshInterval;
         let lastKnownStatus = null;
         function buildHealthEndpoints() {
             return [CONFIG.proxyUrl];
@@ -524,6 +524,7 @@
         function startRefreshTimer() {
             setInterval(() => {
                 secondsRemaining--;
+                localStorage.setItem('secondsRemaining', secondsRemaining);
                 if (secondsRemaining <= 0) {
                     updateStatusPage();
                 } else {
