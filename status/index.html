@@ -572,26 +572,15 @@
                     updateStatusPage();
                 } else {
                     secondsRemaining = CONFIG.refreshInterval - elapsedSeconds;
-                    document.getElementById('refreshIn').textContent = secondsRemaining;
+                    if (!document.hidden) {
+                        document.getElementById('refreshIn').textContent = secondsRemaining;
+                    }
                 }
             }
+            
+            setInterval(checkRefreshDue, 1000);
             
             checkRefreshDue();
-            
-            document.addEventListener('visibilitychange', () => {
-                if (!document.hidden) {
-                    checkRefreshDue();
-                }
-            });
-            
-            function updateTimer() {
-                if (!document.hidden) {
-                    checkRefreshDue();
-                }
-                requestAnimationFrame(updateTimer);
-            }
-            
-            updateTimer();
         }
 
         startRefreshTimer();
