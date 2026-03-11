@@ -28,7 +28,8 @@ export default async function handler(req, res) {
         embeds: [{
           author: {
             name: 'Cypher Monitoring thinks the bot is down.',
-            icon_url: 'https://i.imgur.com/ZDYu6Kp.png'
+            icon_url: 'https://i.imgur.com/ZDYu6Kp.png',
+            url: 'https://cyphvr.github.io/status/'
           },
           color: 16732280
         }]
