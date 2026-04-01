@@ -105,8 +105,8 @@ a.btn-primary, a.btn-primary *, a.btn.btn-primary, a.btn.btn-primary *,
     transition: transform 0.3s ease;
 }
 
-.btn:hover .btn-icon {
-    transform: translateX(5px);
+.group:hover .group-hover\:translate-y-6 {
+    transform: translateX(0.375rem);
 }
 
 .btn-large {
