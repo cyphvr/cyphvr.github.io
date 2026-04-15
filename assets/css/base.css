@@ -7,22 +7,22 @@
 }
 
 :root {
-    --primary-color: #8bdcff;
-    --secondary-color: #d6f2ff;
-    --bg-dark: #0a0f14;
-    --bg-darker: #070b10;
+    --primary-color: #8a9bff;
+    --secondary-color: #cfe1ff;
+    --bg-dark: #09102a;
+    --bg-darker: #05081a;
     --text-light: #f4fbff;
     --text-gray: #c0d0de;
     --card-bg: rgba(255, 255, 255, 0.06);
-    --gradient-1: linear-gradient(135deg, #8bdcff 0%, #b4eaff 55%, #f4fbff 100%);
-    --gradient-2: linear-gradient(135deg, #5da9cf 0%, #8bdcff 60%, #d6f2ff 100%);
+    --gradient-1: linear-gradient(135deg, #8a9bff 0%, #bfc8ff 55%, #f4fbff 100%);
+    --gradient-2: linear-gradient(135deg, #5467df 0%, #8a9bff 60%, #d6e1ff 100%);
     --font-main: 'DM Sans', sans-serif;
     --font-display: 'Space Grotesk', sans-serif;
 }
 
 body {
     font-family: var(--font-main);
-    background-color: #0a0f14;
+    background-color: #09102a;
     color: var(--text-light);
     overflow-x: hidden;
     line-height: 1.6;

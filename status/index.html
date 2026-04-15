@@ -1,242 +1,386 @@
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('img').forEach(function(img) {
-                img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-                img.addEventListener('dragstart', function(e) { e.preventDefault(); });
-            });
-        });
-    </script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cypher</title>
+    <title>Cypher Status</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        .status-container {
-            max-width: 900px;
-            margin: 24px auto 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
+        :root {
+            --status-ok: #44f0a8;
+            --status-warn: #ffc768;
+            --status-primary: #59d8ff;
+            --status-primary-soft: #a9ecff;
+            --status-surface: rgba(255, 255, 255, 0.05);
+            --status-surface-strong: rgba(255, 255, 255, 0.08);
         }
 
-        .status-header {
-            text-align: center;
-            margin-bottom: 50px;
+        .status-shell {
+            position: relative;
+            z-index: 10;
+            max-width: 1100px;
+            margin: 142px auto 30px;
+            padding: 0 20px 0;
+        }
+
+        .status-hero {
+            border-radius: 24px;
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 24px 22px;
+            background:
+                radial-gradient(680px 280px at 8% -20%, rgba(104, 116, 255, 0.22), transparent 62%),
+                radial-gradient(520px 220px at 100% 0%, rgba(59, 206, 255, 0.13), transparent 58%),
+                linear-gradient(150deg, rgba(11, 13, 34, 0.96), rgba(7, 10, 27, 0.96));
+            border: 1px solid rgba(104, 116, 255, 0.28);
+            box-shadow:
+                0 26px 46px rgba(0, 0, 0, 0.38),
+                0 0 0 1px rgba(59, 206, 255, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .status-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.07), transparent 25%, transparent 72%, rgba(169, 236, 255, 0.07));
+            pointer-events: none;
+        }
+
+        .status-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            padding: 6px 14px;
+            border: 1px solid rgba(104, 116, 255, 0.34);
+            background: rgba(104, 116, 255, 0.12);
+            color: #dbe1ff;
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .status-headline {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 3.2vw, 2.35rem);
+            line-height: 1.05;
+            color: #f4fbff;
+            letter-spacing: 0.01em;
+        }
+
+        .status-subline {
+            margin: 8px 0 0;
+            color: #bfcbda;
+            font-size: 0.94rem;
+        }
+
+        .status-live-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .live-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 999px;
+            padding: 10px 18px;
+            background: linear-gradient(135deg, rgba(16, 20, 52, 0.9), rgba(20, 28, 72, 0.86));
+            border: 1px solid rgba(104, 116, 255, 0.32);
+            box-shadow:
+                0 10px 26px rgba(0, 0, 0, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
 
         .status-indicator {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            background-color: #22ff55;
-            margin-right: 8px;
-            box-shadow: 0 0 8px 2px #22ff55;
-            animation: status-breathe-green 2.2s ease-in-out infinite;
-            vertical-align: middle;
+            background: var(--status-ok);
+            box-shadow: 0 0 0 0 rgba(68, 240, 168, 0.65);
+            animation: statusPulseOk 2s ease-in-out infinite;
         }
 
         .status-indicator.offline {
-            background-color: #ff3b5c;
-            box-shadow: 0 0 8px 2px #ff3b5c;
-            animation: status-breathe-red 2.2s ease-in-out infinite;
+            background: var(--status-warn);
+            box-shadow: 0 0 0 0 rgba(255, 199, 104, 0.55);
+            animation: statusPulseWarn 2s ease-in-out infinite;
         }
 
-        @keyframes status-breathe-green {
-            0% {
-                box-shadow: 0 0 8px 2px #22ff55, 0 0 0 0 #22ff55;
-                opacity: 1;
-            }
-            50% {
-                box-shadow: 0 0 16px 6px #22ff55bb, 0 0 0 8px #22ff5500;
-                opacity: 0.6;
-            }
-            100% {
-                box-shadow: 0 0 8px 2px #22ff55, 0 0 0 0 #22ff55;
-                opacity: 1;
-            }
+        #statusText {
+            color: #f5fbff;
+            font-weight: 700;
         }
 
-        @keyframes status-breathe-red {
-            0% {
-                box-shadow: 0 0 8px 2px #ff3b5c, 0 0 0 0 #ff3b5c;
-                opacity: 1;
-            }
-            50% {
-                box-shadow: 0 0 16px 6px #ff3b5cbb, 0 0 0 8px #ff3b5c00;
-                opacity: 0.6;
-            }
-            100% {
-                box-shadow: 0 0 8px 2px #ff3b5c, 0 0 0 0 #ff3b5c;
-                opacity: 1;
-            }
+        .status-message {
+            color: #afc2d6;
+            font-size: 0.95rem;
+            margin: 0;
         }
 
-        .status-summary {
-            background: rgba(255, 59, 92, 0.1);
-            border: 1px solid rgba(45, 212, 255, 0.3);
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 40px;
-            text-align: center;
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 12px;
         }
 
-        .uptime-text {
-            font-size: 18px;
-            color: #2dd4ff !important;
-            font-weight: 600;
-            margin: 10px 0;
-        }
-
-        .service-status {
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 12px;
+        .panel {
+            border-radius: 20px;
+            border: 1px solid rgba(104, 116, 255, 0.22);
+            background:
+                linear-gradient(150deg, rgba(10, 12, 31, 0.94), rgba(8, 12, 25, 0.94));
+            box-shadow:
+                0 16px 34px rgba(0, 0, 0, 0.34),
+                0 0 0 1px rgba(59, 206, 255, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
             padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(45, 212, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(128deg, rgba(255, 255, 255, 0.05), transparent 34%, transparent 70%, rgba(104, 116, 255, 0.08));
+            pointer-events: none;
+        }
+
+        .metric-card {
+            grid-column: span 3;
+            min-height: 130px;
+        }
+
+        .metric-card:nth-of-type(1) {
+            background:
+                linear-gradient(150deg, rgba(13, 15, 38, 0.96), rgba(8, 12, 26, 0.94)),
+                radial-gradient(180px circle at 80% 20%, rgba(104, 116, 255, 0.16), transparent 55%);
+        }
+
+        .metric-card:nth-of-type(2) {
+            background:
+                linear-gradient(150deg, rgba(11, 15, 41, 0.96), rgba(7, 12, 27, 0.94)),
+                radial-gradient(180px circle at 20% 20%, rgba(59, 206, 255, 0.16), transparent 55%);
+        }
+
+        .metric-label {
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            font-size: 0.74rem;
+            color: #9faaf4;
+            margin: 0;
+        }
+
+        .metric-value {
+            margin: 10px 0 0;
+            font-family: var(--font-display);
+            font-size: 1.45rem;
+            color: #f2f5ff;
+            letter-spacing: 0.01em;
+        }
+
+        .metric-hint {
+            margin: 8px 0 0;
+            color: #b2bddf;
+            font-size: 0.9rem;
+        }
+
+        .status-history-panel {
+            grid-column: span 6;
+            background:
+                linear-gradient(150deg, rgba(9, 12, 32, 0.95), rgba(8, 10, 25, 0.94)),
+                radial-gradient(260px circle at 85% 0%, rgba(59, 206, 255, 0.12), transparent 58%),
+                radial-gradient(260px circle at 10% 100%, rgba(104, 116, 255, 0.12), transparent 58%);
+        }
+
+        .status-history-panel .panel-title {
+            margin-bottom: 0;
+        }
+
+        .panel-title {
+            margin: 0 0 14px;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: #f3f6ff;
         }
 
         .service-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .service-row:last-child {
-            border-bottom: none;
+            border-bottom: 0;
+            padding-bottom: 4px;
         }
 
         .service-name {
-            font-weight: 600;
-            color: #ffffff !important;
+            margin: 0;
+            color: #f3f6ff;
+            font-weight: 700;
         }
 
         .service-response {
-            color: #b7c1d1 !important;
-            font-size: 14px;
+            margin: 4px 0 0;
+            color: #b2bddf;
+            font-size: 0.9rem;
         }
 
         .status-badge {
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .status-badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
         }
 
         .badge-operational {
-            background: rgba(45, 212, 255, 0.2);
-            color: #2dd4ff;
-        }
-
-        .badge-degraded {
-            background: rgba(255, 193, 7, 0.2);
-            color: #ffc107;
+            background: rgba(104, 116, 255, 0.18);
+            border-color: rgba(104, 116, 255, 0.4);
+            color: #dfe4ff;
         }
 
         .badge-down {
-            background: rgba(255, 59, 92, 0.2);
-            color: #ff3b5c;
+            background: rgba(59, 206, 255, 0.12);
+            border-color: rgba(59, 206, 255, 0.32);
+            color: #cfeeff;
         }
 
-        .incident-list {
-            margin-top: 40px;
+        .history-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
         }
 
-        .incident {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(45, 212, 255, 0.15);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-
-        .incident-title {
-            color: #ffffff !important;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .incident-time {
-            color: #b7c1d1 !important;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .incident-status {
-            color: #2dd4ff;
-            font-size: 14px;
-        }
-
-        .no-incidents {
-            text-align: center;
-            padding: 30px;
-            color: #2dd4ff !important;
-            font-size: 16px;
-        }
-
-        .last-updated {
-            text-align: center;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #b7c1d1 !important;
-            font-size: 14px;
-        }
-
-        .status-history {
-            margin-top: 50px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            border: 1px solid rgba(45, 212, 255, 0.15);
-        }
-
-        .history-title {
-            color: #ffffff;
-            font-weight: 600;
-            margin-bottom: 20px;
-            font-size: 18px;
+        .history-caption {
+            color: #aeb8df;
+            font-size: 0.88rem;
         }
 
         .history-bar {
-            display: flex;
-            height: 30px;
-            border-radius: 6px;
-            overflow: hidden;
-            gap: 2px;
-            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: repeat(30, minmax(0, 1fr));
+            gap: 4px;
         }
 
         .history-item {
-            flex: 1;
-            background: #2dd4ff;
-            position: relative;
-            cursor: pointer;
-            transition: opacity 0.2s;
+            height: 24px;
+            border-radius: 5px;
+            background: linear-gradient(180deg, #97a1ff, #5a6df3);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+            transition: transform 0.2s ease, opacity 0.2s ease;
         }
 
         .history-item:hover {
-            opacity: 0.8;
+            transform: translateY(-2px);
+            opacity: 0.9;
         }
 
         .history-item.degraded {
-            background: #ffc107;
+            background: linear-gradient(180deg, #74d9ff, #469bff);
         }
 
         .history-item.down {
-            background: #ff3b5c;
+            background: linear-gradient(180deg, #5662e0, #3440aa);
+        }
+
+        .status-footer-meta {
+            margin-top: 4px;
+            margin-bottom: 0;
+            text-align: center;
+            color: #aab5dc;
+            font-size: 0.9rem;
+        }
+
+        .status-footer-meta strong {
+            color: #edf1ff;
+            font-weight: 700;
+        }
+
+        @keyframes statusPulseOk {
+            0% {
+                box-shadow: 0 0 0 0 rgba(68, 240, 168, 0.62);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(68, 240, 168, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(68, 240, 168, 0);
+            }
+        }
+
+        @keyframes statusPulseWarn {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 199, 104, 0.55);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 199, 104, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 199, 104, 0);
+            }
+        }
+
+        @media (max-width: 980px) {
+            .metric-card,
+            .status-history-panel {
+                grid-column: span 12;
+            }
+
+            .status-shell {
+                margin-top: 116px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .status-shell {
+                margin-top: 98px;
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .status-hero {
+                border-radius: 18px;
+                padding: 24px 18px;
+            }
+
+            .panel {
+                border-radius: 16px;
+                padding: 16px;
+            }
+
+            .history-item {
+                height: 18px;
+                border-radius: 4px;
+            }
         }
     </style>
 </head>
@@ -247,7 +391,7 @@
         <div class="container">
             <div class="navbar-logo">
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                    <span class="logo-icon" data-icon="cypher-logo" data-label="Cypher Logo"></span>
+                    <img src="../images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
                     <span class="logo-text">Cypher</span>
                 </a>
             </div>
@@ -264,78 +408,77 @@
             </div>
         </div>
     </nav>
-    <section style="padding: 100px 0 0px;">
-        <div class="container">
-            <h1 class="glitch" data-text="Status" style="text-align: center; margin-bottom: 30px; font-size:2.8rem;">Status</h1>
-            <p style="text-align: center; font-size: 18px; color: #b7c1d1; margin-bottom: 0;">Cypher System Status and Availability</p>
-        </div>
-    </section>
-    <div class="status-container">
-        <div class="status-summary">
-            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-                <span class="status-indicator" id="statusIndicator"></span>
-                <span style="font-size: 18px; font-weight: 600; display: inline-block; line-height: 1; vertical-align: middle;" id="statusText">Checking...</span>
-            </div>
-            <div class="uptime-text" id="uptimeText" style="margin: 0 0 0.2rem 0;">Connecting to server...</div>
-            <p style="color: #b7c1d1; margin-top: 6px;" id="statusMessage">Please wait while we check system status</p>
-        </div>
 
-        <h2 style="color: #ffffff; margin-bottom: 32px; font-size: 20px;">Service Status</h2>
-        <div class="service-status" id="serviceStatus" style="margin-bottom: 40px;">
-            <div class="service-row">
-                <div>
-                    <div class="service-name">Cypher Bot</div>
-                    <div class="service-response" id="serviceResponse">Checking connection...</div>
+    <main class="status-shell">
+        <section class="status-hero">
+            <span class="status-eyebrow">Live Telemetry</span>
+            <h1 class="status-headline">Cypher Status</h1>
+            <p class="status-subline">Real-time health for core services, uptime visibility, and rapid incident awareness.</p>
+
+            <div class="status-live-row">
+                <div class="live-pill">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span id="statusText">Checking systems...</span>
                 </div>
-                <span class="status-badge badge-operational" id="serviceBadge">
-                    <span style="width: 8px; height: 8px; background: #2dd4ff; border-radius: 50%;"></span>
-                    <span id="badgeText">Checking</span>
-                </span>
+                <p class="status-message" id="statusMessage">Establishing connection with status endpoint.</p>
             </div>
-        </div>
+        </section>
 
-        <h2 style="color: #ffffff; margin-bottom: 32px; font-size: 20px;">Recent Incidents</h2>
+        <section class="status-grid">
+            <article class="panel metric-card">
+                <p class="metric-label">Uptime</p>
+                <p class="metric-value" id="uptimeText">Checking...</p>
+                <p class="metric-hint">Current availability estimate for the bot runtime.</p>
+            </article>
 
-        <div class="status-history" style="margin-top: 0;">
-            <div class="history-title">30-Day Uptime History</div>
-            <div class="history-bar">
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-                <div class="history-item"></div>
-            </div>
-        </div>
+            <article class="panel metric-card">
+                <p class="metric-label">Refresh Cycle</p>
+                <p class="metric-value"><span id="refreshIn">60</span>s</p>
+                <p class="metric-hint">Automatic polling interval for status refresh.</p>
+            </article>
 
-        <div class="last-updated">
-            Last updated: <span id="lastUpdated">Just now</span> | Refresh in <span id="refreshIn">15</span>s
-        </div>
-    </div>
+            <article class="panel status-history-panel">
+                <div class="history-head">
+                    <h2 class="panel-title" style="margin: 0;">30-Day History</h2>
+                    <span class="history-caption">Daily health snapshots</span>
+                </div>
+                <div class="history-bar" aria-label="30 day status history">
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                    <div class="history-item"></div>
+                </div>
+            </article>
+        </section>
+
+        <p class="status-footer-meta">Last update: <strong id="lastUpdatedLabel">Just now</strong> | next check in <strong><span id="refreshInLabel">60</span>s</strong></p>
+    </main>
 
     <button class="back-to-top" id="backToTop"></button>
 
@@ -344,7 +487,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="logo">
-                        <span class="logo-icon" data-icon="cypher-logo" data-label="Cypher Logo"></span>
+                        <img src="../images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
                         <span class="logo-text">Cypher</span>
                     </div>
                     <p>Empowering Discord communities since 2023.</p>
@@ -379,130 +522,102 @@
         </div>
     </footer>
 
+    <script type="module" src="../assets/js/main.js"></script>
     <script>
         const CONFIG = {
             host: 'cypher.hype.surf',
-            port: 10001,
             proxyUrl: 'https://cypher-bot-gamma.vercel.app/api/status',
             refreshInterval: 60,
             timeout: 5000
         };
 
-        let secondsRemaining = parseInt(localStorage.getItem('secondsRemaining')) || CONFIG.refreshInterval;
+        let secondsRemaining = parseInt(localStorage.getItem('secondsRemaining'), 10) || CONFIG.refreshInterval;
         let lastKnownStatus = localStorage.getItem('lastKnownStatus') === 'true';
         let lastUpdatedTime = localStorage.getItem('lastUpdatedTime') || 'Just now';
-        document.getElementById('refreshIn').textContent = secondsRemaining;
-        
+        let isInitialLoad = true;
+
+        function setRefreshLabels(value) {
+            const numeric = Math.max(0, Number(value) || 0);
+            const refreshIn = document.getElementById('refreshIn');
+            const refreshInLabel = document.getElementById('refreshInLabel');
+            if (refreshIn) refreshIn.textContent = String(numeric);
+            if (refreshInLabel) refreshInLabel.textContent = String(numeric);
+        }
+
+        function setLastUpdatedLabels(value) {
+            const updated = value || 'Just now';
+            const lastUpdated = document.getElementById('lastUpdated');
+            const lastUpdatedLabel = document.getElementById('lastUpdatedLabel');
+            if (lastUpdated) lastUpdated.textContent = updated;
+            if (lastUpdatedLabel) lastUpdatedLabel.textContent = updated;
+        }
+
+        function updateOnlineStatus() {
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+            const uptime = document.getElementById('uptimeText');
+            const message = document.getElementById('statusMessage');
+
+            if (indicator) indicator.className = 'status-indicator';
+            if (text) text.textContent = 'All Systems Operational';
+            if (uptime) {
+                uptime.textContent = '99.99% uptime';
+                uptime.style.color = 'var(--status-ok)';
+            }
+            if (message) message.textContent = 'Cypher is online and responding normally.';
+        }
+
+        function updateOfflineStatus(reason) {
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+            const uptime = document.getElementById('uptimeText');
+            const message = document.getElementById('statusMessage');
+
+            if (indicator) indicator.className = 'status-indicator offline';
+            if (text) text.textContent = 'Service Interruption Detected';
+            if (uptime) {
+                uptime.textContent = 'Temporarily unavailable';
+                uptime.style.color = 'var(--status-warn)';
+            }
+            if (message) message.textContent = reason || 'Connection issue while checking status endpoint.';
+        }
+
         function displayCachedStatus() {
             if (lastKnownStatus) {
-                updateOnlineStatus({ isUp: true });
+                updateOnlineStatus();
             } else {
-                updateOfflineStatus({ isUp: false });
+                updateOfflineStatus('Showing latest cached status while reconnecting.');
             }
-            document.getElementById('lastUpdated').textContent = lastUpdatedTime;
-        }
-        displayCachedStatus();
-        function buildHealthEndpoints() {
-            return [CONFIG.proxyUrl];
+            setLastUpdatedLabels(lastUpdatedTime);
+            setRefreshLabels(secondsRemaining);
         }
 
         async function checkBotStatus() {
-            const endpoints = buildHealthEndpoints();
-            let lastError = '';
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), CONFIG.timeout);
 
-            for (const url of endpoints) {
-                try {
-                    const controller = new AbortController();
-                    const timeout = setTimeout(() => controller.abort(), CONFIG.timeout);
+                const response = await fetch(CONFIG.proxyUrl, {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
 
-                    const response = await fetch(url, {
-                        method: 'GET',
-                        mode: 'cors',
-                        cache: 'no-store',
-                        signal: controller.signal
-                    });
+                clearTimeout(timeoutId);
 
-                    clearTimeout(timeout);
-
-                    const data = await response.json();
-                    
-                    if (data && data.success === true) {
-                        console.log('? Bot is ONLINE via', url);
-                        return { isUp: true, endpoint: url };
-                    }
-
-                    lastError = 'Health endpoint did not return success:true';
-                } catch (error) {
+                if (!response.ok) {
+                    return { isUp: false, reason: 'Status endpoint returned a non-OK response.' };
                 }
-            }
 
-            console.log('? Bot is OFFLINE:', lastError);
-            return { isUp: false, reason: lastError };
-        }
+                const data = await response.json();
+                if (data && data.success === true) {
+                    return { isUp: true };
+                }
 
-        function updateOnlineStatus(result) {
-            const elements = {
-                indicator: document.getElementById('statusIndicator'),
-                text: document.getElementById('statusText'),
-                uptime: document.getElementById('uptimeText'),
-                message: document.getElementById('statusMessage'),
-                response: document.getElementById('serviceResponse'),
-                badge: document.getElementById('serviceBadge'),
-                badgeText: document.getElementById('badgeText')
-            };
-
-            elements.indicator.className = 'status-indicator';
-            elements.text.textContent = 'All Systems Operational';
-            elements.uptime.textContent = 'Uptime 99.99%';
-            elements.uptime.style.color = '#22ff55';
-            elements.message.textContent = 'Bot is online and running normally';
-            elements.response.textContent = '';
-            elements.badge.className = 'status-badge badge-operational';
-            elements.badgeText.textContent = 'Operational';
-            elements.badge.querySelector('span').style.background = '#22ff55';
-        }
-
-        function updateOfflineStatus(result) {
-            const elements = {
-                indicator: document.getElementById('statusIndicator'),
-                text: document.getElementById('statusText'),
-                uptime: document.getElementById('uptimeText'),
-                message: document.getElementById('statusMessage'),
-                response: document.getElementById('serviceResponse'),
-                badge: document.getElementById('serviceBadge'),
-                badgeText: document.getElementById('badgeText')
-            };
-
-            elements.indicator.className = 'status-indicator offline';
-            elements.text.textContent = 'System Offline';
-            elements.uptime.textContent = 'Bot is currently down';
-            elements.uptime.style.color = '#ff3b5c';
-            elements.message.textContent = result?.reason || '';
-            elements.response.textContent = 'Unable to connect';
-            elements.badge.className = 'status-badge badge-down';
-            elements.badgeText.textContent = 'Down';
-            elements.badge.querySelector('span').style.background = '#ff3b5c';
-        }
-
-        let downInterval = null;
-        let wasDown = localStorage.getItem('wasDown') === 'true';
-        let isInitialLoad = true;
-
-        const BOT_NAME = 'Cypher';
-        
-        function handleStatus(isDown) {
-            if (isInitialLoad) {
-                wasDown = isDown;
-                localStorage.setItem('wasDown', isDown ? 'true' : 'false');
-                return;
-            }
-
-            if (isDown) {
-                wasDown = true;
-                localStorage.setItem('wasDown', 'true');
-            } else {
-                wasDown = false;
-                localStorage.setItem('wasDown', 'false');
+                return { isUp: false, reason: 'Endpoint did not report success.' };
+            } catch (error) {
+                return { isUp: false, reason: error && error.name === 'AbortError' ? 'Status request timed out.' : 'Network request failed.' };
             }
         }
 
@@ -512,58 +627,67 @@
             localStorage.setItem('lastKnownStatus', result.isUp ? 'true' : 'false');
 
             if (result.isUp) {
-                updateOnlineStatus(result);
+                updateOnlineStatus();
             } else {
-                updateOfflineStatus(result);
+                updateOfflineStatus(result.reason);
             }
 
-            const wasInitialLoad = isInitialLoad;
-            const wasPreviouslyDown = wasDown;
-            
-            handleStatus(!result.isUp);
-            
-            isInitialLoad = false;
+            const now = new Date().toLocaleTimeString([], {
+                hour: 'numeric',
+                minute: '2-digit'
+            });
+            lastUpdatedTime = now;
+            localStorage.setItem('lastUpdatedTime', now);
+            setLastUpdatedLabels(now);
 
-            const now = new Date();
-            const timeString = now.toLocaleTimeString();
-            document.getElementById('lastUpdated').textContent = timeString;
-            lastUpdatedTime = timeString;
-            localStorage.setItem('lastUpdatedTime', timeString);
-            
-            if (!wasInitialLoad) {
+            if (!isInitialLoad) {
                 secondsRemaining = CONFIG.refreshInterval;
-                localStorage.setItem('secondsRemaining', secondsRemaining);
+                localStorage.setItem('secondsRemaining', String(secondsRemaining));
+                localStorage.setItem('lastRefreshTimestamp', String(Date.now()));
+                setRefreshLabels(secondsRemaining);
             }
+
+            isInitialLoad = false;
         }
+
         function startRefreshTimer() {
-            let lastRefreshTime = parseInt(localStorage.getItem('lastRefreshTimestamp')) || Date.now();
-            
+            let lastRefreshTime = parseInt(localStorage.getItem('lastRefreshTimestamp'), 10) || Date.now();
+
             if (!localStorage.getItem('lastRefreshTimestamp')) {
-                localStorage.setItem('lastRefreshTimestamp', lastRefreshTime);
+                localStorage.setItem('lastRefreshTimestamp', String(lastRefreshTime));
             }
-            
-            function checkRefreshDue() {
+
+            function tick() {
                 const now = Date.now();
                 const elapsedSeconds = Math.floor((now - lastRefreshTime) / 1000);
-                
+
                 if (elapsedSeconds >= CONFIG.refreshInterval) {
                     lastRefreshTime = now;
-                    localStorage.setItem('lastRefreshTimestamp', now);
+                    localStorage.setItem('lastRefreshTimestamp', String(now));
                     updateStatusPage();
                 } else {
                     secondsRemaining = CONFIG.refreshInterval - elapsedSeconds;
+                    localStorage.setItem('secondsRemaining', String(secondsRemaining));
                     if (!document.hidden) {
-                        document.getElementById('refreshIn').textContent = secondsRemaining;
+                        setRefreshLabels(secondsRemaining);
                     }
                 }
             }
-            
-            setInterval(checkRefreshDue, 1000);
-            
-            checkRefreshDue();
+
+            setInterval(tick, 1000);
+            tick();
         }
 
-        startRefreshTimer();
-    </script></body>
-</html>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('img').forEach((img) => {
+                img.addEventListener('contextmenu', (e) => e.preventDefault());
+                img.addEventListener('dragstart', (e) => e.preventDefault());
+            });
 
+            displayCachedStatus();
+            updateStatusPage();
+            startRefreshTimer();
+        });
+    </script>
+</body>
+</html>
