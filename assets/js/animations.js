@@ -16,17 +16,18 @@ export function initAnimations() {
         animateGlitch();
     }
 
-    const subtitle = document.querySelector('.hero-subtitle');
-    if (subtitle) {
-        const text = subtitle.textContent;
-        subtitle.textContent = '';
+    const titleTyping = document.querySelector('.hero-title-typing');
+    if (titleTyping) {
+        const text = titleTyping.dataset.text || titleTyping.textContent;
+        titleTyping.textContent = '';
         let i = 0;
         let textNode = document.createTextNode('');
         let cursorSpan = document.createElement('span');
         cursorSpan.className = 'typing-cursor';
         cursorSpan.textContent = '_';
-        subtitle.appendChild(textNode);
-        subtitle.appendChild(cursorSpan);
+        cursorSpan.setAttribute('aria-hidden', 'true');
+        titleTyping.appendChild(textNode);
+        titleTyping.appendChild(cursorSpan);
 
         const typeWriter = () => {
             if (i < text.length) {

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=Space+Grotesk:wght@500;700;800&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -5,23 +7,40 @@
 }
 
 :root {
-    --primary-color: #ff3b5c;
-    --secondary-color: #2dd4ff;
-    --bg-dark: #0f0f0f;
-    --bg-darker: #0a0a0a;
-    --text-light: #ffffff;
-    --text-gray: #b7c1d1;
-    --card-bg: rgba(255, 255, 255, 0.04);
-    --gradient-1: linear-gradient(135deg, #ff3b5c 0%, #ff1f4b 60%, #2dd4ff 100%);
-    --gradient-2: linear-gradient(135deg, #912d58 0%, #ff3b5c 70%, #2dd4ff 100%);
+    --primary-color: #8bdcff;
+    --secondary-color: #d6f2ff;
+    --bg-dark: #0a0f14;
+    --bg-darker: #070b10;
+    --text-light: #f4fbff;
+    --text-gray: #c0d0de;
+    --card-bg: rgba(255, 255, 255, 0.06);
+    --gradient-1: linear-gradient(135deg, #8bdcff 0%, #b4eaff 55%, #f4fbff 100%);
+    --gradient-2: linear-gradient(135deg, #5da9cf 0%, #8bdcff 60%, #d6f2ff 100%);
+    --font-main: 'DM Sans', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
 }
 
 body {
-    font-family: 'Rajdhani', sans-serif;
-    background-color: var(--bg-dark);
+    font-family: var(--font-main);
+    background-color: #0a0f14;
     color: var(--text-light);
     overflow-x: hidden;
     line-height: 1.6;
+}
+
+*, *::before, *::after {
+    font-family: var(--font-main);
+}
+
+h1, h2, h3, h4, h5, h6,
+.logo-text,
+.glitch,
+.section-title,
+.command-name,
+.cta-content h2,
+.about-text h2,
+.footer-section h4 {
+    font-family: var(--font-display) !important;
 }
 
 .container {

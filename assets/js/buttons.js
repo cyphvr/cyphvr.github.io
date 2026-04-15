@@ -2,6 +2,15 @@ export function initButtons() {
     const backToTopButton = document.getElementById('backToTop');
 
     if (backToTopButton) {
+        backToTopButton.classList.add('group');
+
+        if (!backToTopButton.querySelector('.back-to-top-icon')) {
+            const icon = document.createElement('span');
+            icon.className = 'back-to-top-icon';
+            icon.setAttribute('aria-hidden', 'true');
+            backToTopButton.appendChild(icon);
+        }
+
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
                 backToTopButton.classList.add('show');

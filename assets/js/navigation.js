@@ -15,20 +15,56 @@ export function initNavigation() {
     const navbar = document.querySelector('.navbar');
     const navbarMenu = document.getElementById('navbarMenu');
     const navbarToggle = document.getElementById('navbarToggle');
+    let ticking = false;
+    const SCROLL_ENTER = 52;
+    const SCROLL_EXIT = 22;
+
+    const updateNavbarState = () => {
+        if (!navbar) return;
+
+        if (window.innerWidth <= 768) {
+            navbar.classList.remove('scrolled');
+            navbar.classList.remove('is-compact');
+            navbar.classList.remove('is-hidden');
+            ticking = false;
+            return;
+        }
+
+        const currentScrollY = window.scrollY;
+
+        const isScrolled = navbar.classList.contains('scrolled');
+
+        if (!isScrolled && currentScrollY > SCROLL_ENTER) {
+            navbar.classList.add('scrolled');
+            navbar.classList.add('is-compact');
+        } else if (isScrolled && currentScrollY < SCROLL_EXIT) {
+            navbar.classList.remove('scrolled');
+            navbar.classList.remove('is-compact');
+        }
+
+        navbar.classList.remove('is-hidden');
+
+        ticking = false;
+    };
 
     window.addEventListener('scroll', () => {
-        if (!navbar) return;
-        if (window.scrollY > 30) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
+        if (!ticking) {
+            window.requestAnimationFrame(updateNavbarState);
+            ticking = true;
         }
     });
+
+    window.addEventListener('resize', updateNavbarState);
+
+    updateNavbarState();
 
     if (navbar && navbarMenu && navbarToggle) {
         navbarToggle.addEventListener('click', () => {
             const isOpen = navbarMenu.classList.toggle('open');
             navbar.classList.toggle('menu-open', isOpen);
+            if (isOpen) {
+                navbar.classList.remove('is-hidden');
+            }
             navbarToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
 
@@ -40,11 +76,6 @@ export function initNavigation() {
             });
         });
     }
-
-    const navLinks = document.querySelectorAll('.navbar-link');
-    navLinks.forEach((link, index) => {
-        link.style.animation = `navFloat 3s ease-in-out ${index * 0.1}s infinite`;
-    });
 
         function setMenuTop() {
             const navbar = document.querySelector('.navbar');

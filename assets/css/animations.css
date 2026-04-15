@@ -1,36 +1,89 @@
 .aurora {
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse 140% 110% at 50% 0%, rgba(10, 12, 22, 1) 0%, rgba(6, 8, 16, 1) 100%);
+    background:
+        radial-gradient(82% 64% at 18% 14%, rgba(96, 128, 176, 0.16), transparent 60%),
+        radial-gradient(88% 72% at 82% 20%, rgba(84, 108, 146, 0.14), transparent 62%),
+        radial-gradient(94% 78% at 50% 92%, rgba(74, 92, 126, 0.12), transparent 66%),
+        linear-gradient(160deg, #04070d 0%, #08111b 42%, #0c1624 70%, #111d2d 100%);
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
-    filter: brightness(1.18) saturate(1.25) contrast(1.12);
+    filter: saturate(1.02) contrast(1.08) brightness(0.9);
 }
 
 .aurora::before {
     content: '';
     position: absolute;
-    inset: -50%;
+    inset: -34%;
     background:
-        radial-gradient(circle at 30% 20%, rgba(255, 59, 92, 0.22) 0%, transparent 50%),
-        radial-gradient(circle at 70% 60%, rgba(45, 212, 255, 0.18) 0%, transparent 50%),
-        radial-gradient(circle at 50% 80%, rgba(255, 59, 92, 0.16) 0%, transparent 45%);
-    opacity: 1;
-    filter: blur(48px) brightness(1.18) saturate(1.18);
-    animation: meshFloat 14s ease-in-out infinite;
+        radial-gradient(42% 38% at 24% 30%, rgba(150, 182, 224, 0.2), transparent 70%),
+        radial-gradient(36% 34% at 74% 30%, rgba(120, 144, 178, 0.16), transparent 72%),
+        radial-gradient(44% 40% at 52% 74%, rgba(108, 128, 160, 0.16), transparent 74%);
+    opacity: 0.8;
+    filter: blur(44px);
+    animation: blobShift 9s ease-in-out infinite alternate, auroraPulse 4.2s ease-in-out infinite;
 }
 
 .aurora::after {
     content: '';
     position: absolute;
-    inset: -30%;
+    inset: -16%;
     background:
-        radial-gradient(circle at 80% 30%, rgba(45, 212, 255, 0.14) 0%, transparent 40%),
-        radial-gradient(circle at 20% 70%, rgba(255, 59, 92, 0.13) 0%, transparent 45%),
-        radial-gradient(circle at 60% 50%, rgba(45, 212, 255, 0.11) 0%, transparent 50%);
-    filter: blur(64px) brightness(1.12) saturate(1.12);
-    animation: meshFloat 16s ease-in-out infinite reverse;
+        repeating-linear-gradient(122deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 30px),
+        repeating-linear-gradient(58deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 28px),
+        linear-gradient(120deg, transparent 0%, rgba(190, 208, 228, 0.14) 46%, transparent 74%);
+    mix-blend-mode: screen;
+    opacity: 0.5;
+    animation: beamSweep 9s linear infinite, auroraPulse 6s linear infinite;
+}
+
+@keyframes auroraPulse {
+    0%,
+    100% {
+        filter: brightness(0.98) contrast(1);
+        opacity: 0.55;
+    }
+    50% {
+        filter: brightness(1.03) contrast(1.02);
+        opacity: 0.68;
+    }
+}
+
+@keyframes blobShift {
+    0% {
+        transform: translate3d(-5%, -3%, 0) scale(1);
+    }
+    25% {
+        transform: translate3d(2%, -4%, 0) scale(1.03);
+    }
+    50% {
+        transform: translate3d(4%, 2%, 0) scale(1.06);
+    }
+    75% {
+        transform: translate3d(1%, 4%, 0) scale(1.03);
+    }
+    100% {
+        transform: translate3d(-5%, -3%, 0) scale(1);
+    }
+}
+
+@keyframes beamSweep {
+    0% {
+        transform: translate3d(-7%, -2%, 0) scale(1);
+    }
+    25% {
+        transform: translate3d(-2%, -3%, 0) scale(1.03);
+    }
+    50% {
+        transform: translate3d(5%, 1%, 0) scale(1.05);
+    }
+    75% {
+        transform: translate3d(2%, 3%, 0) scale(1.03);
+    }
+    100% {
+        transform: translate3d(-7%, -2%, 0) scale(1);
+    }
 }
 
 @keyframes meshFloat {
@@ -70,10 +123,10 @@
 
 @keyframes buttonGlow {
     0%, 100% {
-        box-shadow: 0 12px 28px rgba(255, 59, 92, 0.4), 0 0 20px rgba(255, 59, 92, 0.2);
+        box-shadow: 0 12px 28px rgba(139, 220, 255, 0.36), 0 0 20px rgba(139, 220, 255, 0.18);
     }
     50% {
-        box-shadow: 0 12px 28px rgba(255, 59, 92, 0.6), 0 0 35px rgba(255, 59, 92, 0.35);
+        box-shadow: 0 12px 28px rgba(139, 220, 255, 0.5), 0 0 35px rgba(139, 220, 255, 0.28);
     }
 }
 
@@ -92,11 +145,11 @@
 @keyframes floatButton {
     0%, 100% {
         transform: translateY(0);
-        box-shadow: 0 8px 20px rgba(255, 59, 92, 0.4);
+        box-shadow: 0 8px 20px rgba(139, 220, 255, 0.32);
     }
     50% {
         transform: translateY(-10px);
-        box-shadow: 0 12px 30px rgba(255, 59, 92, 0.6);
+        box-shadow: 0 12px 30px rgba(139, 220, 255, 0.45);
     }
 }
 

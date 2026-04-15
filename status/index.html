@@ -1,4 +1,4 @@
-﻿    <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('img').forEach(function(img) {
                 img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
@@ -11,9 +11,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status - Cypher Discord Bot</title>
+    <title>Cypher</title>
     <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="icon" type="image/png" href="/images/cypher.png">
+    <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -247,7 +247,7 @@
         <div class="container">
             <div class="navbar-logo">
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                    <img src="../images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                    <span class="logo-icon" data-icon="cypher-logo" data-label="Cypher Logo"></span>
                     <span class="logo-text">Cypher</span>
                 </a>
             </div>
@@ -344,7 +344,7 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="logo">
-                        <img src="../images/cypher.png" alt="Cypher Logo" class="logo-icon">
+                        <span class="logo-icon" data-icon="cypher-logo" data-label="Cypher Logo"></span>
                         <span class="logo-text">Cypher</span>
                     </div>
                     <p>Empowering Discord communities since 2023.</p>
@@ -427,7 +427,7 @@
                     const data = await response.json();
                     
                     if (data && data.success === true) {
-                        console.log('✓ Bot is ONLINE via', url);
+                        console.log('? Bot is ONLINE via', url);
                         return { isUp: true, endpoint: url };
                     }
 
@@ -436,7 +436,7 @@
                 }
             }
 
-            console.log('✗ Bot is OFFLINE:', lastError);
+            console.log('? Bot is OFFLINE:', lastError);
             return { isUp: false, reason: lastError };
         }
 
@@ -566,3 +566,4 @@
         startRefreshTimer();
     </script></body>
 </html>
+
