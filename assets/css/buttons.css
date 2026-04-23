@@ -88,7 +88,7 @@ a.btn-primary, a.btn-primary *, a.btn.btn-primary, a.btn.btn-primary *,
 }
 
 .btn-primary:hover {
-    transform: translateY(-3px);
+    filter: brightness(1.03) saturate(1.08);
     box-shadow: 0 12px 30px rgba(139, 220, 255, 0.42);
 }
 
@@ -131,7 +131,7 @@ a.btn.btn-primary[href*="discord.com/oauth2/authorize?client_id=1121314550969532
 a.btn.btn-primary[href*="discord.com/oauth2/authorize?client_id=1121314550969532476"]:focus-visible,
 a.btn.btn-primary[href*="discord.gg/Zygr52jpme"]:hover,
 a.btn.btn-primary[href*="discord.gg/Zygr52jpme"]:focus-visible {
-    transform: translateY(-2px);
+    filter: brightness(1.05) saturate(1.12);
     background: linear-gradient(135deg, rgba(139, 220, 255, 0.26), rgba(214, 242, 255, 0.18));
     border-color: rgba(214, 242, 255, 0.5);
     box-shadow:
@@ -164,7 +164,7 @@ a.btn.btn-primary[href*="discord.gg/Zygr52jpme"]:focus-visible {
 .btn-secondary:hover {
     background: var(--primary-color);
     color: #041018;
-    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(139, 220, 255, 0.22);
 }
 
 .btn-icon {
@@ -173,6 +173,11 @@ a.btn.btn-primary[href*="discord.gg/Zygr52jpme"]:focus-visible {
 
 .group:hover .group-hover\:translate-y-6 {
     transform: translateX(0.375rem);
+}
+
+.btn:hover .btn-icon,
+.btn:focus-visible .btn-icon {
+    transform: translateX(0.3rem);
 }
 
 .btn-large {
@@ -264,7 +269,7 @@ a.btn.btn-primary * {
 }
 
 .back-to-top:hover {
-    transform: translateY(-9px) scale(1.05);
+    transform: translateY(0) scale(1);
     background: linear-gradient(155deg, rgba(45, 70, 100, 0.62), rgba(20, 33, 50, 0.78));
     border-color: rgba(214, 242, 255, 0.56);
     box-shadow: 

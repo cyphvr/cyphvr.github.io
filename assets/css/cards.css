@@ -141,6 +141,11 @@
     filter: saturate(1.08) contrast(1.03);
 }
 
+.features .feature-card:nth-child(even).group:hover.group-hover\:feature-card,
+.features .feature-card:nth-child(even).group:focus-within.group-hover\:feature-card {
+    transform: perspective(920px) rotateX(3.2deg) rotateY(2.4deg) scale(1.012);
+}
+
 .features .feature-card h3 {
     font-family: var(--font-display);
     font-size: 1.15rem;
@@ -392,15 +397,21 @@
     z-index: 2;
 }
 
-.group:hover.group-hover\:command-card {
+.group:hover.group-hover\:command-card,
+.group:focus-within.group-hover\:command-card {
     background: linear-gradient(160deg, rgba(18, 28, 40, 0.98), rgba(12, 20, 30, 0.96));
-    transform: translate3d(0, -8px, 0) scale(1.015);
+    transform: perspective(960px) translate3d(0, -8px, 0) rotateY(-2deg) scale(1.015);
     border-color: rgba(139, 220, 255, 0.44);
     box-shadow:
         0 24px 38px rgba(0, 0, 0, 0.52),
         0 14px 28px rgba(139, 220, 255, 0.24),
         0 0 24px rgba(139, 220, 255, 0.24),
         inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.command-card:nth-child(even).group:hover.group-hover\:command-card,
+.command-card:nth-child(even).group:focus-within.group-hover\:command-card {
+    transform: perspective(960px) translate3d(0, -8px, 0) rotateY(2deg) scale(1.015);
 }
 
 .group:hover.group-hover\:command-card::before,
@@ -538,13 +549,19 @@
 .category-card:hover,
 .category-card:focus-visible,
 .group:hover.group-hover\:category-card {
-    transform: translateY(-6px);
+    transform: perspective(920px) translateY(-6px) rotateY(-1.8deg);
     border-color: rgba(139, 220, 255, 0.48);
     background: linear-gradient(155deg, rgba(18, 28, 40, 0.97), rgba(12, 19, 30, 0.96));
     box-shadow:
         0 18px 34px rgba(0, 0, 0, 0.44),
         0 0 22px rgba(139, 220, 255, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+
+.category-card:nth-child(even):hover,
+.category-card:nth-child(even):focus-visible,
+.category-card:nth-child(even).group:hover.group-hover\:category-card {
+    transform: perspective(920px) translateY(-6px) rotateY(1.8deg);
 }
 
 .category-card:hover::before,

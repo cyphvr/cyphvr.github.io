@@ -27,18 +27,14 @@ function initPageTransitions() {
         `;
 
         body.insertBefore(overlay, body.firstChild);
+        overlay.setAttribute('aria-hidden', 'true');
         return overlay;
     };
 
     const transitionOverlay = ensureTransitionOverlay();
 
     if (!prefersReducedMotion) {
-        body.classList.add('page-transition');
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                body.classList.add('page-ready');
-            });
-        });
+        body.classList.add('page-transition', 'page-ready');
     }
 
     let isNavigating = false;
@@ -79,18 +75,22 @@ function initPageTransitions() {
         event.preventDefault();
         body.classList.add('page-leaving');
         if (transitionOverlay) {
-            transitionOverlay.setAttribute('aria-hidden', 'true');
+            transitionOverlay.setAttribute('aria-hidden', 'false');
         }
 
         const navigate = () => {
             window.location.assign(destination.href);
         };
 
-        window.setTimeout(navigate, 430);
+        window.setTimeout(navigate, 260);
     }, true);
 
     window.addEventListener('pageshow', () => {
         body.classList.remove('page-leaving');
+        if (transitionOverlay) {
+            transitionOverlay.setAttribute('aria-hidden', 'true');
+        }
+        isNavigating = false;
     });
 }
 

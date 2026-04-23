@@ -1,4 +1,5 @@
 export function initCards() {
+    const supportsHoverPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const featureCards = document.querySelectorAll('.feature-card');
 
     const featuresSection = document.querySelector('.features');
@@ -46,19 +47,21 @@ export function initCards() {
             frameId = requestAnimationFrame(updateGlow);
         };
 
-        featuresSection.addEventListener('pointerenter', queueGlowUpdate);
-        featuresSection.addEventListener('pointermove', queueGlowUpdate);
-        featuresSection.addEventListener('pointerleave', () => {
-            pointerX = -1000;
-            pointerY = -1000;
+        if (supportsHoverPointer) {
+            featuresSection.addEventListener('pointerenter', queueGlowUpdate);
+            featuresSection.addEventListener('pointermove', queueGlowUpdate);
+            featuresSection.addEventListener('pointerleave', () => {
+                pointerX = -1000;
+                pointerY = -1000;
 
-            if (frameId !== null) {
-                window.cancelAnimationFrame(frameId);
-                frameId = null;
-            }
+                if (frameId !== null) {
+                    window.cancelAnimationFrame(frameId);
+                    frameId = null;
+                }
 
-            resetGlow();
-        });
+                resetGlow();
+            });
+        }
 
         resetGlow();
     }
@@ -75,25 +78,52 @@ export function initCards() {
     }, { threshold: 0.1 });
 
     const commandCards = document.querySelectorAll('.command-card');
-    commandCards.forEach(card => {
+    commandCards.forEach((card) => {
         card.style.opacity = '0';
         card.style.transform = 'translateX(-20px)';
         card.style.transition = 'opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.38s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.38s cubic-bezier(0.22, 1, 0.36, 1), background 0.38s cubic-bezier(0.22, 1, 0.36, 1)';
 
+        let rafId = null;
+        let latestEvent = null;
+
         const updateCardGlowPosition = (event) => {
-            const bounds = card.getBoundingClientRect();
-            const x = ((event.clientX - bounds.left) / bounds.width) * 100;
-            const y = ((event.clientY - bounds.top) / bounds.height) * 100;
-            card.style.setProperty('--hover-x', `${Math.max(0, Math.min(100, x))}%`);
-            card.style.setProperty('--hover-y', `${Math.max(0, Math.min(100, y))}%`);
+            latestEvent = event;
+            if (rafId !== null) {
+                return;
+            }
+
+            rafId = requestAnimationFrame(() => {
+                if (!latestEvent) {
+                    rafId = null;
+                    return;
+                }
+
+                const bounds = card.getBoundingClientRect();
+                const x = ((latestEvent.clientX - bounds.left) / bounds.width) * 100;
+                const y = ((latestEvent.clientY - bounds.top) / bounds.height) * 100;
+                card.style.setProperty('--hover-x', `${Math.max(0, Math.min(100, x))}%`);
+                card.style.setProperty('--hover-y', `${Math.max(0, Math.min(100, y))}%`);
+
+                rafId = null;
+            });
         };
 
-        card.addEventListener('pointermove', updateCardGlowPosition);
-        card.addEventListener('pointerenter', updateCardGlowPosition);
-        card.addEventListener('pointerleave', () => {
+        if (supportsHoverPointer) {
+            card.addEventListener('pointermove', updateCardGlowPosition);
+            card.addEventListener('pointerenter', updateCardGlowPosition);
+            card.addEventListener('pointerleave', () => {
+                if (rafId !== null) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                }
+                latestEvent = null;
+                card.style.setProperty('--hover-x', '50%');
+                card.style.setProperty('--hover-y', '50%');
+            });
+        } else {
             card.style.setProperty('--hover-x', '50%');
             card.style.setProperty('--hover-y', '50%');
-        });
+        }
 
         commandObserver.observe(card);
     });

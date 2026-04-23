@@ -31,6 +31,7 @@
         -webkit-backdrop-filter: blur(14px) saturate(140%);
         animation: none;
         z-index: 1000;
+        transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
     }
 
     .navbar.scrolled .container {
@@ -43,6 +44,13 @@
         backdrop-filter: blur(14px) saturate(140%);
         -webkit-backdrop-filter: blur(14px) saturate(140%);
         animation: none;
+    }
+
+    .navbar.menu-open .container {
+        max-width: calc(100% - 16px);
+        min-height: 62px;
+        padding: 0.58rem 0.66rem;
+        border-radius: 16px;
     }
 
     .navbar.is-compact {
@@ -73,27 +81,26 @@
     }
 
     .navbar-toggle span {
-        left: 11px;
-        right: 11px;
-        height: 2.2px;
+        width: 24px;
+        height: 2px;
         border-radius: 999px;
         transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
     }
 
     .navbar-toggle span:nth-child(1) {
-        top: 14px;
+        transform: translate(-50%, calc(-50% - 8px));
     }
 
     .navbar-toggle span:nth-child(2) {
-        top: 21px;
+        transform: translate(-50%, -50%);
     }
 
     .navbar-toggle span:nth-child(3) {
-        top: 28px;
+        transform: translate(-50%, calc(-50% + 8px));
     }
 
     .navbar.menu-open .navbar-toggle span:nth-child(1) {
-        transform: translateY(7px) rotate(45deg);
+        transform: translate(-50%, -50%) rotate(45deg);
     }
 
     .navbar.menu-open .navbar-toggle span:nth-child(2) {
@@ -102,7 +109,7 @@
     }
 
     .navbar.menu-open .navbar-toggle span:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
+        transform: translate(-50%, -50%) rotate(-45deg);
     }
 
     .navbar-menu {
@@ -125,7 +132,7 @@
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
-        transform: translateY(-12px) scale(0.98);
+        transform: translateY(-12px);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.42);
         z-index: 9999;
     }
@@ -135,10 +142,11 @@
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
     }
 
     .navbar-link {
+        position: relative;
         width: 100%;
         text-align: left;
         padding: 0.92rem 1rem;
@@ -148,6 +156,20 @@
         border: 1px solid transparent;
         animation: none !important;
     }
+
+    .navbar-link::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background:
+            linear-gradient(102deg, rgba(139, 220, 255, 0), rgba(139, 220, 255, 0.2), rgba(214, 242, 255, 0), rgba(139, 220, 255, 0.16));
+        background-size: 220% 100%;
+        animation: mobileNavLinkSweep 4.2s ease-in-out infinite;
+        opacity: 0.88;
+        pointer-events: none;
+    }
+
     .navbar-invite {
         width: 100%;
         text-align: center;
@@ -163,12 +185,12 @@
 
     .navbar-link:hover,
     .navbar-invite:hover {
-        transform: translateY(-1px);
+        transform: none;
     }
 
     .navbar-link:hover {
-        background: transparent;
-        border-color: transparent;
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(139, 220, 255, 0.24);
     }
 
     .navbar-link:active,
@@ -196,7 +218,7 @@
     }
 
     .back-to-top:hover {
-        transform: translateX(-50%) scale(1.08) translateY(-8px);
+        transform: translateX(-50%) scale(1) translateY(0);
     }
 
     .back-to-top::before {
@@ -375,7 +397,7 @@
     }
 
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
 
     .hero {
@@ -383,7 +405,9 @@
     }
 
     .hero-title {
-        font-size: 1.4rem;
+        font-size: 1.72rem;
+        line-height: 1.12;
+        gap: 0.16em;
     }
 
     .hero-description {
@@ -496,5 +520,17 @@
 
     .footer-content {
         grid-template-columns: 1fr;
+    }
+}
+
+@keyframes mobileNavLinkSweep {
+    0%,
+    100% {
+        background-position: 0% 50%;
+        opacity: 0.66;
+    }
+    50% {
+        background-position: 100% 50%;
+        opacity: 1;
     }
 }
