@@ -12,138 +12,100 @@
 
 .features .feature-card {
     --feature-accent-rgb: 45 212 255;
-    --feature-x: -150px;
-    --feature-y: -150px;
-    --feature-proximity: 0;
-    --feature-border-angle: 0deg;
+    --pointer-x: -10;
+    --pointer-y: -10;
+    --cursor-x: calc((var(--pointer-x) * 50%) + 50%);
+    --cursor-y: calc((var(--pointer-y) * 50%) + 50%);
+    --feature-entry-y: 24px;
+    --feature-hover-lift: 0px;
+    --feature-rotate-x: 0deg;
+    --feature-rotate-y: 0deg;
+    --feature-scale: 1;
+    width: 100%;
     padding: 1.15rem;
-    border-radius: 16px;
-    background:
-        radial-gradient(
-            210px circle at var(--feature-x) var(--feature-y),
-            rgb(var(--feature-accent-rgb) / calc(0.8 * var(--feature-proximity))),
-            rgb(var(--feature-accent-rgb) / calc(0.48 * var(--feature-proximity))) 44%,
-            rgba(10, 16, 24, 0) 82%
-        ),
-        radial-gradient(
-            78px circle at var(--feature-x) var(--feature-y),
-            rgb(255 255 255 / calc(0.12 * var(--feature-proximity))),
-            rgba(255, 255, 255, 0) 72%
-        ),
-        linear-gradient(155deg, rgba(15, 22, 33, 0.9), rgba(10, 16, 25, 0.9));
-    border: none;
-    box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.38),
-        0 0 calc(36px * var(--feature-proximity)) rgb(var(--feature-accent-rgb) / calc(0.26 * var(--feature-proximity))),
-        inset 0 0 calc(24px * var(--feature-proximity)) rgb(var(--feature-accent-rgb) / calc(0.08 * var(--feature-proximity)));
-    transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s ease, opacity 0.5s ease, filter 0.32s ease;
+    border-radius: 12px;
+    background: rgb(26 26 26);
+    outline: 2px solid rgb(51 51 51);
     position: relative;
-    overflow: hidden;
-    transform: translateY(24px);
+    transform: perspective(920px) translate3d(0, calc(var(--feature-entry-y) + var(--feature-hover-lift)), 0) rotateX(var(--feature-rotate-x)) rotateY(var(--feature-rotate-y)) scale(var(--feature-scale));
     opacity: 0;
+    overflow: hidden;
     isolation: isolate;
     transform-style: preserve-3d;
+    will-change: transform;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 250px;
+    cursor: pointer;
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, filter 0.24s ease;
 }
 
-@property --feature-border-angle {
-    syntax: '<angle>';
-    inherits: false;
-    initial-value: 0deg;
-}
+.features .feature-card:nth-child(1) { --feature-accent-rgb: 255 82 106; }
+.features .feature-card:nth-child(2) { --feature-accent-rgb: 45 212 255; }
+.features .feature-card:nth-child(3) { --feature-accent-rgb: 156 114 255; }
+.features .feature-card:nth-child(4) { --feature-accent-rgb: 250 204 21; }
+.features .feature-card:nth-child(5) { --feature-accent-rgb: 59 130 246; }
+.features .feature-card:nth-child(6) { --feature-accent-rgb: 20 184 166; }
+.features .feature-card:nth-child(7) { --feature-accent-rgb: 236 72 153; }
 
 .features .feature-card::before {
     content: '';
     position: absolute;
-    inset: 0;
-    padding: 1.5px;
-    border-radius: inherit;
-    background:
-        conic-gradient(
-            from var(--feature-border-angle),
-            rgb(var(--feature-accent-rgb) / 0) 0deg,
-            rgb(var(--feature-accent-rgb) / 0.06) 28deg,
-            rgb(var(--feature-accent-rgb) / 0.28) 78deg,
-            rgb(255 255 255 / 0.48) 104deg,
-            rgb(var(--feature-accent-rgb) / 0.26) 152deg,
-            rgb(var(--feature-accent-rgb) / 0.06) 214deg,
-            rgb(var(--feature-accent-rgb) / 0) 360deg
-        );
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    animation: featureBorderSpin 4.8s linear infinite;
-    filter: saturate(1.1) brightness(1);
-    pointer-events: none;
+    inset: -20%;
+    background: radial-gradient(
+        230px circle at var(--cursor-x) var(--cursor-y),
+        rgb(var(--feature-accent-rgb) / 0.9) 0%,
+        rgb(var(--feature-accent-rgb) / 0.5) 42%,
+        rgb(var(--feature-accent-rgb) / 0.14) 66%,
+        transparent 82%
+    );
+    filter: blur(28px) saturate(1.15) brightness(1.08);
+    opacity: 0.3;
     z-index: 0;
-}
-
-.features .feature-card:hover::before,
-.features .feature-card:focus-within::before {
-    animation-duration: 2.8s;
-    filter: saturate(1.5) brightness(1.22) drop-shadow(0 0 10px rgb(var(--feature-accent-rgb) / 0.28));
+    pointer-events: none;
+    transform: translateZ(0);
 }
 
 .features .feature-card::after {
     content: '';
     position: absolute;
-    inset: 1.5px;
+    inset: 0;
     border-radius: inherit;
-    background:
-        linear-gradient(155deg, rgba(15, 22, 33, 0.9), rgba(10, 16, 25, 0.9)),
-        radial-gradient(
-            230px circle at var(--feature-x) var(--feature-y),
-            rgb(var(--feature-accent-rgb) / calc(0.48 * var(--feature-proximity))),
-            rgba(10, 16, 24, 0) 74%
-        );
-    box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.38),
-        0 0 calc(36px * var(--feature-proximity)) rgb(var(--feature-accent-rgb) / calc(0.26 * var(--feature-proximity))),
-        inset 0 0 calc(24px * var(--feature-proximity)) rgb(var(--feature-accent-rgb) / calc(0.08 * var(--feature-proximity)));
+    border: 3px solid transparent;
+    backdrop-filter: blur(0px) saturate(4.2) brightness(2.5) contrast(2.5);
+    mask: linear-gradient(#fff 0 100%) border-box, linear-gradient(#fff 0 100%) padding-box;
+    mask-composite: exclude;
     pointer-events: none;
     z-index: 1;
 }
 
-.features .feature-card:hover::after,
-.features .feature-card:focus-within::after {
-    background:
-        linear-gradient(155deg, rgba(18, 28, 41, 0.95), rgba(10, 16, 25, 0.95)),
-        radial-gradient(
-            230px circle at var(--feature-x) var(--feature-y),
-            rgb(var(--feature-accent-rgb) / calc(0.68 * var(--feature-proximity))),
-            rgba(10, 16, 24, 0) 72%
-        );
-    box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.38),
-        0 0 calc(42px * var(--feature-proximity)) rgb(var(--feature-accent-rgb) / calc(0.34 * var(--feature-proximity))),
-        inset 0 0 calc(26px * var(--feature-proximity)) rgb(var(--feature-accent-rgb) / calc(0.12 * var(--feature-proximity)));
+.features .feature-card.is-visible {
+    --feature-entry-y: 0px;
+    opacity: 1;
 }
 
-.features .feature-card h3,
-.features .feature-card p,
-.features .feature-card img {
+.features .feature-card:active {
+    --feature-hover-lift: 0px;
+    --feature-scale: 1;
+}
+
+.features .feature-icon {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    background: transparent;
+    margin-bottom: 0.6rem;
+    user-select: none;
     position: relative;
     z-index: 2;
 }
 
-.features .feature-card.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.features .group:hover.group-hover\:feature-card,
-.features .group:focus-within.group-hover\:feature-card {
-    transform: perspective(920px) rotateX(3.2deg) rotateY(-2.4deg) scale(1.012);
-    filter: saturate(1.08) contrast(1.03);
-}
-
-.features .feature-card:nth-child(even).group:hover.group-hover\:feature-card,
-.features .feature-card:nth-child(even).group:focus-within.group-hover\:feature-card {
-    transform: perspective(920px) rotateX(3.2deg) rotateY(2.4deg) scale(1.012);
+.features .feature-card h3,
+.features .feature-card p {
+    position: relative;
+    z-index: 2;
 }
 
 .features .feature-card h3 {
@@ -156,10 +118,18 @@
 }
 
 .features .feature-card p {
-    filter: saturate(1.1) brightness(1);
     color: #b7c1d1;
     line-height: 1.6;
-    transition: color 0.28s ease, transform 0.28s ease;
+    font-size: 0.92rem;
+    text-align: left;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s ease;
+}
+
+.features .group:hover.group-hover\:feature-card,
+.features .group:focus-within.group-hover\:feature-card {
+    --feature-hover-lift: 0px;
+    --feature-scale: 1;
+    filter: saturate(1.08) contrast(1.03);
 }
 
 .features .group:hover.group-hover\:feature-card h3,
@@ -175,16 +145,16 @@
     color: #d7e7f8;
 }
 
-.feature-icon {
-    width: 44px;
-    height: 44px;
-    object-fit: contain;
-    border-radius: 8px;
-    padding: 2px;
-    background: transparent;
-    box-shadow: none;
-    margin-bottom: 0.6rem;
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), filter 0.3s ease;
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }
 
 .icon-badge {
@@ -197,51 +167,46 @@
 }
 
 .icon-badge--sm {
-    width: 28px;
-    height: 28px;
-    padding: 8px;
+    width: 20px;
+    height: 20px;
+    padding: 5px;
 }
 
 .icon-badge--md {
-    width: 40px;
-    height: 40px;
-    padding: 10px;
+    width: 28px;
+    height: 28px;
+    padding: 7px;
 }
 
 .icon-badge--lg {
-    width: 56px;
-    height: 56px;
-    padding: 12px;
+    width: 40px;
+    height: 40px;
+    padding: 9px;
 }
 
 
-.icon-badge,
-.feature-icon {
+.icon-badge {
     transition: box-shadow 0.25s ease, filter 0.25s ease;
     animation: icon-glow 6s ease-in-out infinite;
     will-change: box-shadow;
 }
 
 .features .feature-icon {
-    animation: none;
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), filter 0.3s ease;
 }
 
 .features .group:hover.group-hover\:feature-card .feature-icon,
 .features .group:focus-within.group-hover\:feature-card .feature-icon {
-    transform: translateY(-2px) scale(1.04);
+    transform: translateZ(18px) scale(1.04);
     filter: saturate(1.05);
 }
 
-.icon-sheen .icon-badge,
-.icon-sheen .feature-icon {
+.icon-sheen .icon-badge {
     transition: none !important;
     animation: none !important;
 }
 .icon-sheen .icon-badge:hover,
-.icon-sheen .icon-badge:focus-visible,
-.icon-sheen .feature-icon:hover,
-.icon-sheen .feature-icon:focus-visible {
+.icon-sheen .icon-badge:focus-visible {
     transform: none !important;
     box-shadow: none !important;
     filter: none !important;
@@ -266,20 +231,24 @@
     }
 }
 
-@keyframes featureBorderSpin {
-    from {
-        --feature-border-angle: 0deg;
-    }
-    to {
-        --feature-border-angle: 360deg;
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
-    .icon-badge,
-    .feature-icon {
+    .icon-badge {
         animation: none;
         transition: none;
+    }
+
+    .features .feature-card,
+    .features .feature-card h3,
+    .features .feature-card p,
+    .features .feature-icon {
+        transition: none;
+    }
+
+    .features .group:hover.group-hover\:feature-card,
+    .features .group:focus-within.group-hover\:feature-card {
+        --feature-hover-lift: 0px;
+        --feature-rotate-x: 0deg;
+        --feature-rotate-y: 0deg;
     }
 }
 
@@ -319,21 +288,6 @@
 
 @media (prefers-reduced-motion: reduce) {
     .icon-sheen::after { animation: none; }
-}
-
-.feature-card h3 {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    margin-bottom: 0.5rem;
-    color: #ffffff;
-    letter-spacing: 0.01em;
-}
-
-
-.feature-card p {
-    color: #b7c1d1;
-    line-height: 1.6;
-    font-size: 0.92rem;
 }
 
 .commands {

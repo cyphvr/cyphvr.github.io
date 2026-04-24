@@ -4,66 +4,110 @@ export function initCards() {
 
     const featuresSection = document.querySelector('.features');
     if (featureCards.length && featuresSection) {
-        let pointerX = -1000;
-        let pointerY = -1000;
-        let frameId = null;
-
-        const resetGlow = () => {
-            featureCards.forEach((card) => {
-                card.style.setProperty('--feature-x', '-150px');
-                card.style.setProperty('--feature-y', '-150px');
-                card.style.setProperty('--feature-proximity', '0');
-            });
+        const resetFeatureGlow = (card) => {
+            card.style.setProperty('--pointer-x', '-10');
+            card.style.setProperty('--pointer-y', '-10');
         };
 
-        const updateGlow = () => {
-            featureCards.forEach((card) => {
-                const bounds = card.getBoundingClientRect();
-                const localX = pointerX - bounds.left;
-                const localY = pointerY - bounds.top;
-                const deltaX = Math.max(bounds.left - pointerX, 0, pointerX - bounds.right);
-                const deltaY = Math.max(bounds.top - pointerY, 0, pointerY - bounds.bottom);
-                const distance = Math.hypot(deltaX, deltaY);
-                const maxDistance = 120;
-                const proximityRaw = Math.max(0, 1 - distance / maxDistance);
-                const proximity = Math.pow(proximityRaw, 1.45);
-
-                card.style.setProperty('--feature-x', `${localX.toFixed(1)}px`);
-                card.style.setProperty('--feature-y', `${localY.toFixed(1)}px`);
-                card.style.setProperty('--feature-proximity', proximity.toFixed(3));
-            });
-
-            frameId = null;
+        const resetFeatureTilt = (card) => {
+            card.style.setProperty('--feature-rotate-x', '0deg');
+            card.style.setProperty('--feature-rotate-y', '0deg');
         };
 
-        const queueGlowUpdate = (event) => {
-            pointerX = event.clientX;
-            pointerY = event.clientY;
+        const resetFeatureCard = (card) => {
+            resetFeatureGlow(card);
+            resetFeatureTilt(card);
+        };
 
-            if (frameId !== null) {
+        let glowFrameId = null;
+        let latestGlowEvent = null;
+
+        const updateFeatureGlow = () => {
+            if (!latestGlowEvent) {
+                glowFrameId = null;
                 return;
             }
 
-            frameId = requestAnimationFrame(updateGlow);
+            featureCards.forEach((card) => {
+                const rect = card.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const relativeX = (latestGlowEvent.clientX - centerX) / (rect.width / 2);
+                const relativeY = (latestGlowEvent.clientY - centerY) / (rect.height / 2);
+
+                card.style.setProperty('--pointer-x', relativeX.toFixed(3));
+                card.style.setProperty('--pointer-y', relativeY.toFixed(3));
+            });
+
+            glowFrameId = null;
         };
 
-        if (supportsHoverPointer) {
-            featuresSection.addEventListener('pointerenter', queueGlowUpdate);
-            featuresSection.addEventListener('pointermove', queueGlowUpdate);
-            featuresSection.addEventListener('pointerleave', () => {
-                pointerX = -1000;
-                pointerY = -1000;
+        const queueFeatureGlowUpdate = (event) => {
+            latestGlowEvent = event;
+            if (glowFrameId !== null) {
+                return;
+            }
 
-                if (frameId !== null) {
-                    window.cancelAnimationFrame(frameId);
-                    frameId = null;
+            glowFrameId = requestAnimationFrame(updateFeatureGlow);
+        };
+
+        featureCards.forEach((card) => {
+            resetFeatureCard(card);
+
+            if (!supportsHoverPointer) {
+                return;
+            }
+
+            let rafId = null;
+            let latestEvent = null;
+
+            const updateFeatureCard = () => {
+                if (!latestEvent) {
+                    rafId = null;
+                    return;
                 }
 
-                resetGlow();
-            });
-        }
+                const rect = card.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const relativeX = (latestEvent.clientX - centerX) / (rect.width / 2);
+                const relativeY = (latestEvent.clientY - centerY) / (rect.height / 2);
+                const clampedX = Math.max(-1, Math.min(1, relativeX));
+                const clampedY = Math.max(-1, Math.min(1, relativeY));
 
-        resetGlow();
+                card.style.setProperty('--pointer-x', clampedX.toFixed(3));
+                card.style.setProperty('--pointer-y', clampedY.toFixed(3));
+                card.style.setProperty('--feature-rotate-x', `${(clampedY * -5.5).toFixed(2)}deg`);
+                card.style.setProperty('--feature-rotate-y', `${(clampedX * 6.5).toFixed(2)}deg`);
+
+                rafId = null;
+            };
+
+            const queueFeatureUpdate = (event) => {
+                latestEvent = event;
+                if (rafId !== null) {
+                    return;
+                }
+
+                rafId = requestAnimationFrame(updateFeatureCard);
+            };
+
+            card.addEventListener('pointerenter', queueFeatureUpdate);
+            card.addEventListener('pointermove', queueFeatureUpdate);
+            card.addEventListener('pointerleave', () => {
+                if (rafId !== null) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                }
+
+                latestEvent = null;
+                resetFeatureTilt(card);
+            });
+        });
+
+        if (supportsHoverPointer) {
+            document.addEventListener('pointermove', queueFeatureGlowUpdate);
+        }
     }
 
     const commandObserver = new IntersectionObserver((entries) => {

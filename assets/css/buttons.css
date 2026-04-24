@@ -168,16 +168,28 @@ a.btn.btn-primary[href*="discord.gg/Zygr52jpme"]:focus-visible {
 }
 
 .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.btn-icon > * {
+    pointer-events: none;
+}
+
+.btn-icon-shift {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.3s ease;
+    will-change: transform;
 }
 
-.group:hover .group-hover\:translate-y-6 {
+.group:hover .group-hover\:translate-y-6,
+.group:focus-visible .group-hover\:translate-y-6,
+.group:focus-within .group-hover\:translate-y-6 {
     transform: translateX(0.375rem);
-}
-
-.btn:hover .btn-icon,
-.btn:focus-visible .btn-icon {
-    transform: translateX(0.3rem);
 }
 
 .btn-large {
