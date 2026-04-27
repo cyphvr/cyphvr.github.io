@@ -54,7 +54,6 @@ function createLinesBetweenParticles(points, maxDist, color, opacity) {
 }
 
 function initThreeBackground() {
-    // Remove old background if exists
     const oldBg = document.getElementById('three-bg-canvas');
     if (oldBg) oldBg.remove();
 
@@ -74,20 +73,17 @@ function initThreeBackground() {
     renderer.domElement.style.zIndex = '0';
     document.body.prepend(renderer.domElement);
 
-    // Multi-layered particles
     particleSystems = [
         createParticleLayer(220, 3.2, 0.0009, 0x8a9bff, 0.7),
         createParticleLayer(120, 2.1, 0.0015, 0x3ecfff, 0.5),
         createParticleLayer(60, 5.2, 0.0005, 0xff52a0, 0.3)
     ];
 
-    // Glowing lines between some particles
     lines = [
         createLinesBetweenParticles(particleSystems[0], 38, 0x8a9bff, 0.18),
         createLinesBetweenParticles(particleSystems[1], 48, 0x3ecfff, 0.12)
     ];
 
-    // Mouse parallax
     document.addEventListener('mousemove', (e) => {
         mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -99,16 +95,13 @@ function initThreeBackground() {
 
 function animate() {
     requestAnimationFrame(animate);
-    // Parallax camera
     camera.position.x += (mouse.x * 20 - camera.position.x) * 0.04;
     camera.position.y += (mouse.y * 10 - camera.position.y) * 0.04;
     camera.lookAt(scene.position);
-    // Animate layers
     particleSystems.forEach((ps, i) => {
         ps.rotation.y += ps.userData.speed;
         ps.rotation.x += ps.userData.speed * 0.3;
     });
-    // Animate lines (subtle pulsate)
     lines.forEach((line, i) => {
         line.material.opacity = 0.12 + 0.08 * Math.abs(Math.sin(Date.now() * 0.0007 + i));
     });

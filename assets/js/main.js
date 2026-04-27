@@ -1,4 +1,3 @@
-
 import { initNavigation } from './navigation.js';
 import { initAnimations } from './animations.js';
 import { initCards } from './cards.js';
