@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="aurora"></div>
+
 
     <nav class="navbar">
         <div class="container">
@@ -253,6 +253,12 @@
     </footer>
 
     <script type="module" src="assets/js/main.js"></script>
+    <script type="module">
+        import { initThreeBackground } from './assets/js/three-bg-advanced.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeBackground();
+        });
+    </script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('img').forEach(function(img) {
