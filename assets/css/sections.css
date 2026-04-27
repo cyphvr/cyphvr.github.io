@@ -477,6 +477,7 @@ h2:not(.section-title) {
     border-radius: inherit;
     background: conic-gradient(from var(--cap-rotate), #0088bb 0deg, #0088bb 40deg, transparent 60deg, transparent 360deg);
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
