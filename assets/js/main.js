@@ -3,6 +3,13 @@ import { initAnimations } from './animations.js';
 import { initCards } from './cards.js';
 import { initButtons } from './buttons.js';
 import { initCapabilityPuzzle } from './capabilities.js';
+import { initThreeBackground } from './three-bg-advanced.js?v=20260526b';
+
+try {
+    initThreeBackground();
+} catch (error) {
+    console.error('Three.js background failed to initialize:', error);
+}
 
 function initPageTransitions() {
     const body = document.body;
