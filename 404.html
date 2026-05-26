@@ -9,6 +9,417 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .not-found-page {
+            min-height: 100vh;
+            padding: 108px 0 72px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .not-found-page::before,
+        .not-found-page::after {
+            content: '';
+            position: absolute;
+            inset: auto;
+            pointer-events: none;
+            border-radius: 50%;
+            filter: blur(18px);
+            opacity: 0.8;
+        }
+
+        .not-found-page::before {
+            width: 360px;
+            height: 360px;
+            top: 70px;
+            left: -90px;
+            background: radial-gradient(circle, rgba(139, 220, 255, 0.18), transparent 68%);
+            animation: notFoundFloat 10s ease-in-out infinite;
+        }
+
+        .not-found-page::after {
+            width: 460px;
+            height: 460px;
+            right: -150px;
+            bottom: -120px;
+            background: radial-gradient(circle, rgba(214, 242, 255, 0.14), transparent 70%);
+            animation: notFoundFloat 12s ease-in-out infinite reverse;
+        }
+
+        .not-found-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+            gap: 2rem;
+            align-items: center;
+            max-width: 1060px;
+            margin: 0 auto;
+        }
+
+        .not-found-copy,
+        .not-found-visual {
+            position: relative;
+            z-index: 1;
+        }
+
+        .not-found-copy {
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .not-found-actions,
+        .not-found-links {
+            justify-content: center;
+        }
+
+        .not-found-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.5rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid rgba(139, 220, 255, 0.22);
+            background: rgba(10, 18, 28, 0.55);
+            color: #d8f4ff;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-size: 0.76rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+        }
+
+        .not-found-kicker::before {
+            content: '';
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8bdcff, #dff6ff);
+            box-shadow: 0 0 14px rgba(139, 220, 255, 0.6);
+        }
+
+        .not-found-title {
+            margin: 0 0 0.8rem;
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 10vw, 7.4rem);
+            line-height: 0.92;
+            letter-spacing: -0.05em;
+        }
+
+        .not-found-title .glitch {
+            font-size: inherit;
+            display: inline-block;
+        }
+
+        .not-found-copy h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            margin-bottom: 1rem;
+        }
+
+        .not-found-copy p {
+            max-width: 620px;
+            color: var(--text-gray);
+            font-size: 1.08rem;
+            line-height: 1.8;
+            margin-bottom: 1.6rem;
+        }
+
+        .not-found-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            margin-bottom: 1.3rem;
+            align-items: center;
+        }
+
+        .not-found-home-btn {
+            position: relative;
+            padding: 0.92rem 1.7rem;
+            background: linear-gradient(135deg, #9fe5ff 0%, #a9d8ff 48%, #dff6ff 100%);
+            color: #07101a !important;
+            border: 1px solid rgba(226, 245, 255, 0.7);
+            box-shadow:
+                0 18px 34px rgba(139, 220, 255, 0.24),
+                0 0 0 1px rgba(214, 242, 255, 0.22),
+                inset 0 1px 0 rgba(255, 255, 255, 0.42);
+            font-size: 1.08rem;
+            letter-spacing: 0.01em;
+            transform: translate3d(0, 0, 0);
+            transition:
+                transform 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.34s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.28s ease,
+                border-color 0.28s ease;
+            overflow: hidden;
+        }
+
+        .not-found-home-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,0.36) 50%, transparent 100%);
+            transform: translateX(-120%);
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .not-found-home-btn::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
+        .not-found-home-btn:hover,
+        .not-found-home-btn:focus-visible {
+            transform: translate3d(0, -3px, 0) scale(1.01);
+            border-color: rgba(255, 255, 255, 0.92);
+            box-shadow:
+                0 22px 44px rgba(139, 220, 255, 0.3),
+                0 0 24px rgba(139, 220, 255, 0.24),
+                0 0 0 1px rgba(214, 242, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            filter: brightness(1.03) saturate(1.05);
+        }
+
+        .not-found-home-btn:hover::before,
+        .not-found-home-btn:focus-visible::before {
+            transform: translateX(120%);
+        }
+
+        .not-found-home-btn .btn-text,
+        .not-found-home-btn .btn-icon {
+            position: relative;
+            z-index: 1;
+        }
+
+        .not-found-home-btn .btn-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 999px;
+            background: rgba(8, 16, 26, 0.12);
+            display: inline-grid;
+            place-items: center;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+        }
+
+        .not-found-home-btn .btn-icon svg {
+            width: 0.95rem;
+            height: 0.95rem;
+        }
+
+        .not-found-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+        }
+
+        .not-found-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.62rem 0.95rem;
+            border-radius: 999px;
+            border: 1px solid rgba(139, 220, 255, 0.16);
+            background: rgba(8, 14, 22, 0.66);
+            color: #edf5ff;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease, background 0.28s ease, box-shadow 0.28s ease;
+        }
+
+        .not-found-link:hover,
+        .not-found-link:focus-visible {
+            transform: translate3d(0, -2px, 0);
+            border-color: rgba(139, 220, 255, 0.34);
+            background: rgba(12, 22, 34, 0.88);
+            box-shadow:
+                0 12px 24px rgba(0, 0, 0, 0.2),
+                0 0 18px rgba(139, 220, 255, 0.12);
+        }
+
+        .not-found-visual-card {
+            position: relative;
+            padding: 2.15rem 1.4rem 1.4rem;
+            border-radius: 28px;
+            border: 1px solid rgba(139, 220, 255, 0.18);
+            background:
+                radial-gradient(120% 100% at 50% 0%, rgba(139, 220, 255, 0.12), transparent 48%),
+                linear-gradient(180deg, rgba(13, 19, 31, 0.94), rgba(7, 12, 21, 0.98));
+            box-shadow:
+                0 24px 58px rgba(0, 0, 0, 0.36),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .not-found-visual-card::before {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border-radius: 22px;
+            border: 1px solid rgba(214, 242, 255, 0.07);
+            pointer-events: none;
+        }
+
+        .not-found-orb {
+            position: absolute;
+            inset: auto;
+            border-radius: 50%;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            filter: blur(4px);
+            opacity: 0.9;
+        }
+
+        .not-found-orb--one {
+            width: 150px;
+            height: 150px;
+            top: 20px;
+            right: 22px;
+            background: radial-gradient(circle, rgba(139, 220, 255, 0.25), transparent 72%);
+            animation: notFoundPulse 6s ease-in-out infinite;
+        }
+
+        .not-found-orb--two {
+            width: 220px;
+            height: 220px;
+            bottom: -50px;
+            left: -30px;
+            background: radial-gradient(circle, rgba(214, 242, 255, 0.16), transparent 68%);
+            animation: notFoundFloat 9s ease-in-out infinite;
+        }
+
+        .not-found-logo-wrap {
+            width: 118px;
+            height: 118px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            padding: 10px;
+            background: linear-gradient(145deg, rgba(139, 220, 255, 0.14), rgba(7, 14, 24, 0.9));
+            border: 1px solid rgba(139, 220, 255, 0.24);
+            box-shadow:
+                0 0 0 10px rgba(139, 220, 255, 0.04),
+                0 18px 36px rgba(0, 0, 0, 0.26);
+            display: grid;
+            place-items: center;
+            position: relative;
+        }
+
+        .not-found-logo-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -16px;
+            border-radius: inherit;
+            border: 1px solid rgba(214, 242, 255, 0.1);
+            animation: notFoundRing 7s linear infinite;
+        }
+
+        .not-found-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .not-found-status {
+            margin: 0 auto 1rem;
+            width: fit-content;
+            padding: 0.42rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #d7efff;
+            border: 1px solid rgba(139, 220, 255, 0.18);
+            background: rgba(6, 12, 20, 0.58);
+        }
+
+        .not-found-signal {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 0.4rem;
+            width: 100%;
+        }
+
+        .not-found-signal-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.85rem 1rem;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e8f3ff;
+        }
+
+        .not-found-signal-item span:last-child {
+            color: #9fc9dd;
+        }
+
+        @keyframes notFoundFloat {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(0, -12px, 0) scale(1.03); }
+        }
+
+        @keyframes notFoundPulse {
+            0%, 100% { transform: scale(1); opacity: 0.75; }
+            50% { transform: scale(1.08); opacity: 1; }
+        }
+
+        @keyframes notFoundRing {
+            0% { transform: rotate(0deg) scale(1); opacity: 0.55; }
+            50% { transform: rotate(180deg) scale(1.04); opacity: 0.95; }
+            100% { transform: rotate(360deg) scale(1); opacity: 0.55; }
+        }
+
+        @media (max-width: 980px) {
+            .not-found-page {
+                padding-top: 98px;
+            }
+
+            .not-found-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .not-found-visual {
+                max-width: 680px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .not-found-page {
+                padding: 92px 0 58px;
+            }
+
+            .not-found-actions,
+            .not-found-links {
+                width: 100%;
+            }
+
+            .not-found-actions .btn,
+            .not-found-links .not-found-link {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .not-found-visual-card {
+                padding: 1.1rem;
+            }
+        }
+    </style>
     <script>
         (function() {
             var redirect = sessionStorage.redirect;
@@ -26,7 +437,7 @@
         <div class="container">
             <div class="navbar-logo">
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                    <span class="logo-icon" data-icon="cypher-logo" data-label="Cypher Logo"></span>
+                    <img src="/images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
                     <span class="logo-text">Cypher</span>
                 </a>
             </div>
@@ -44,21 +455,50 @@
         </div>
     </nav>
 
-    <section style="padding: 150px 0;">
+    <section class="not-found-page">
         <div class="container">
-            <div style="text-align: center;">
-                <h1 class="glitch" data-text="404" style="font-size: 100px; margin-bottom: 20px;">404</h1>
-                <h2 style="font-size: 36px; color: #2dd4ff; margin-bottom: 20px;">Page Not Found</h2>
-                <p style="color: #b7c1d1; font-size: 18px; margin-bottom: 40px;">
-                    Oops! The page you're looking for doesn't exist or has been moved.
-                </p>
-                <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                    <a href="/" class="btn btn-primary" style="text-decoration: none;">
-                        <span>Go to Home</span>
-                    </a>
-                    <a href="/features" class="btn btn-secondary" style="text-decoration: none;">
-                        <span>Explore Features</span>
-                    </a>
+            <div class="not-found-layout">
+                <div class="not-found-copy">
+                    <div class="not-found-kicker">Lost signal</div>
+                    <h1 class="not-found-title"><span class="glitch" data-text="404">404</span></h1>
+                    <h2>Page Not Found</h2>
+                    <p>
+                        The path you tried to open doesn’t exist anymore, or never existed at all. Use the routes below to get back to the main network.
+                    </p>
+                    <div class="not-found-actions">
+                        <a href="/" class="btn btn-primary group hero-invite-btn not-found-home-btn" style="text-decoration: none; display:inline-flex; align-items:center; justify-content:center; gap:0.72rem; white-space:nowrap;">
+                            <span class="btn-text">Go to Home</span>
+                            <span class="btn-icon" aria-hidden="true">
+                                <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.8 9h8.4M10.2 4.8L13.4 9l-3.2 4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </a>
+                        <a href="/features" class="btn btn-secondary group about-cta-btn about-cta-btn--secondary" style="text-decoration: none; display:inline-flex; align-items:center; justify-content:center; gap:0.7rem; white-space:nowrap;">
+                            <span>Explore Features</span>
+                        </a>
+                    </div>
+                    <div class="not-found-links" aria-label="Quick links">
+                        <a class="not-found-link" href="/commands">Commands</a>
+                        <a class="not-found-link" href="/about">About</a>
+                        <a class="not-found-link" href="/status">Status</a>
+                    </div>
+                </div>
+
+                <div class="not-found-visual">
+                    <div class="not-found-visual-card">
+                        <div class="not-found-orb not-found-orb--one"></div>
+                        <div class="not-found-orb not-found-orb--two"></div>
+                        <div class="not-found-logo-wrap" aria-hidden="true">
+                            <img class="not-found-logo" src="/images/cypher rebrand logo round (No BG).png" alt="Cypher Logo">
+                        </div>
+                        <div class="not-found-status">Cypher network</div>
+                        <div class="not-found-signal" aria-label="Recovery hints">
+                            <div class="not-found-signal-item"><span>Site status</span><span>Stable</span></div>
+                            <div class="not-found-signal-item"><span>Navigation</span><span>Available</span></div>
+                            <div class="not-found-signal-item"><span>Recovery path</span><span>Home / Features</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,13 +511,13 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <div class="logo">
-                        <span class="logo-icon" data-icon="cypher-logo" data-label="Cypher Logo"></span>
+                        <img src="images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
                         <span class="logo-text">Cypher</span>
                     </div>
                     <p>Empowering Discord communities since 2023.</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Resources</h4>
+                    <h4 class="binary-roll">Resources</h4>
                     <ul>
                         <li><a href="#">Documentation</a></li>
                         <li><a href="/commands">Commands</a></li>
@@ -85,7 +525,7 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Community</h4>
+                    <h4 class="binary-roll">Community</h4>
                     <ul>
                         <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
                         <li><a href="https://top.gg/bot/1121314550969532476/vote">Vote For Us</a></li>
@@ -93,7 +533,7 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Legal</h4>
+                    <h4 class="binary-roll">Legal</h4>
                     <ul>
                         <li><a href="/tos">Terms of Service</a></li>
                         <li><a href="/privacy">Privacy Policy</a></li>

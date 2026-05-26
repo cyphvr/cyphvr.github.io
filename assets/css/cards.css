@@ -5,8 +5,8 @@
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(272px, 1fr));
+    gap: 1.1rem;
     align-items: stretch;
 }
 
@@ -22,10 +22,12 @@
     --feature-rotate-y: 0deg;
     --feature-scale: 1;
     width: 100%;
-    padding: 1.15rem;
-    border-radius: 12px;
-    background: rgb(26 26 26);
-    outline: 2px solid rgb(51 51 51);
+    padding: 1.35rem 1.2rem 1.2rem;
+    border-radius: 20px;
+    background:
+        radial-gradient(140% 120% at 100% 0%, rgb(255 255 255 / 0.03) 0%, transparent 38%),
+        linear-gradient(180deg, rgb(22 25 32 / 0.98), rgb(11 13 18 / 0.98));
+    border: 1px solid transparent;
     position: relative;
     transform: perspective(920px) translate3d(0, calc(var(--feature-entry-y) + var(--feature-hover-lift)), 0) rotateX(var(--feature-rotate-x)) rotateY(var(--feature-rotate-y)) scale(var(--feature-scale));
     opacity: 0;
@@ -37,9 +39,18 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    min-height: 250px;
+    gap: 0.72rem;
+    min-height: 258px;
     cursor: pointer;
-    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, filter 0.24s ease;
+    box-shadow:
+        0 18px 44px rgb(0 0 0 / 0.34),
+        inset 0 1px 0 rgb(255 255 255 / 0.05);
+    transition:
+        transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.45s ease,
+        filter 0.24s ease,
+        box-shadow 0.24s ease,
+        border-color 0.24s ease;
 }
 
 .features .feature-card:nth-child(1) { --feature-accent-rgb: 255 82 106; }
@@ -53,16 +64,11 @@
 .features .feature-card::before {
     content: '';
     position: absolute;
-    inset: -20%;
-    background: radial-gradient(
-        230px circle at var(--cursor-x) var(--cursor-y),
-        rgb(var(--feature-accent-rgb) / 0.9) 0%,
-        rgb(var(--feature-accent-rgb) / 0.5) 42%,
-        rgb(var(--feature-accent-rgb) / 0.14) 66%,
-        transparent 82%
-    );
-    filter: blur(28px) saturate(1.15) brightness(1.08);
-    opacity: 0.3;
+    inset: 4px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgb(18 21 27 / 0.98), rgb(11 13 18 / 0.98));
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+    opacity: 1;
     z-index: 0;
     pointer-events: none;
     transform: translateZ(0);
@@ -73,12 +79,25 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    border: 3px solid transparent;
-    backdrop-filter: blur(0px) saturate(4.2) brightness(2.5) contrast(2.5);
-    mask: linear-gradient(#fff 0 100%) border-box, linear-gradient(#fff 0 100%) padding-box;
+    padding: 4px;
+    background: radial-gradient(
+        180px circle at var(--cursor-x) var(--cursor-y),
+        rgb(var(--feature-accent-rgb) / 1) 0%,
+        rgb(var(--feature-accent-rgb) / 0.75) 28%,
+        rgb(var(--feature-accent-rgb) / 0.32) 48%,
+        transparent 72%
+    );
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
     mask-composite: exclude;
     pointer-events: none;
     z-index: 1;
+    opacity: 0.98;
 }
 
 .features .feature-card.is-visible {
@@ -92,14 +111,23 @@
 }
 
 .features .feature-icon {
-    width: 56px;
-    height: 56px;
-    object-fit: contain;
-    background: transparent;
-    margin-bottom: 0.6rem;
+    width: 64px;
+    height: 64px;
+    background:
+        radial-gradient(circle at 30% 30%, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.03));
+    padding: 0.8rem;
+    border-radius: 18px;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    box-shadow:
+        0 10px 24px rgb(0 0 0 / 0.28),
+        0 0 18px rgb(var(--feature-accent-rgb) / 0.08);
+    margin-bottom: 0.1rem;
     user-select: none;
     position: relative;
     z-index: 2;
+    display: block;
+    overflow: visible;
+    color: #eff6ff;
 }
 
 .features .feature-card h3,
@@ -110,17 +138,30 @@
 
 .features .feature-card h3 {
     font-family: var(--font-display);
-    font-size: 1.15rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.02rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.1rem;
     color: #ffffff;
-    letter-spacing: 0.01em;
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease, text-shadow 0.3s ease;
 }
 
+.features .feature-card h3::before {
+    content: 'Core feature';
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgb(184 194 208 / 0.78);
+}
+
 .features .feature-card p {
-    color: #b7c1d1;
-    line-height: 1.6;
-    font-size: 0.92rem;
+    color: #c0d1e4;
+    line-height: 1.7;
+    font-size: 0.94rem;
     text-align: left;
     transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), color 0.28s ease;
 }
@@ -129,7 +170,11 @@
 .features .group:focus-within.group-hover\:feature-card {
     --feature-hover-lift: 0px;
     --feature-scale: 1;
-    filter: saturate(1.08) contrast(1.03);
+    box-shadow:
+        0 26px 56px rgb(0 0 0 / 0.42),
+        0 0 30px rgb(var(--feature-accent-rgb) / 0.24),
+        inset 0 1px 0 rgb(255 255 255 / 0.05);
+    filter: saturate(1.12) brightness(1.03);
 }
 
 .features .group:hover.group-hover\:feature-card h3,
@@ -158,12 +203,13 @@
 }
 
 .icon-badge {
-    object-fit: contain;
     border-radius: 14px;
     background: radial-gradient(circle at 30% 30%, rgba(214, 242, 255, 0.16), rgba(139, 220, 255, 0.1));
     box-shadow: 0 10px 26px rgba(139, 220, 255, 0.22);
     vertical-align: middle;
     display: inline-block;
+    overflow: visible;
+    color: #eff6ff;
 }
 
 .icon-badge--sm {
@@ -249,6 +295,39 @@
         --feature-hover-lift: 0px;
         --feature-rotate-x: 0deg;
         --feature-rotate-y: 0deg;
+    }
+}
+
+@media (max-width: 640px) {
+    .features-grid {
+        gap: 0.9rem;
+    }
+
+    .features .feature-card {
+        padding: 1.1rem;
+        border-radius: 18px;
+        min-height: 228px;
+    }
+
+    .features .feature-icon {
+        width: 58px;
+        height: 58px;
+        padding: 0.7rem;
+        border-radius: 16px;
+    }
+
+    .features .feature-card h3 {
+        font-size: 0.96rem;
+        letter-spacing: 0.1em;
+    }
+
+    .features .feature-card h3::before {
+        font-size: 0.64rem;
+        letter-spacing: 0.2em;
+    }
+
+    .features .feature-card p {
+        font-size: 0.91rem;
     }
 }
 
@@ -498,6 +577,12 @@
 .category-card > * {
     position: relative;
     z-index: 1;
+}
+
+.category-card .icon-badge--sm {
+    width: 24px;
+    height: 24px;
+    padding: 6px;
 }
 
 .category-card:hover,

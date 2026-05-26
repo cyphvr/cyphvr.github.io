@@ -60,6 +60,7 @@ export function initCards() {
 
             let rafId = null;
             let latestEvent = null;
+            let leaveTimeoutId = null;
 
             const updateFeatureCard = () => {
                 if (!latestEvent) {
@@ -85,6 +86,10 @@ export function initCards() {
 
             const queueFeatureUpdate = (event) => {
                 latestEvent = event;
+                if (leaveTimeoutId !== null) {
+                    clearTimeout(leaveTimeoutId);
+                    leaveTimeoutId = null;
+                }
                 if (rafId !== null) {
                     return;
                 }
@@ -95,13 +100,20 @@ export function initCards() {
             card.addEventListener('pointerenter', queueFeatureUpdate);
             card.addEventListener('pointermove', queueFeatureUpdate);
             card.addEventListener('pointerleave', () => {
-                if (rafId !== null) {
-                    cancelAnimationFrame(rafId);
-                    rafId = null;
+                if (leaveTimeoutId !== null) {
+                    clearTimeout(leaveTimeoutId);
                 }
 
-                latestEvent = null;
-                resetFeatureTilt(card);
+                leaveTimeoutId = window.setTimeout(() => {
+                    if (rafId !== null) {
+                        cancelAnimationFrame(rafId);
+                        rafId = null;
+                    }
+
+                    latestEvent = null;
+                    resetFeatureTilt(card);
+                    leaveTimeoutId = null;
+                }, 80);
             });
         });
 
