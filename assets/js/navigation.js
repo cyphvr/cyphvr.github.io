@@ -25,7 +25,6 @@ export function initNavigation() {
         if (window.innerWidth <= 768) {
             navbar.classList.remove('scrolled');
             navbar.classList.remove('is-compact');
-            navbar.classList.remove('is-hidden');
             ticking = false;
             return;
         }
@@ -41,8 +40,6 @@ export function initNavigation() {
             navbar.classList.remove('scrolled');
             navbar.classList.remove('is-compact');
         }
-
-        navbar.classList.remove('is-hidden');
 
         ticking = false;
     };
@@ -62,9 +59,6 @@ export function initNavigation() {
         navbarToggle.addEventListener('click', () => {
             const isOpen = navbarMenu.classList.toggle('open');
             navbar.classList.toggle('menu-open', isOpen);
-            if (isOpen) {
-                navbar.classList.remove('is-hidden');
-            }
             navbarToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
 

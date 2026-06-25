@@ -114,12 +114,6 @@
     }
 }
 
-.navbar.is-hidden {
-    transform: translateY(calc(-100% - 12px));
-    opacity: 0.02;
-    pointer-events: none;
-}
-
 .navbar.menu-open {
     transform: translateY(0) !important;
     opacity: 1;

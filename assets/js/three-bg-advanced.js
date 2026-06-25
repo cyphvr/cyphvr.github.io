@@ -5,7 +5,6 @@ let scene;
 let renderer;
 let clockStart = 0;
 let mouse = { x: 0, y: 0 };
-let animationFrameId = null;
 let initialized = false;
 let layers = [];
 let driftPoints = null;
@@ -269,7 +268,7 @@ function initThreeBackground() {
     clockStart = performance.now();
 
     function animate() {
-        animationFrameId = requestAnimationFrame(animate);
+        requestAnimationFrame(animate);
         const t = (performance.now() - clockStart) * 0.001;
 
         if (bgMaterial.uniforms) {

@@ -57,10 +57,6 @@
         padding: 0.3rem 0;
     }
 
-    .navbar.is-hidden {
-        transform: translateY(calc(-100% - 8px));
-    }
-
     .navbar-toggle {
         display: flex;
         justify-content: center;
@@ -265,46 +261,6 @@
         font-size: 2rem;
     }
 
-    /* Showcase responsive styles removed */
-
-    .capabilities-section {
-        padding: 1.2rem 0 3rem;
-    }
-
-    .capabilities-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 0.4rem;
-    }
-
-    .capability-card,
-    .capability-card-wide,
-    .capability-card-tall {
-        grid-column: auto;
-        grid-row: auto;
-        min-height: 115px;
-        border-radius: 18px;
-        padding: 0.72rem 0.76rem;
-    }
-
-    .capability-card[class*="cap-slot-"] {
-        grid-column: auto;
-        grid-row: auto;
-        min-height: 115px;
-    }
-
-    .capability-card h3 {
-        font-size: 0.96rem;
-        margin-bottom: 0.26rem;
-    }
-
-    .capability-card p {
-        font-size: 0.82rem;
-        line-height: 1.28;
-        max-width: 100%;
-    }
-
-    /* Live community wall responsive styles removed */
-
     .title-line {
         max-width: 50px;
     }
@@ -377,37 +333,6 @@
         flex-direction: column;
         gap: 0.5rem;
     }
-
-    /* Showcase mobile styles removed */
-
-    .capabilities-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .capability-card,
-    .capability-card-wide,
-    .capability-card-tall {
-        min-height: 0;
-        border-radius: 15px;
-        padding: 0.68rem 0.72rem;
-    }
-
-    .capability-card[class*="cap-slot-"] {
-        min-height: 0;
-        grid-column: auto;
-        grid-row: auto;
-    }
-
-    .capability-card h3 {
-        font-size: 0.94rem;
-    }
-
-    .capability-card p {
-        font-size: 0.82rem;
-        line-height: 1.32;
-    }
-
-    /* Live community wall mobile styles removed */
 
     .title-line {
         max-width: 40px;

@@ -62,8 +62,8 @@ export default async function handler(req, res) {
       process.env.LAST_ALERT_TIME = now.toString();
     }
 
-    return res.status(200).json({ 
-      success: true, 
+    return res.status(200).json({
+      success: true,
       botDown: isBotDown,
       alertSent: isBotDown && timeSinceLastAlert >= ALERT_INTERVAL
     });

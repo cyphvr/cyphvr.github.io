@@ -263,11 +263,6 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.group:hover.group-hover\:card-hover,
-.group:focus-within.group-hover\:card-hover {
-    transform: translateY(-6px) scale(1.08);
-}
-
 @keyframes icon-glow {
     0%, 100% {
         box-shadow: 0 10px 26px rgba(139, 220, 255, 0.2);
@@ -586,8 +581,7 @@
 }
 
 .category-card:hover,
-.category-card:focus-visible,
-.group:hover.group-hover\:category-card {
+.category-card:focus-visible {
     transform: perspective(920px) translateY(-6px) rotateY(-1.8deg);
     border-color: rgba(139, 220, 255, 0.48);
     background: linear-gradient(155deg, rgba(18, 28, 40, 0.97), rgba(12, 19, 30, 0.96));
@@ -598,142 +592,13 @@
 }
 
 .category-card:nth-child(even):hover,
-.category-card:nth-child(even):focus-visible,
-.category-card:nth-child(even).group:hover.group-hover\:category-card {
+.category-card:nth-child(even):focus-visible {
     transform: perspective(920px) translateY(-6px) rotateY(1.8deg);
 }
 
 .category-card:hover::before,
 .category-card:focus-visible::before {
     opacity: 1;
-}
-
-.why-choose-card {
-    --why-border-angle: 0deg;
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-    border-radius: 14px;
-    border: 1px solid rgba(139, 220, 255, 0.32);
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.085), rgba(170, 235, 255, 0.04));
-    box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.28),
-        0 0 22px rgba(139, 220, 255, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 0 0 1px rgba(139, 220, 255, 0.08);
-    opacity: 0;
-    transform: translateY(14px) scale(0.98);
-    animation: whyChooseReveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.34s ease, background 0.34s ease, filter 0.34s ease;
-}
-
-@property --why-border-angle {
-    syntax: '<angle>';
-    inherits: false;
-    initial-value: 0deg;
-}
-
-.why-choose-card:nth-child(1) { animation-delay: 0.04s; }
-.why-choose-card:nth-child(2) { animation-delay: 0.12s; }
-.why-choose-card:nth-child(3) { animation-delay: 0.2s; }
-.why-choose-card:nth-child(4) { animation-delay: 0.28s; }
-.why-choose-card:nth-child(5) { animation-delay: 0.36s; }
-.why-choose-card:nth-child(6) { animation-delay: 0.44s; }
-
-.why-choose-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(116deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.12) 44%, rgba(139, 220, 255, 0.26) 50%, rgba(255, 255, 255, 0.12) 56%, rgba(255, 255, 255, 0));
-    opacity: 0;
-    transform: translateX(-170%);
-    transition: transform 1.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
-    z-index: 1;
-    pointer-events: none;
-}
-
-.why-choose-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    padding: 1.6px;
-    border-radius: inherit;
-    background: conic-gradient(
-        from var(--why-border-angle),
-        rgba(139, 220, 255, 0) 0deg,
-        rgba(139, 220, 255, 0.16) 42deg,
-        rgba(170, 235, 255, 0.74) 94deg,
-        rgba(139, 220, 255, 0.24) 156deg,
-        rgba(139, 220, 255, 0) 360deg
-    );
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    animation: whyChooseBorderSpin 6.4s linear infinite;
-    opacity: 0.72;
-    z-index: 2;
-    pointer-events: none;
-}
-
-.why-choose-card > * {
-    position: relative;
-    z-index: 3;
-}
-
-.why-choose-card:hover,
-.why-choose-card:focus-within {
-    transform: scale(1.024);
-    border-color: rgba(139, 220, 255, 0.74);
-    background: rgba(255, 255, 255, 0.07);
-    box-shadow:
-        0 18px 34px rgba(0, 0, 0, 0.4),
-        0 0 36px rgba(139, 220, 255, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.14);
-    filter: saturate(1.14) contrast(1.06);
-}
-
-.why-choose-card:hover::before,
-.why-choose-card:focus-within::before {
-    opacity: 1;
-    transform: translateX(170%);
-}
-
-.why-choose-card:hover::after,
-.why-choose-card:focus-within::after {
-    animation-duration: 2.25s;
-    opacity: 1;
-    filter: saturate(1.3) brightness(1.22) drop-shadow(0 0 12px rgba(139, 220, 255, 0.34));
-}
-
-@keyframes whyChooseReveal {
-    0% {
-        opacity: 0;
-        transform: translateY(14px) scale(0.98);
-        filter: blur(1.5px);
-    }
-    55% {
-        opacity: 0.92;
-        transform: translateY(-2px) scale(1.01);
-        filter: blur(0.2px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .why-choose-card {
-        animation: none;
-        opacity: 1;
-        transform: none;
-    }
 }
 
 .value-card {
@@ -832,11 +697,3 @@
     }
 }
 
-@keyframes whyChooseBorderSpin {
-    from {
-        --why-border-angle: 0deg;
-    }
-    to {
-        --why-border-angle: 360deg;
-    }
-}

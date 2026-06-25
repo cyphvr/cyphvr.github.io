@@ -2,7 +2,6 @@ import { initNavigation } from './navigation.js';
 import { initAnimations } from './animations.js';
 import { initCards } from './cards.js';
 import { initButtons } from './buttons.js';
-import { initCapabilityPuzzle } from './capabilities.js';
 import { initThreeBackground } from './three-bg-advanced.js?v=20260625a';
 
 try {
@@ -107,5 +106,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initAnimations();
     initCards();
     initButtons();
-    initCapabilityPuzzle();
 });
