@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cypher — Permission Diagnostics</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --diag-accent: #9976fe;
+            --diag-accent-soft: rgba(153, 118, 254, 0.18);
+            --diag-ok: #44f0a8;
+            --diag-missing: #ff6b8a;
+            --diag-surface: rgba(255, 255, 255, 0.05);
+        }
+
+        .diag-shell {
+            position: relative;
+            z-index: 10;
+            max-width: 760px;
+            margin: 142px auto 40px;
+            padding: 0 20px;
+        }
+
+        .diag-hero {
+            border-radius: 24px;
+            padding: 28px 24px;
+            background:
+                radial-gradient(620px 260px at 0% -10%, rgba(153, 118, 254, 0.22), transparent 62%),
+                radial-gradient(480px 220px at 100% 0%, rgba(59, 206, 255, 0.12), transparent 58%),
+                linear-gradient(150deg, rgba(11, 13, 34, 0.96), rgba(7, 10, 27, 0.96));
+            border: 1px solid rgba(153, 118, 254, 0.28);
+            box-shadow:
+                0 26px 46px rgba(0, 0, 0, 0.38),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .diag-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            padding: 6px 14px;
+            border: 1px solid rgba(153, 118, 254, 0.34);
+            background: var(--diag-accent-soft);
+            color: #e8ddff;
+            font-size: 0.82rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .diag-headline {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            line-height: 1.1;
+            color: #f4fbff;
+        }
+
+        .diag-subline {
+            margin: 10px 0 0;
+            color: #b7c1d1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .diag-panel {
+            margin-top: 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(104, 116, 255, 0.22);
+            background: linear-gradient(150deg, rgba(10, 12, 31, 0.94), rgba(8, 12, 25, 0.94));
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.34);
+            overflow: hidden;
+        }
+
+        .diag-panel-head {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .diag-panel-title {
+            margin: 0;
+            color: #f5fbff;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .diag-summary {
+            color: #afc2d6;
+            font-size: 0.88rem;
+        }
+
+        .diag-list {
+            list-style: none;
+            margin: 0;
+            padding: 8px 0;
+        }
+
+        .diag-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .diag-item:last-child {
+            border-bottom: none;
+        }
+
+        .diag-perm-name {
+            color: #eef5ff;
+            font-size: 0.98rem;
+            font-weight: 600;
+        }
+
+        .diag-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .diag-status.ok {
+            color: #d8ffef;
+            background: rgba(68, 240, 168, 0.12);
+            border: 1px solid rgba(68, 240, 168, 0.28);
+        }
+
+        .diag-status.missing {
+            color: #ffd6df;
+            background: rgba(255, 107, 138, 0.12);
+            border: 1px solid rgba(255, 107, 138, 0.28);
+        }
+
+        .diag-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .diag-working,
+        .diag-error {
+            padding: 28px 20px;
+            text-align: center;
+            color: #b7c1d1;
+            font-size: 1rem;
+        }
+
+        .diag-error {
+            color: #ffb4c4;
+        }
+
+        .diag-footer-note {
+            margin-top: 16px;
+            color: #8f9bb0;
+            font-size: 0.86rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .diag-footer-note a {
+            color: #a9ecff;
+            text-decoration: none;
+        }
+
+        .diag-footer-note a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            .diag-shell {
+                margin-top: 98px;
+            }
+
+            .diag-hero,
+            .diag-panel {
+                border-radius: 16px;
+            }
+
+            .diag-item {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-logo">
+                <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                    <img src="../images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
+                    <span class="logo-text">Cypher</span>
+                </a>
+            </div>
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="navbar-menu" id="navbarMenu">
+                <a href="/features" class="navbar-link">Features</a>
+                <a href="/commands" class="navbar-link">Commands</a>
+                <a href="/about" class="navbar-link">About</a>
+                <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="navbar-invite">Invite Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="diag-shell">
+        <section class="diag-hero">
+            <span class="diag-eyebrow">Incognito Diagnostics</span>
+            <h1 class="diag-headline">Permission Diagnostics</h1>
+            <p class="diag-subline">
+                This page shows which channel permissions you have when Cypher makes a slash response private.
+                Ask a server moderator to grant any missing permissions if you want public responses again.
+            </p>
+        </section>
+
+        <section class="diag-panel" id="diagPanel">
+            <div class="diag-working" id="diagWorking">Working...</div>
+        </section>
+
+        <p class="diag-footer-note">
+            Learn more about channel permissions in
+            <a href="https://support.discord.com/hc/en-us/articles/10543994968087" target="_blank" rel="noopener noreferrer">Discord's help center</a>.
+        </p>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="binary-roll">Cypher</h3>
+                    <p>Empowering Discord communities since 2023.</p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="binary-roll">Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="/commands">Commands</a></li>
+                        <li><a href="/features">Features</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="binary-roll">Community</h4>
+                    <ul>
+                        <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
+                        <li><a href="https://top.gg/bot/1121314550969532476/vote">Vote For Us</a></li>
+                        <li><a href="/status">Status Page</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="binary-roll">Legal</h4>
+                    <ul>
+                        <li><a href="/tos">Terms of Service</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Cypher. Built for communities. Designed for excellence.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="../assets/js/main.js"></script>
+    <script>
+        (function () {
+            const panel = document.getElementById('diagPanel');
+            const working = document.getElementById('diagWorking');
+
+            function showError(message) {
+                panel.innerHTML = '<div class="diag-error">' + message + '</div>';
+            }
+
+            function decodePayload(encoded) {
+                const normalized = encoded.replace(/-/g, '+').replace(/_/g, '/');
+                const padded = normalized + '='.repeat((4 - (normalized.length % 4)) % 4);
+                const binary = atob(padded);
+                const bytes = Uint8Array.from(binary, function (char) { return char.charCodeAt(0); });
+                const json = new TextDecoder().decode(bytes);
+                return JSON.parse(json);
+            }
+
+            function renderPermissions(names, values) {
+                const missingCount = values.filter(function (value) { return !value; }).length;
+                const grantedCount = values.length - missingCount;
+
+                const head = document.createElement('div');
+                head.className = 'diag-panel-head';
+                head.innerHTML =
+                    '<h2 class="diag-panel-title">Your Channel Permissions</h2>' +
+                    '<span class="diag-summary">' + grantedCount + ' granted · ' + missingCount + ' missing</span>';
+
+                const list = document.createElement('ul');
+                list.className = 'diag-list';
+
+                names.forEach(function (name, index) {
+                    const hasPermission = Boolean(values[index]);
+                    const item = document.createElement('li');
+                    item.className = 'diag-item';
+                    item.innerHTML =
+                        '<span class="diag-perm-name">' + name + '</span>' +
+                        '<span class="diag-status ' + (hasPermission ? 'ok' : 'missing') + '">' +
+                            '<span class="diag-status-dot" aria-hidden="true"></span>' +
+                            (hasPermission ? 'Granted' : 'Missing') +
+                        '</span>';
+                    list.appendChild(item);
+                });
+
+                panel.innerHTML = '';
+                panel.appendChild(head);
+                panel.appendChild(list);
+            }
+
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const encoded = params.get('pbdiag');
+
+                if (!encoded) {
+                    showError('No diagnostic data was provided. Open this page from a Cypher incognito notice.');
+                    return;
+                }
+
+                const payload = decodePayload(encoded);
+
+                if (!Array.isArray(payload) || payload.length < 2) {
+                    showError('The diagnostic payload is invalid.');
+                    return;
+                }
+
+                const version = payload[0];
+                const data = payload[1];
+
+                if (version !== 1 || !Array.isArray(data) || data.length < 2) {
+                    showError('This diagnostic format is not supported.');
+                    return;
+                }
+
+                const names = data[0];
+                const values = data[1];
+
+                if (!Array.isArray(names) || !Array.isArray(values) || names.length !== values.length || names.length === 0) {
+                    showError('The permission report is incomplete.');
+                    return;
+                }
+
+                working.remove();
+                renderPermissions(names, values);
+            } catch (error) {
+                showError('Unable to read the diagnostic payload.');
+            }
+        })();
+    </script>
+</body>
+</html>
