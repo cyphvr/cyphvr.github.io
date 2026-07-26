@@ -10,8 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
         :root {
-            --diag-accent: #9976fe;
-            --diag-accent-soft: rgba(153, 118, 254, 0.18);
+            --diag-accent: #8a9bff;
+            --diag-accent-soft: rgba(138, 155, 255, 0.16);
+            --diag-cyan: #8bdcff;
             --diag-ok: #44f0a8;
             --diag-missing: #ff6b8a;
             --diag-surface: rgba(255, 255, 255, 0.05);
@@ -23,16 +24,32 @@
             max-width: 760px;
             margin: 142px auto 40px;
             padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Kill global `section { padding: 5rem 0 }`, then set intentional card padding */
+        .diag-shell > section {
+            margin: 0;
+            padding: 0;
+        }
+
+        .diag-shell > .diag-hero {
+            padding: 24px 22px;
+        }
+
+        .diag-shell > .diag-panel {
+            padding: 0;
         }
 
         .diag-hero {
             border-radius: 24px;
-            padding: 28px 24px;
             background:
-                radial-gradient(620px 260px at 0% -10%, rgba(153, 118, 254, 0.22), transparent 62%),
-                radial-gradient(480px 220px at 100% 0%, rgba(59, 206, 255, 0.12), transparent 58%),
-                linear-gradient(150deg, rgba(11, 13, 34, 0.96), rgba(7, 10, 27, 0.96));
-            border: 1px solid rgba(153, 118, 254, 0.28);
+                radial-gradient(620px 260px at 0% -10%, rgba(138, 155, 255, 0.2), transparent 62%),
+                radial-gradient(480px 220px at 100% 0%, rgba(139, 220, 255, 0.14), transparent 58%),
+                linear-gradient(150deg, rgba(9, 16, 42, 0.96), rgba(5, 8, 26, 0.96));
+            border: 1px solid rgba(138, 155, 255, 0.28);
             box-shadow:
                 0 26px 46px rgba(0, 0, 0, 0.38),
                 inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -44,9 +61,9 @@
             gap: 8px;
             border-radius: 999px;
             padding: 6px 14px;
-            border: 1px solid rgba(153, 118, 254, 0.34);
-            background: var(--diag-accent-soft);
-            color: #e8ddff;
+            border: 1px solid rgba(139, 220, 255, 0.28);
+            background: linear-gradient(135deg, rgba(138, 155, 255, 0.16), rgba(139, 220, 255, 0.1));
+            color: #dff6ff;
             font-size: 0.82rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -69,7 +86,6 @@
         }
 
         .diag-panel {
-            margin-top: 18px;
             border-radius: 20px;
             border: 1px solid rgba(104, 116, 255, 0.22);
             background: linear-gradient(150deg, rgba(10, 12, 31, 0.94), rgba(8, 12, 25, 0.94));
@@ -78,7 +94,7 @@
         }
 
         .diag-panel-head {
-            padding: 18px 20px;
+            padding: 14px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             align-items: center;
@@ -101,7 +117,7 @@
         .diag-list {
             list-style: none;
             margin: 0;
-            padding: 8px 0;
+            padding: 0;
         }
 
         .diag-item {
@@ -111,10 +127,98 @@
             gap: 16px;
             padding: 14px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transform: translateY(8px);
+            animation: diag-item-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation-delay: calc(var(--diag-i, 0) * 55ms);
         }
 
         .diag-item:last-child {
             border-bottom: none;
+        }
+
+        .diag-perm-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .diag-perm-icon-box {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(169, 184, 212, 0.22);
+            background: rgba(255, 255, 255, 0.04);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            transform-origin: center;
+            transition:
+                border-color 0.25s ease,
+                background 0.25s ease,
+                box-shadow 0.25s ease,
+                transform 0.25s ease,
+                color 0.25s ease;
+        }
+
+        .diag-item:hover .diag-perm-icon-box {
+            transform: translateY(-1px) scale(1.06);
+            border-color: rgba(139, 220, 255, 0.42);
+            background: rgba(138, 155, 255, 0.12);
+            box-shadow:
+                0 0 0 1px rgba(139, 220, 255, 0.1),
+                0 6px 16px rgba(138, 155, 255, 0.18),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .diag-perm-icon {
+            width: 16px;
+            height: 16px;
+            color: #a9b8d4;
+            opacity: 0.95;
+            transition: color 0.25s ease, transform 0.25s ease;
+        }
+
+        .diag-item:hover .diag-perm-icon {
+            color: #dff6ff;
+            transform: scale(1.05);
+        }
+
+        @keyframes diag-item-in {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .diag-item {
+                opacity: 1;
+                transform: none;
+                animation: none;
+            }
+
+            .diag-item:hover .diag-perm-icon-box,
+            .diag-item:hover .diag-perm-icon {
+                transform: none;
+            }
+
+            .diag-status-mark path {
+                stroke-dasharray: none;
+                stroke-dashoffset: 0;
+                animation: none;
+            }
+
+            .diag-status::before {
+                transition: none;
+            }
         }
 
         .diag-perm-name {
@@ -124,9 +228,10 @@
         }
 
         .diag-status {
+            position: relative;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             border-radius: 999px;
             padding: 6px 12px;
             font-size: 0.82rem;
@@ -134,6 +239,34 @@
             letter-spacing: 0.03em;
             text-transform: uppercase;
             white-space: nowrap;
+            overflow: hidden;
+            transition:
+                background 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        /* Same light trail as navbar link pills */
+        .diag-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .diag-status:hover::before {
+            left: 100%;
+        }
+
+        .diag-status > * {
+            position: relative;
+            z-index: 1;
         }
 
         .diag-status.ok {
@@ -142,17 +275,52 @@
             border: 1px solid rgba(68, 240, 168, 0.28);
         }
 
+        .diag-status.ok:hover {
+            background: rgba(68, 240, 168, 0.18);
+            border-color: rgba(68, 240, 168, 0.42);
+            box-shadow: 0 0 14px rgba(68, 240, 168, 0.12);
+        }
+
         .diag-status.missing {
             color: #ffd6df;
             background: rgba(255, 107, 138, 0.12);
             border: 1px solid rgba(255, 107, 138, 0.28);
         }
 
-        .diag-status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: currentColor;
+        .diag-status.missing:hover {
+            background: rgba(255, 107, 138, 0.18);
+            border-color: rgba(255, 107, 138, 0.42);
+            box-shadow: 0 0 14px rgba(255, 107, 138, 0.12);
+        }
+
+        .diag-status-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .diag-status-mark svg {
+            width: 14px;
+            height: 14px;
+            display: block;
+            overflow: visible;
+        }
+
+        /* #29 trial: one-shot stroke draw on check/X (revert removes this block + pathLength on icons) */
+        .diag-status-mark path {
+            stroke-dasharray: 1;
+            stroke-dashoffset: 1;
+            animation: diag-mark-draw 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation-delay: calc(0.28s + var(--diag-i, 0) * 55ms);
+        }
+
+        @keyframes diag-mark-draw {
+            to {
+                stroke-dashoffset: 0;
+            }
         }
 
         .diag-working,
@@ -168,7 +336,7 @@
         }
 
         .diag-footer-note {
-            margin-top: 16px;
+            margin: 0;
             color: #8f9bb0;
             font-size: 0.86rem;
             line-height: 1.6;
@@ -311,6 +479,59 @@
                 return JSON.parse(json);
             }
 
+            // Inline SVG paths for permission-related icons (viewBox 0 0 24 24)
+            const PERM_ICONS = {
+                'send messages': '<path d="M4 6.5c0-1.1.9-2 2-2h12c1.1 0 2 .9 2 2v7c0 1.1-.9 2-2 2H9.5L5 19.5V15.5H6c-1.1 0-2-.9-2-2v-7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 9.5h8M8 12.5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+                'embed links': '<path d="M10 14.5l4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8.5 12.5l-1.2 1.2a3 3 0 0 0 4.2 4.2l1.5-1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 11.5l1.2-1.2a3 3 0 0 0-4.2-4.2L11 7.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+                'attach files': '<path d="M15.5 8.5l-5.8 5.8a2.2 2.2 0 0 0 3.1 3.1l6.3-6.3a3.6 3.6 0 0 0-5.1-5.1L7.2 12.8a5 5 0 0 0 7.1 7.1l5.2-5.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+                'use external emojis': '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 10.2h.01M15.5 10.2h.01" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M8.8 14.2c.9 1.2 2 1.8 3.2 1.8s2.3-.6 3.2-1.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+                'use external stickers': '<rect x="5" y="5" width="14" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9.5" cy="10" r="1" fill="currentColor"/><circle cx="14.5" cy="10" r="1" fill="currentColor"/><path d="M9 14.5c.8 1 1.8 1.5 3 1.5s2.2-.5 3-1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+                'add reactions': '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 8.5v7M8.5 12h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+                'read message history': '<path d="M5 7.5h14M5 12h10M5 16.5h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="18" cy="12" r="1.2" fill="currentColor"/>',
+                'view channel': '<path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12s-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+                'mention everyone': '<circle cx="9" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 19a4.5 4.5 0 0 1 9 0M13.5 19a3.5 3.5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+                'manage messages': '<path d="M5 7h14M5 12h10M5 17h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 14.5l2 2 3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+                'use application commands': '<path d="M8 7h8M8 12h5M8 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16.5 9.5l3 2.5-3 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+                'send messages in threads': '<path d="M6 6.5h9.5a2 2 0 0 1 2 2V13l-3.5 3.5H6a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 18.5h7.5L20 21v-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+                'create public threads': '<path d="M8 8h8v8H8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 12h8M12 8v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+                'create private threads': '<rect x="6" y="10" width="12" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 10V8a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+                'send tts messages': '<path d="M4 10v4M7.5 8v8M11 6.5v11M14.5 8.5v7M18 10.5v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+                'use voice activity': '<path d="M12 4v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 9a4 4 0 0 0 8 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M9 18h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+            };
+
+            const DEFAULT_PERM_ICON =
+                '<path d="M12 3l7 4v5c0 4.4-2.8 8.2-7 9-4.2-.8-7-4.6-7-9V7l7-4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>';
+
+            const CHECK_ICON =
+                '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+                    '<path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' +
+                '</svg>';
+
+            const CROSS_ICON =
+                '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+                    '<path pathLength="1" d="M7 7l10 10M17 7L7 17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>' +
+                '</svg>';
+
+            function escapeHtml(value) {
+                return String(value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+            }
+
+            function iconForPermission(name) {
+                const key = String(name).trim().toLowerCase();
+                const paths = PERM_ICONS[key] || DEFAULT_PERM_ICON;
+                return (
+                    '<span class="diag-perm-icon-box" aria-hidden="true">' +
+                        '<svg class="diag-perm-icon" viewBox="0 0 24 24" focusable="false">' +
+                            paths +
+                        '</svg>' +
+                    '</span>'
+                );
+            }
+
             function renderPermissions(names, values) {
                 const missingCount = values.filter(function (value) { return !value; }).length;
                 const grantedCount = values.length - missingCount;
@@ -326,12 +547,19 @@
 
                 names.forEach(function (name, index) {
                     const hasPermission = Boolean(values[index]);
+                    const safeName = escapeHtml(name);
                     const item = document.createElement('li');
                     item.className = 'diag-item';
+                    item.style.setProperty('--diag-i', String(index));
                     item.innerHTML =
-                        '<span class="diag-perm-name">' + name + '</span>' +
+                        '<span class="diag-perm-label">' +
+                            iconForPermission(name) +
+                            '<span class="diag-perm-name">' + safeName + '</span>' +
+                        '</span>' +
                         '<span class="diag-status ' + (hasPermission ? 'ok' : 'missing') + '">' +
-                            '<span class="diag-status-dot" aria-hidden="true"></span>' +
+                            '<span class="diag-status-mark" aria-hidden="true">' +
+                                (hasPermission ? CHECK_ICON : CROSS_ICON) +
+                            '</span>' +
                             (hasPermission ? 'Granted' : 'Missing') +
                         '</span>';
                     list.appendChild(item);
