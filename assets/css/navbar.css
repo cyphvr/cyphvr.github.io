@@ -210,7 +210,17 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+.navbar .logo-text {
     display: none;
+}
+
+.footer .logo-text {
+    display: inline;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.25rem;
 }
 
 .navbar-menu {

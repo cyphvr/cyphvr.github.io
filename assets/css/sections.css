@@ -141,7 +141,7 @@ h2:not(.section-title) {
 }
 
 .about {
-    background: var(--bg-darker);
+    background: transparent;
 }
 
 .about-content {
@@ -203,17 +203,18 @@ h2:not(.section-title) {
 }
 
 .code-window {
-    background: rgba(8, 14, 22, 0.78);
+    background: transparent;
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid rgba(139, 220, 255, 0.22);
 }
 
 .code-header {
-    background: rgba(255, 255, 255, 0.04);
+    background: transparent;
     padding: 0.75rem;
     display: flex;
     gap: 0.5rem;
+    border-bottom: 1px solid rgba(139, 220, 255, 0.12);
 }
 
 .dot {
@@ -240,7 +241,7 @@ h2:not(.section-title) {
 .code-method { color: #8be9fd; }
 
 .cta {
-    background: var(--bg-darker);
+    background: transparent;
     text-align: center;
 }
 
@@ -257,7 +258,7 @@ h2:not(.section-title) {
 }
 
 /* Why Choose Cypher — full redesign: two-column layout + interactive cards */
-.why-choose { padding: 80px 0; background: linear-gradient(180deg, rgba(6,10,18,0.6), rgba(8,12,20,0.6)); }
+.why-choose { padding: 80px 0; background: transparent; }
 .why-choose-container { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: start; }
 .why-choose-left { padding: 6px 12px; }
 .why-choose-left .section-title { text-align: left; margin-bottom: 18px; }
@@ -269,14 +270,14 @@ h2:not(.section-title) {
 
 .why-choose-right { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; align-content: start; }
 .wc-card {
-    background: linear-gradient(180deg, rgba(12,18,28,0.9), rgba(8,12,18,0.85));
+    background: transparent;
     border-radius: 16px;
     padding: 18px;
     display:flex;
     flex-direction:column;
     gap:10px;
-    border: 1px solid rgba(255,255,255,0.03);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: none;
     transition:
         transform 420ms cubic-bezier(0.16, 1, 0.3, 1),
         box-shadow 420ms cubic-bezier(0.16, 1, 0.3, 1),
@@ -293,18 +294,18 @@ h2:not(.section-title) {
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(45,212,255,0.28), rgba(255,82,106,0.14), rgba(214,242,255,0.08));
+    background: linear-gradient(135deg, rgba(45,212,255,0.4), rgba(255,82,106,0.2), rgba(214,242,255,0.12));
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    opacity: 0.26;
+    opacity: 0.35;
     pointer-events: none;
     transition: opacity 300ms ease;
 }
-.wc-card::after { content: ''; position: absolute; inset: -30% -20%; background: radial-gradient(circle at top left, rgba(139,220,255,0.16), transparent 48%); pointer-events: none; opacity: 0; transition: opacity 420ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1); transform: translate3d(0, 10px, 0) scale(0.98); }
+.wc-card::after { display: none; }
 .wc-card:hover,
-.wc-card:focus-within { transform: translate3d(0, -12px, 0) scale(1.01); box-shadow: 0 26px 56px rgba(12,22,34,0.78); border-color: rgba(139,220,255,0.16); }
+.wc-card:focus-within { transform: translate3d(0, -12px, 0) scale(1.01); box-shadow: 0 0 28px rgba(139,220,255,0.16); border-color: rgba(139,220,255,0.28); background: transparent; }
 .wc-card:hover::before,
 .wc-card:focus-within::before { opacity: 0.75; }
 .wc-card:hover::after,

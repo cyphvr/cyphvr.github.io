@@ -3,52 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cypher Status</title>
+    <title>Cypher - Status</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <style>
         :root {
             --status-ok: #44f0a8;
             --status-warn: #ffc768;
-            --status-primary: #59d8ff;
-            --status-primary-soft: #a9ecff;
-            --status-surface: rgba(255, 255, 255, 0.05);
-            --status-surface-strong: rgba(255, 255, 255, 0.08);
         }
 
         .status-shell {
             position: relative;
             z-index: 10;
+            width: 100%;
             max-width: 1020px;
-            margin: 142px auto 30px;
-            padding: 0 20px 0;
+            margin: 120px auto 48px;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            box-sizing: border-box;
+        }
+
+        /* Kill global `section { padding: 5rem 0 }` so hero + grid stay level */
+        .status-shell > section {
+            margin: 0;
+        }
+
+        .status-shell > .status-hero {
+            padding: 24px;
+        }
+
+        .status-shell > .status-grid {
+            padding: 0;
         }
 
         .status-hero {
-            border-radius: 24px;
+            border-radius: 22px;
             width: 100%;
             max-width: none;
             margin: 0;
-            padding: 18px 18px;
-            background:
-                radial-gradient(680px 280px at 8% -20%, rgba(104, 116, 255, 0.22), transparent 62%),
-                radial-gradient(520px 220px at 100% 0%, rgba(59, 206, 255, 0.13), transparent 58%),
-                linear-gradient(150deg, rgba(11, 13, 34, 0.96), rgba(7, 10, 27, 0.96));
+            padding: 24px;
+            background: transparent;
             border: 1px solid rgba(104, 116, 255, 0.28);
-            box-shadow:
-                0 26px 46px rgba(0, 0, 0, 0.38),
-                0 0 0 1px rgba(59, 206, 255, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            box-shadow: none;
             overflow: hidden;
             position: relative;
         }
 
         .status-hero::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg, rgba(255, 255, 255, 0.07), transparent 25%, transparent 72%, rgba(169, 236, 255, 0.07));
-            pointer-events: none;
+            display: none;
         }
 
         .status-eyebrow {
@@ -98,11 +102,9 @@
             gap: 10px;
             border-radius: 999px;
             padding: 10px 18px;
-            background: linear-gradient(135deg, rgba(16, 20, 52, 0.9), rgba(20, 28, 72, 0.86));
-            border: 1px solid rgba(104, 116, 255, 0.32);
-            box-shadow:
-                0 10px 26px rgba(0, 0, 0, 0.28),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            background: transparent;
+            border: 1px solid rgba(104, 116, 255, 0.35);
+            box-shadow: none;
         }
 
         .status-indicator {
@@ -135,46 +137,27 @@
             display: grid;
             grid-template-columns: repeat(12, minmax(0, 1fr));
             gap: 16px;
-            margin-top: -14px;
+            margin: 0;
+            align-items: stretch;
         }
 
         .panel {
             border-radius: 20px;
-            border: 1px solid rgba(104, 116, 255, 0.22);
-            background:
-                linear-gradient(150deg, rgba(10, 12, 31, 0.94), rgba(8, 12, 25, 0.94));
-            box-shadow:
-                0 16px 34px rgba(0, 0, 0, 0.34),
-                0 0 0 1px rgba(59, 206, 255, 0.04),
-                inset 0 1px 0 rgba(255, 255, 255, 0.04);
-            padding: 20px;
+            border: 1px solid rgba(104, 116, 255, 0.28);
+            background: transparent;
+            box-shadow: none;
+            padding: 22px;
             position: relative;
             overflow: hidden;
-        }
-
-        .panel::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(128deg, rgba(255, 255, 255, 0.05), transparent 34%, transparent 70%, rgba(104, 116, 255, 0.08));
-            pointer-events: none;
+            height: 100%;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         .metric-card {
             grid-column: span 3;
-            min-height: 130px;
-        }
-
-        .metric-card:nth-of-type(1) {
-            background:
-                linear-gradient(150deg, rgba(13, 15, 38, 0.96), rgba(8, 12, 26, 0.94)),
-                radial-gradient(180px circle at 80% 20%, rgba(104, 116, 255, 0.16), transparent 55%);
-        }
-
-        .metric-card:nth-of-type(2) {
-            background:
-                linear-gradient(150deg, rgba(11, 15, 41, 0.96), rgba(7, 12, 27, 0.94)),
-                radial-gradient(180px circle at 20% 20%, rgba(59, 206, 255, 0.16), transparent 55%);
+            min-height: 140px;
         }
 
         .metric-label {
@@ -230,18 +213,22 @@
             margin: 8px 0 0;
             color: #b2bddf;
             font-size: 0.9rem;
+            margin-top: auto;
+            padding-top: 8px;
         }
 
         .status-history-panel {
             grid-column: span 6;
-            background:
-                linear-gradient(150deg, rgba(9, 12, 32, 0.95), rgba(8, 10, 25, 0.94)),
-                radial-gradient(260px circle at 85% 0%, rgba(59, 206, 255, 0.12), transparent 58%),
-                radial-gradient(260px circle at 10% 100%, rgba(104, 116, 255, 0.12), transparent 58%);
+            min-height: 140px;
+            background: transparent;
         }
 
         .status-history-panel .panel-title {
             margin-bottom: 0;
+        }
+
+        .status-history-panel .history-bar {
+            margin-top: auto;
         }
 
         .panel-title {
@@ -252,61 +239,6 @@
             font-family: var(--font-display);
             font-size: 1.1rem;
             color: #f3f6ff;
-        }
-
-        .service-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .service-row:last-child {
-            border-bottom: 0;
-            padding-bottom: 4px;
-        }
-
-        .service-name {
-            margin: 0;
-            color: #f3f6ff;
-            font-weight: 700;
-        }
-
-        .service-response {
-            margin: 4px 0 0;
-            color: #b2bddf;
-            font-size: 0.9rem;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            border-radius: 999px;
-            border: 1px solid transparent;
-            font-size: 0.82rem;
-            font-weight: 700;
-        }
-
-        .status-badge-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-
-        .badge-operational {
-            background: rgba(104, 116, 255, 0.18);
-            border-color: rgba(104, 116, 255, 0.4);
-            color: #dfe4ff;
-        }
-
-        .badge-down {
-            background: rgba(59, 206, 255, 0.12);
-            border-color: rgba(59, 206, 255, 0.32);
-            color: #cfeeff;
         }
 
         .history-head {
@@ -341,17 +273,8 @@
             opacity: 0.9;
         }
 
-        .history-item.degraded {
-            background: linear-gradient(180deg, #74d9ff, #469bff);
-        }
-
-        .history-item.down {
-            background: linear-gradient(180deg, #5662e0, #3440aa);
-        }
-
         .status-footer-meta {
-            margin-top: 4px;
-            margin-bottom: 0;
+            margin: 4px 0 0;
             text-align: center;
             color: #aab5dc;
             font-size: 0.9rem;
@@ -393,25 +316,43 @@
             }
 
             .status-shell {
-                margin-top: 116px;
+                margin-top: 108px;
             }
         }
 
         @media (max-width: 640px) {
             .status-shell {
-                margin-top: 98px;
+                margin-top: 96px;
+                margin-bottom: 32px;
                 padding-left: 14px;
                 padding-right: 14px;
+                gap: 14px;
             }
 
+            .status-shell > .status-hero,
             .status-hero {
                 border-radius: 18px;
-                padding: 24px 18px;
+                padding: 20px 16px;
             }
 
             .panel {
                 border-radius: 16px;
                 padding: 16px;
+            }
+
+            .status-headline,
+            .metric-value,
+            .panel-title {
+                text-shadow: 0 1px 12px rgba(0, 0, 0, 0.7);
+            }
+
+            .status-subline,
+            .status-message,
+            .metric-hint,
+            .history-caption,
+            .status-footer-meta {
+                color: #d4e2f2;
+                text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65);
             }
 
             .history-item {
@@ -422,8 +363,6 @@
     </style>
 </head>
 <body>
-    <div class="aurora"></div>
-
     <nav class="navbar">
         <div class="container">
             <div class="navbar-logo">
@@ -519,7 +458,7 @@
 
     <button class="back-to-top" id="backToTop"></button>
 
-    <footer class="footer">
+        <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
@@ -559,10 +498,17 @@
         </div>
     </footer>
 
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+      }
+    }
+    </script>
     <script type="module" src="../assets/js/main.js"></script>
     <script>
         const CONFIG = {
-            host: 'cypher.hype.surf',
             proxyUrl: 'https://cypher-bot-gamma.vercel.app/api/status',
             refreshInterval: 60,
             timeout: 5000
@@ -582,11 +528,8 @@
         }
 
         function setLastUpdatedLabels(value) {
-            const updated = value || 'Just now';
-            const lastUpdated = document.getElementById('lastUpdated');
             const lastUpdatedLabel = document.getElementById('lastUpdatedLabel');
-            if (lastUpdated) lastUpdated.textContent = updated;
-            if (lastUpdatedLabel) lastUpdatedLabel.textContent = updated;
+            if (lastUpdatedLabel) lastUpdatedLabel.textContent = value || 'Just now';
         }
 
         function updateOnlineStatus() {
@@ -716,11 +659,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('img').forEach((img) => {
-                img.addEventListener('contextmenu', (e) => e.preventDefault());
-                img.addEventListener('dragstart', (e) => e.preventDefault());
-            });
-
             displayCachedStatus();
             updateStatusPage();
             startRefreshTimer();

@@ -2,7 +2,7 @@ import { initNavigation } from './navigation.js';
 import { initAnimations } from './animations.js';
 import { initCards } from './cards.js';
 import { initButtons } from './buttons.js';
-import { initThreeBackground } from './three-bg-advanced.js?v=20260625a';
+import { initThreeBackground } from './three-bg-advanced.js?v=20260725parity';
 
 try {
     initThreeBackground();
@@ -100,10 +100,29 @@ function initPageTransitions() {
     });
 }
 
+/** Soft image protect: block right-click save menu + native drag (sitewide). */
+function initImageProtect() {
+    const isImageTarget = (target) =>
+        target instanceof Element && Boolean(target.closest('img'));
+
+    document.addEventListener('contextmenu', (event) => {
+        if (isImageTarget(event.target)) {
+            event.preventDefault();
+        }
+    });
+
+    document.addEventListener('dragstart', (event) => {
+        if (isImageTarget(event.target)) {
+            event.preventDefault();
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initPageTransitions();
     initNavigation();
     initAnimations();
     initCards();
     initButtons();
+    initImageProtect();
 });

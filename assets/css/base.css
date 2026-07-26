@@ -22,10 +22,16 @@
 
 body {
     font-family: var(--font-main);
-    background-color: #09102a;
+    background-color: #05081a;
     color: var(--text-light);
     overflow-x: hidden;
     line-height: 1.6;
+}
+
+/* Body fill is the Three.js canvas; keep a matching fallback color only */
+body.has-three-bg,
+body:has(#three-bg-canvas) {
+    background-color: #05081a;
 }
 
 *, *::before, *::after {
@@ -49,4 +55,13 @@ h1, h2, h3, h4, h5, h6,
     padding: 0 20px;
     position: relative;
     z-index: 1;
+}
+
+/* Soft image protect (pairs with initImageProtect in main.js) */
+img {
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
 }

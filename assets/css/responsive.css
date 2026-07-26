@@ -239,6 +239,16 @@
         font-size: 3rem;
     }
 
+    .hero-description {
+        color: #dce8f5;
+        text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-title-typing,
+    .hero-title-separator {
+        text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+    }
+
     .hero-buttons {
         flex-direction: column;
         align-items: center;
@@ -248,6 +258,12 @@
         gap: 2rem;
     }
 
+    .stat-label,
+    .stat-item .stat-label {
+        color: #c8d7e8;
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
+    }
+
     .about-content {
         grid-template-columns: 1fr;
     }
@@ -255,6 +271,36 @@
     .commands-grid,
     .features-grid {
         grid-template-columns: 1fr;
+    }
+
+    .features .feature-card h3 {
+        color: #ffffff;
+        text-shadow: 0 1px 14px rgba(0, 0, 0, 0.75);
+    }
+
+    .features .feature-card p {
+        color: #d7e6f5;
+        text-shadow: 0 1px 12px rgba(0, 0, 0, 0.7);
+    }
+
+    .features .feature-card h3::before {
+        color: rgba(210, 222, 236, 0.9);
+    }
+
+    .command-name {
+        text-shadow: 0 1px 12px rgba(0, 0, 0, 0.7);
+    }
+
+    .command-desc {
+        color: #d4e2f2;
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65);
+    }
+
+    .footer-section p,
+    .footer-bottom,
+    .footer-bottom p {
+        color: #d0deec;
+        text-shadow: 0 1px 10px rgba(0, 0, 0, 0.55);
     }
 
     .section-title {

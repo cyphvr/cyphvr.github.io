@@ -8,7 +8,6 @@
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -144,15 +143,9 @@
         </div>
     </section>
 
-    <svg class="sr-only" style="overflow: visible !important;" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-        <filter id="feature-blur" width="500%" height="500%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="20"></feGaussianBlur>
-        </filter>
-    </svg>
-
     <button class="back-to-top" id="backToTop" aria-label="Back to top" title="Back to top"></button>
 
-    <footer class="footer">
+        <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
@@ -192,15 +185,15 @@
         </div>
     </footer>
 
-    <script type="module" src="assets/js/main.js?v=20260526b"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                document.querySelectorAll('img').forEach(function(img) {
-                    img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-                    img.addEventListener('dragstart', function(e) { e.preventDefault(); });
-                });
-            });
-        </script>
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+      }
+    }
+    </script>
+    <script type="module" src="assets/js/main.js?v=20260725parity"></script>
     <script>
         async function fetchServerCount() {
             try {

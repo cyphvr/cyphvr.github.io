@@ -8,11 +8,8 @@
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="aurora"></div>
-
     <nav class="navbar">
         <div class="container">
             <div class="navbar-logo">
@@ -225,7 +222,7 @@
 
     <button class="back-to-top" id="backToTop"></button>
 
-    <footer class="footer">
+        <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
@@ -265,14 +262,14 @@
         </div>
     </footer>
 
-    <script type="module" src="../assets/js/main.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('img').forEach(function(img) {
-                img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-                img.addEventListener('dragstart', function(e) { e.preventDefault(); });
-            });
-        });
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+      }
+    }
     </script>
+    <script type="module" src="../assets/js/main.js"></script>
 </body>
 </html>

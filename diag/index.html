@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cypher — Permission Diagnostics</title>
+    <title>Cypher - Permission Diagnostics</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --diag-accent: #9976fe;
@@ -203,8 +202,6 @@
     </style>
 </head>
 <body>
-    <div class="aurora"></div>
-
     <nav class="navbar">
         <div class="container">
             <div class="navbar-logo">
@@ -247,11 +244,14 @@
         </p>
     </main>
 
-    <footer class="footer">
+        <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3 class="binary-roll">Cypher</h3>
+                    <div class="logo">
+                        <img src="../images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
+                        <span class="logo-text">Cypher</span>
+                    </div>
                     <p>Empowering Discord communities since 2023.</p>
                 </div>
                 <div class="footer-section">
@@ -284,6 +284,14 @@
         </div>
     </footer>
 
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+      }
+    }
+    </script>
     <script type="module" src="../assets/js/main.js"></script>
     <script>
         (function () {

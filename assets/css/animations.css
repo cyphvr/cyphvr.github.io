@@ -133,7 +133,7 @@
     pointer-events: none;
 }
 
-body.page-transition > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay) {
+body.page-transition > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay):not(#three-bg-canvas) {
     opacity: 1;
     filter: blur(0);
     transform: translateY(0);
@@ -144,17 +144,24 @@ body.page-transition > :not(.back-to-top):not(script):not(footer):not(.page-tran
     will-change: opacity, filter, transform;
 }
 
-body.page-transition.page-ready > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay) {
+body.page-transition.page-ready > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay):not(#three-bg-canvas) {
     opacity: 1;
     filter: blur(0);
     transform: translateY(0);
 }
 
-body.page-transition.page-leaving > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay) {
+body.page-transition.page-leaving > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay):not(#three-bg-canvas) {
     opacity: 0;
     filter: blur(1.2px);
     transform: translateY(-2px);
     pointer-events: none;
+}
+
+#three-bg-canvas {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+    visibility: visible !important;
 }
 
 .page-transition-overlay {
@@ -301,9 +308,9 @@ body.page-transition.page-leaving .page-transition-overlay {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    body.page-transition > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay),
-    body.page-transition.page-ready > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay),
-    body.page-transition.page-leaving > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay),
+    body.page-transition > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay):not(#three-bg-canvas),
+    body.page-transition.page-ready > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay):not(#three-bg-canvas),
+    body.page-transition.page-leaving > :not(.back-to-top):not(script):not(footer):not(.page-transition-overlay):not(#three-bg-canvas),
     .page-transition-overlay,
     .page-transition-overlay::before,
     .page-transition-overlay__logo,
