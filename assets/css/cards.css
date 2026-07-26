@@ -1,6 +1,13 @@
 .features {
-    background: transparent;
+    background: transparent !important;
+    background-image: none !important;
     padding-bottom: 3.5rem;
+    position: relative;
+    z-index: 1;
+    /* Kill legacy solid section slab from older themes */
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 .features-grid {
@@ -8,6 +15,8 @@
     grid-template-columns: repeat(auto-fit, minmax(272px, 1fr));
     gap: 1.1rem;
     align-items: stretch;
+    background: transparent !important;
+    background-image: none !important;
 }
 
 .features .feature-card {
@@ -24,7 +33,8 @@
     width: 100%;
     padding: 1.35rem 1.2rem 1.2rem;
     border-radius: 20px;
-    background: transparent;
+    background: transparent !important;
+    background-image: none !important;
     border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     transform: perspective(920px) translate3d(0, calc(var(--feature-entry-y) + var(--feature-hover-lift)), 0) rotateX(var(--feature-rotate-x)) rotateY(var(--feature-rotate-y)) scale(var(--feature-scale));
@@ -41,6 +51,8 @@
     min-height: 258px;
     cursor: pointer;
     box-shadow: none;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     transition:
         transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
         opacity 0.45s ease,
@@ -57,10 +69,16 @@
 .features .feature-card:nth-child(6) { --feature-accent-rgb: 20 184 166; }
 .features .feature-card:nth-child(7) { --feature-accent-rgb: 236 72 153; }
 
+/* Legacy solid fill / blur glow layers — must stay off (they flash on mobile scroll) */
 .features .feature-card::before {
-    display: none;
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    opacity: 0 !important;
+    filter: none !important;
 }
 
+/* Accent border only — not a full card fill */
 .features .feature-card::after {
     content: '';
     position: absolute;
@@ -84,6 +102,9 @@
     pointer-events: none;
     z-index: 1;
     opacity: 0.7;
+    /* Prevent Safari from treating this as an opaque layer over the 3js bg */
+    transform: translateZ(0);
+    background-clip: padding-box;
 }
 
 .features .feature-card.is-visible {
@@ -262,6 +283,85 @@
         --feature-hover-lift: 0px;
         --feature-rotate-x: 0deg;
         --feature-rotate-y: 0deg;
+    }
+}
+
+/*
+  Mobile / coarse pointer:
+  Old solid section + 3D card layers composite as a dark slab behind Core Features
+  and jump while scrolling with the fixed Three.js canvas. Flatten + kill glow fill.
+*/
+@media (max-width: 900px), (hover: none), (pointer: coarse) {
+    .features,
+    .features-grid {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    .features .feature-card {
+        --pointer-x: 0;
+        --pointer-y: 0;
+        --cursor-x: 50%;
+        --cursor-y: 50%;
+        --feature-entry-y: 0px;
+        --feature-hover-lift: 0px;
+        --feature-rotate-x: 0deg;
+        --feature-rotate-y: 0deg;
+        --feature-scale: 1;
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+        /* Flat — no perspective stacking over WebGL */
+        transform: none !important;
+        transform-style: flat !important;
+        isolation: auto !important;
+        will-change: auto !important;
+        filter: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        box-shadow: none !important;
+        opacity: 1;
+    }
+
+    .features .feature-card.is-visible {
+        opacity: 1;
+        transform: none !important;
+    }
+
+    /* Masked radial borders often fill the whole card on mobile Safari */
+    .features .feature-card::before,
+    .features .feature-card::after {
+        content: none !important;
+        display: none !important;
+        background: none !important;
+        opacity: 0 !important;
+        filter: none !important;
+        -webkit-mask: none !important;
+        mask: none !important;
+    }
+
+    .features .group:hover.group-hover\:feature-card,
+    .features .group:focus-within.group-hover\:feature-card {
+        --feature-hover-lift: 0px;
+        --feature-scale: 1;
+        --feature-rotate-x: 0deg;
+        --feature-rotate-y: 0deg;
+        transform: none !important;
+        filter: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+    .features .group:hover.group-hover\:feature-card h3,
+    .features .group:focus-within.group-hover\:feature-card h3,
+    .features .group:hover.group-hover\:feature-card p,
+    .features .group:focus-within.group-hover\:feature-card p,
+    .features .group:hover.group-hover\:feature-card .feature-icon,
+    .features .group:focus-within.group-hover\:feature-card .feature-icon {
+        transform: none !important;
     }
 }
 

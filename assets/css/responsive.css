@@ -271,6 +271,21 @@
     .commands-grid,
     .features-grid {
         grid-template-columns: 1fr;
+        background: transparent !important;
+        background-image: none !important;
+    }
+
+    /* Never reintroduce the old solid Core Features slab (#181c2f / bg-darker) */
+    .features {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
+    }
+
+    .features .feature-card {
+        background: transparent !important;
+        background-color: transparent !important;
+        background-image: none !important;
     }
 
     .features .feature-card h3 {
