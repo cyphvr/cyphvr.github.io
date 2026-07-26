@@ -29,9 +29,25 @@ body {
 }
 
 /* Body fill is the Three.js canvas; keep a matching fallback color only */
+html {
+    background-color: #05081a;
+}
+
 body.has-three-bg,
 body:has(#three-bg-canvas) {
     background-color: #05081a;
+    background-image: none;
+}
+
+/* Kill legacy decorative bg layers if any remain in markup */
+.aurora,
+.stars,
+.stars2,
+.stars3 {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
 }
 
 *, *::before, *::after {

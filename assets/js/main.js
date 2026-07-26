@@ -2,7 +2,7 @@ import { initNavigation } from './navigation.js';
 import { initAnimations } from './animations.js';
 import { initCards } from './cards.js';
 import { initButtons } from './buttons.js';
-import { initThreeBackground } from './three-bg-advanced.js?v=20260725parity';
+import { initThreeBackground } from './three-bg-advanced.js?v=20260726mobile';
 
 try {
     initThreeBackground();

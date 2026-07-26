@@ -158,10 +158,26 @@ body.page-transition.page-leaving > :not(.back-to-top):not(script):not(footer):n
 }
 
 #three-bg-canvas {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    /* Large viewport: covers screen while mobile chrome shows/hides (no reflow jump) */
+    min-height: 100vh;
+    min-height: 100lvh;
+    min-height: -webkit-fill-available;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    touch-action: none;
     opacity: 1 !important;
     filter: none !important;
-    transform: none !important;
+    /* Stable compositor layer; avoid page-transition transforms on the bg */
+    transform: translate3d(0, 0, 0) !important;
     visibility: visible !important;
+    will-change: contents;
 }
 
 .page-transition-overlay {

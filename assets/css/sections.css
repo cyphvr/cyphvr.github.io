@@ -318,7 +318,7 @@ h2:not(.section-title) {
 .wc-card p { margin:0; color:#b7c1d1; font-size:0.95rem; line-height:1.5; }
 
 /* About page values redesign */
-.values-section { padding: 100px 0; background: linear-gradient(180deg, rgba(10,16,24,0.58), rgba(8,12,20,0.62)); }
+.values-section { padding: 100px 0; background: transparent; }
 .values-container { display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 34px; align-items: start; }
 .values-left { padding: 8px 10px 0 0; }
 .values-left .section-title { text-align: left; margin-bottom: 18px; }
@@ -337,11 +337,11 @@ h2:not(.section-title) {
 }
 .values-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .value-card {
-    background: linear-gradient(180deg, rgba(14,22,34,0.9), rgba(8,12,18,0.86));
+    background: transparent;
     border-radius: 18px;
     padding: 20px;
-    border: 1px solid rgba(45,212,255,0.08);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.56);
+    border: 1px solid rgba(139, 220, 255, 0.14);
+    box-shadow: none;
     position: relative;
     overflow: hidden;
     isolation: isolate;
@@ -379,7 +379,7 @@ h2:not(.section-title) {
     transform: translate3d(0, 10px, 0) scale(0.98);
 }
 .value-card:hover,
-.value-card:focus-within { transform: translate3d(0, -12px, 0) scale(1.01); box-shadow: 0 26px 60px rgba(0,0,0,0.72); border-color: rgba(139,220,255,0.16); }
+.value-card:focus-within { transform: translate3d(0, -12px, 0) scale(1.01); box-shadow: 0 0 28px rgba(139,220,255,0.14); border-color: rgba(139,220,255,0.28); background: transparent; }
 .value-card:hover::before,
 .value-card:focus-within::before { opacity: 0.78; }
 .value-card:hover::after,

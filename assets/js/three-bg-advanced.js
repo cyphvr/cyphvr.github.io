@@ -22,6 +22,7 @@ const PALETTE = {
 const state = {
     initialized: false,
     reducedMotion: false,
+    touchUi: false,
     time: 0,
     motionScale: 1,
     quality: 1,
@@ -48,8 +49,49 @@ const state = {
     ribbons: null,
     bloomPass: null,
     filmPass: null,
-    tempObject: new THREE.Object3D()
+    tempObject: new THREE.Object3D(),
+    // Stable viewport (mobile URL bar show/hide must not re-size WebGL)
+    renderWidth: 0,
+    renderHeight: 0,
+    lastLayoutWidth: 0,
+    resizeRaf: 0
 };
+
+function detectTouchUi() {
+    try {
+        return (
+            window.matchMedia('(pointer: coarse)').matches ||
+            window.matchMedia('(hover: none)').matches ||
+            (navigator.maxTouchPoints > 0 && 'ontouchstart' in window)
+        );
+    } catch {
+        return navigator.maxTouchPoints > 0;
+    }
+}
+
+/** Layout size for the canvas — ignore transient mobile chrome height flicker. */
+function getStableViewport() {
+    const w = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1);
+    const h = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+
+    if (!state.touchUi) {
+        return { w, h, changed: w !== state.renderWidth || h !== state.renderHeight };
+    }
+
+    // Width change (orientation / real layout) → accept new height fully
+    const widthChanged = !state.lastLayoutWidth || Math.abs(w - state.lastLayoutWidth) > 24;
+    if (widthChanged) {
+        state.lastLayoutWidth = w;
+        return { w, h, changed: true };
+    }
+
+    // Height-only change while scrolling (URL bar) → keep prior render size
+    if (state.renderWidth && state.renderHeight) {
+        return { w: state.renderWidth, h: state.renderHeight, changed: false };
+    }
+
+    return { w, h, changed: true };
+}
 
 function pageMode() {
     const path = (window.location.pathname.replace(/\/+$/, '') || '/').toLowerCase();
@@ -622,7 +664,10 @@ function animate() {
     if (state.backdrop?.material?.uniforms) {
         state.backdrop.material.uniforms.time.value = t;
         state.backdrop.material.uniforms.mouse.value.copy(state.smoothMouse);
-        state.backdrop.material.uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
+        state.backdrop.material.uniforms.resolution.value.set(
+            state.renderWidth || window.innerWidth,
+            state.renderHeight || window.innerHeight
+        );
     }
 
     [state.veilA, state.veilB, state.veilC].forEach((veil, i) => {
@@ -677,7 +722,8 @@ function animate() {
         state.shards.instanceMatrix.needsUpdate = true;
     }
 
-    const parallax = state.reducedMotion ? 0.12 : 1;
+    // Touch UIs: no pointer parallax (scroll was driving mouse → background jumps)
+    const parallax = state.reducedMotion ? 0.12 : state.touchUi ? 0 : 1;
     state.targetCam.x = state.cameraBase.x + state.smoothMouse.x * 22 * parallax + Math.sin(t * 0.07) * 6 * scale;
     state.targetCam.y = state.cameraBase.y + state.smoothMouse.y * 14 * parallax + Math.cos(t * 0.09) * 4 * scale;
     state.targetCam.z = state.cameraBase.z + Math.sin(t * 0.05) * 5 * scale;
@@ -703,16 +749,20 @@ function animate() {
     }
 }
 
-function onResize() {
+function applyViewportSize(w, h, force = false) {
     if (!state.camera || !state.renderer) return;
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    state.camera.aspect = w / h;
+    if (!force && w === state.renderWidth && h === state.renderHeight) return;
+
+    state.renderWidth = w;
+    state.renderHeight = h;
+
+    state.camera.aspect = w / Math.max(h, 1);
     state.camera.updateProjectionMatrix();
-    state.renderer.setSize(w, h);
+    state.renderer.setSize(w, h, false);
     if (state.composer) state.composer.setSize(w, h);
     if (state.bloomPass) state.bloomPass.resolution.set(w, h);
-    const maxDpr = state.reducedMotion ? 1.25 : 1.75;
+
+    const maxDpr = state.reducedMotion ? 1.1 : state.touchUi ? 1.35 : 1.75;
     const pr = Math.min(window.devicePixelRatio || 1, maxDpr);
     state.renderer.setPixelRatio(pr);
     ['mist', 'stream', 'drift'].forEach((key) => {
@@ -722,6 +772,27 @@ function onResize() {
     if (state.backdrop?.material?.uniforms) {
         state.backdrop.material.uniforms.resolution.value.set(w, h);
     }
+
+    const canvas = state.renderer.domElement;
+    // CSS covers the visual viewport; GL buffer stays at stable size (no scroll jump)
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.minHeight = '100lvh';
+}
+
+function onResize(force = false) {
+    if (!state.camera || !state.renderer) return;
+    const { w, h, changed } = getStableViewport();
+    if (!force && !changed && state.renderWidth) return;
+    applyViewportSize(w, h, force);
+}
+
+function scheduleResize(force = false) {
+    if (state.resizeRaf) cancelAnimationFrame(state.resizeRaf);
+    state.resizeRaf = requestAnimationFrame(() => {
+        state.resizeRaf = 0;
+        onResize(force);
+    });
 }
 
 export function initThreeBackground() {
@@ -730,6 +801,7 @@ export function initThreeBackground() {
     }
     state.initialized = true;
     state.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    state.touchUi = detectTouchUi();
 
     // Same visual theme on mobile and desktop; only honor reduced-motion preference
     state.motionScale = state.reducedMotion ? 0.35 : 1;
@@ -741,19 +813,25 @@ export function initThreeBackground() {
     state.scene = new THREE.Scene();
     state.scene.fog = new THREE.FogExp2(PALETTE.deep, 0.0024);
 
-    state.camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.5, 900);
+    const initialW = Math.max(1, window.innerWidth || 1);
+    const initialH = Math.max(1, window.innerHeight || 1);
+    state.lastLayoutWidth = initialW;
+    state.renderWidth = initialW;
+    state.renderHeight = initialH;
+
+    state.camera = new THREE.PerspectiveCamera(55, initialW / initialH, 0.5, 900);
     applyPageCamera(pageMode());
     state.camera.position.copy(state.cameraBase);
 
     // Cap DPR only (does not change composition); full scene layers stay identical
-    const maxDpr = state.reducedMotion ? 1.25 : Math.min(window.devicePixelRatio || 1, 1.75);
+    const maxDpr = state.reducedMotion ? 1.1 : state.touchUi ? 1.35 : Math.min(window.devicePixelRatio || 1, 1.75);
     state.renderer = new THREE.WebGLRenderer({
-        antialias: !state.reducedMotion,
+        antialias: !state.reducedMotion && !state.touchUi,
         alpha: false,
         powerPreference: 'high-performance'
     });
     state.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, maxDpr));
-    state.renderer.setSize(window.innerWidth, window.innerHeight);
+    state.renderer.setSize(initialW, initialH, false);
     state.renderer.setClearColor(PALETTE.deep, 1);
     state.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     state.renderer.toneMappingExposure = 1.0;
@@ -761,12 +839,17 @@ export function initThreeBackground() {
     canvas.id = 'three-bg-canvas';
     canvas.setAttribute('aria-hidden', 'true');
     canvas.style.position = 'fixed';
-    canvas.style.inset = '0';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.right = '0';
+    canvas.style.bottom = '0';
     canvas.style.width = '100%';
     canvas.style.height = '100%';
+    canvas.style.minHeight = '100lvh';
     canvas.style.zIndex = '0';
     canvas.style.pointerEvents = 'none';
     canvas.style.display = 'block';
+    canvas.style.touchAction = 'none';
     document.body.prepend(canvas);
 
     createLights(state.scene);
@@ -813,8 +896,8 @@ export function initThreeBackground() {
     state.composer = new EffectComposer(state.renderer);
     state.composer.addPass(new RenderPass(state.scene, state.camera));
     state.bloomPass = new UnrealBloomPass(
-        new THREE.Vector2(window.innerWidth, window.innerHeight),
-        state.reducedMotion ? 0.35 : 0.55,
+        new THREE.Vector2(initialW, initialH),
+        state.reducedMotion ? 0.35 : state.touchUi ? 0.42 : 0.55,
         0.7,
         0.82
     );
@@ -822,14 +905,35 @@ export function initThreeBackground() {
     state.filmPass = new ShaderPass(FilmShader);
     state.composer.addPass(state.filmPass);
 
-    document.addEventListener('pointermove', (e) => {
-        state.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-        state.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    // Desktop only: pointer parallax. Touch scroll was feeding pointermove → jump/stop.
+    if (!state.touchUi) {
+        document.addEventListener('pointermove', (e) => {
+            if (e.pointerType && e.pointerType !== 'mouse') return;
+            const rw = state.renderWidth || window.innerWidth || 1;
+            const rh = state.renderHeight || window.innerHeight || 1;
+            state.mouse.x = (e.clientX / rw) * 2 - 1;
+            state.mouse.y = -(e.clientY / rh) * 2 + 1;
+        }, { passive: true });
+    } else {
+        state.mouse.set(0, 0);
+        state.smoothMouse.set(0, 0);
+    }
+
+    window.addEventListener('resize', () => scheduleResize(false), { passive: true });
+    window.addEventListener('orientationchange', () => {
+        state.lastLayoutWidth = 0;
+        state.renderWidth = 0;
+        state.renderHeight = 0;
+        scheduleResize(true);
     }, { passive: true });
 
-    window.addEventListener('resize', onResize, { passive: true });
+    // visualViewport fires on mobile chrome changes — ignore height-only via getStableViewport
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => scheduleResize(false), { passive: true });
+    }
+
     document.body.classList.add('has-three-bg');
 
-    onResize();
+    onResize(true);
     animate();
 }
