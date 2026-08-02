@@ -1,6 +1,7 @@
-@import url('base.css');
-@import url('navbar.css');
-@import url('chrome.css');
-@import url('components.css');
-@import url('pages.css');
-@import url('motion.css');
+/* Cache-bust nested sheets — browsers often keep old @imports forever */
+@import url('base.css?v=20260801v36');
+@import url('navbar.css?v=20260801v36');
+@import url('chrome.css?v=20260801v36');
+@import url('components.css?v=20260801v36');
+@import url('pages.css?v=20260801v36');
+@import url('motion.css?v=20260801v36');
