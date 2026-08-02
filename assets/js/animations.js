@@ -331,20 +331,3 @@ export function initAnimations() {
     initParallaxDeck();
     initAnchorPulse();
 }
-
-/** Soft reflow after command filter/search — first 12 visible only */
-let cmdAnimTimer = 0;
-export function animateCommandRows() {
-    if (reduced()) return;
-    window.clearTimeout(cmdAnimTimer);
-    cmdAnimTimer = window.setTimeout(() => {
-        const rows = document.querySelectorAll('.cmd-row:not(.is-hidden)');
-        rows.forEach((row, i) => {
-            if (i > 11) return;
-            row.classList.remove('cmd-enter');
-            void row.offsetWidth;
-            row.style.animationDelay = `${i * 0.025}s`;
-            row.classList.add('cmd-enter');
-        });
-    }, 40);
-}

@@ -4,8 +4,8 @@ import { initCards } from './cards.js';
 import { initButtons } from './buttons.js';
 import { initCommands } from './commands.js';
 import { initDeckDemo } from './deck-demo.js';
-import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260801v33';
-import { initThreeBackground } from './three-bg-advanced.js?v=20260801v33';
+import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260801v34';
+import { initThreeBackground } from './three-bg-advanced.js?v=20260801v34';
 
 // Smooth inertia scroll; Three.js reads progress each frame
 try {
