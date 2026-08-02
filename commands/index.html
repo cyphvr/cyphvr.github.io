@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher - Commands</title>
+    <meta name="description" content="Searchable library of every Cypher slash command.">
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-    <nav class="navbar">
+        <nav class="navbar">
         <div class="container">
             <div class="navbar-logo">
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
@@ -27,668 +28,182 @@
                 <a href="/features" class="navbar-link">Features</a>
                 <a href="/commands" class="navbar-link">Commands</a>
                 <a href="/about" class="navbar-link">About</a>
+                <a href="/status" class="navbar-link">Status</a>
                 <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="navbar-invite">Invite Now</a>
             </div>
         </div>
     </nav>
 
-    <section style="padding: 100px 0 50px;">
-        <div class="container">
-            <h1 class="glitch" data-text="Commands" style="text-align: center; margin-bottom: 30px; font-size:2.8rem;">Commands</h1>
-            <p style="text-align: center; font-size: 18px; color: #b7c1d1; margin-bottom: 60px;">
-             Explore all the powerful commands available in Cypher
-            </p>
+<main class="site-main">
+        <div class="shell page-intro">
+            <p class="eyebrow">Operator library</p>
+            <h1>Commands as a console.</h1>
+            <p>Filter by category or type to search. Same slash names your staff will use in Discord.</p>
         </div>
-    </section>
 
-    <section class="commands" id="commands">
-        <div class="container">
-            <h2 class="section-title">
-                <span class="title-line"></span>
-                <span class="title-text glossy-text">COMMANDS</span>
-                <span class="title-line"></span>
-            </h2>
-            <h3 id="moderation" style="display: flex; align-items: center; gap: 12px; color: #ff3b5c; margin-bottom: 30px; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-moderation"></use></svg></span>
-                Moderation
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/kick</span>
-                        <span class="command-badge">Moderation</span>
+        <div class="shell" style="padding-bottom:4rem;">
+            <div class="cmd-app">
+                <aside class="cmd-rail" aria-label="Categories">
+                    <button type="button" class="is-active" data-cmd-filter="all">All</button>
+                    <button type="button" data-cmd-filter="moderation">Moderation</button>
+                    <button type="button" data-cmd-filter="channel">Channel</button>
+                    <button type="button" data-cmd-filter="info">Info</button>
+                    <button type="button" data-cmd-filter="utility">Utility</button>
+                    <button type="button" data-cmd-filter="search">Search</button>
+                    <button type="button" data-cmd-filter="ai">AI</button>
+                    <button type="button" data-cmd-filter="member">Member</button>
+                    <button type="button" data-cmd-filter="role">Role</button>
+                    <button type="button" data-cmd-filter="config">Config</button>
+                    <button type="button" data-cmd-filter="creative">Creative</button>
+                </aside>
+                <div class="cmd-main">
+                    <div class="cmd-toolbar">
+                        <label class="cmd-search">
+                            <span class="sr-only">Search commands</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                            <input id="commandSearch" type="search" placeholder="Search name or description…" autocomplete="off">
+                        </label>
+                        <span class="cmd-count" id="commandCount">0 commands</span>
                     </div>
-                    <p class="command-desc">Kick a member from the server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/ban</span>
-                        <span class="command-badge">Moderation</span>
+                    <div class="cmd-list" id="commandList">
+                        <div class="cmd-group-label" data-cmd-group="moderation">Moderation</div>
+                        <div class="cmd-row" data-category="moderation" data-name="/kick" data-desc="Kick a member from the server."><span class="cmd-row__name">/kick</span><span class="cmd-row__desc">Kick a member from the server.</span><span class="cmd-row__badge">Moderation</span></div>
+                        <div class="cmd-row" data-category="moderation" data-name="/ban" data-desc="Ban a member from the server."><span class="cmd-row__name">/ban</span><span class="cmd-row__desc">Ban a member from the server.</span><span class="cmd-row__badge">Moderation</span></div>
+                        <div class="cmd-row" data-category="moderation" data-name="/unban" data-desc="Unban a user from the server."><span class="cmd-row__name">/unban</span><span class="cmd-row__desc">Unban a user from the server.</span><span class="cmd-row__badge">Moderation</span></div>
+                        <div class="cmd-row" data-category="moderation" data-name="/mute" data-desc="Mute a member in the server."><span class="cmd-row__name">/mute</span><span class="cmd-row__desc">Mute a member in the server.</span><span class="cmd-row__badge">Moderation</span></div>
+                        <div class="cmd-row" data-category="moderation" data-name="/unmute" data-desc="Unmute a member in the server."><span class="cmd-row__name">/unmute</span><span class="cmd-row__desc">Unmute a member in the server.</span><span class="cmd-row__badge">Moderation</span></div>
+                        <div class="cmd-row" data-category="moderation" data-name="/clean" data-desc="Clean a specified number of messages."><span class="cmd-row__name">/clean</span><span class="cmd-row__desc">Clean a specified number of messages.</span><span class="cmd-row__badge">Moderation</span></div>
+                        <div class="cmd-row" data-category="moderation" data-name="/anti-raid" data-desc="Enable or disable anti-raid protection."><span class="cmd-row__name">/anti-raid</span><span class="cmd-row__desc">Enable or disable anti-raid protection.</span><span class="cmd-row__badge">Moderation</span></div>
+                        <div class="cmd-row" data-category="moderation" data-name="/perspective" data-desc="Judge the toxicity of a prompt."><span class="cmd-row__name">/perspective</span><span class="cmd-row__desc">Judge the toxicity of a prompt.</span><span class="cmd-row__badge">Moderation</span></div>
+                        <div class="cmd-row" data-category="moderation" data-name="/analyze" data-desc="Analyze a word or sentence for toxicity."><span class="cmd-row__name">/analyze</span><span class="cmd-row__desc">Analyze a word or sentence for toxicity.</span><span class="cmd-row__badge">Moderation</span></div>
+
+                        <div class="cmd-group-label" data-cmd-group="channel">Channel</div>
+                        <div class="cmd-row" data-category="channel" data-name="/channel lock" data-desc="Lock a text channel."><span class="cmd-row__name">/channel lock</span><span class="cmd-row__desc">Lock a text channel.</span><span class="cmd-row__badge">Channel</span></div>
+                        <div class="cmd-row" data-category="channel" data-name="/channel unlock" data-desc="Unlock a text channel."><span class="cmd-row__name">/channel unlock</span><span class="cmd-row__desc">Unlock a text channel.</span><span class="cmd-row__badge">Channel</span></div>
+                        <div class="cmd-row" data-category="channel" data-name="/channel slowmode" data-desc="Set slowmode for the channel."><span class="cmd-row__name">/channel slowmode</span><span class="cmd-row__desc">Set slowmode for the channel.</span><span class="cmd-row__badge">Channel</span></div>
+                        <div class="cmd-row" data-category="channel" data-name="/channel server-lock" data-desc="Lock the entire server."><span class="cmd-row__name">/channel server-lock</span><span class="cmd-row__desc">Lock the entire server.</span><span class="cmd-row__badge">Channel</span></div>
+                        <div class="cmd-row" data-category="channel" data-name="/channel lock-vc" data-desc="Lock a voice channel."><span class="cmd-row__name">/channel lock-vc</span><span class="cmd-row__desc">Lock a voice channel.</span><span class="cmd-row__badge">Channel</span></div>
+                        <div class="cmd-row" data-category="channel" data-name="/channel vc-move" data-desc="Move members between voice channels."><span class="cmd-row__name">/channel vc-move</span><span class="cmd-row__desc">Move members between voice channels.</span><span class="cmd-row__badge">Channel</span></div>
+
+                        <div class="cmd-group-label" data-cmd-group="info">Info</div>
+                        <div class="cmd-row" data-category="info" data-name="/avatar" data-desc="Get a user's avatar in high quality."><span class="cmd-row__name">/avatar</span><span class="cmd-row__desc">Get a user's avatar in high quality.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/banner" data-desc="Get a user's profile banner."><span class="cmd-row__name">/banner</span><span class="cmd-row__desc">Get a user's profile banner.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/info" data-desc="Get detailed information about a user."><span class="cmd-row__name">/info</span><span class="cmd-row__desc">Get detailed information about a user.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/server icon" data-desc="Get the server's icon."><span class="cmd-row__name">/server icon</span><span class="cmd-row__desc">Get the server's icon.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/server banner" data-desc="Get the server's banner."><span class="cmd-row__name">/server banner</span><span class="cmd-row__desc">Get the server's banner.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/server info" data-desc="Get comprehensive server information."><span class="cmd-row__name">/server info</span><span class="cmd-row__desc">Get comprehensive server information.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/server role-info" data-desc="Get information about a server role."><span class="cmd-row__name">/server role-info</span><span class="cmd-row__desc">Get information about a server role.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/server roles" data-desc="View all server roles."><span class="cmd-row__name">/server roles</span><span class="cmd-row__desc">View all server roles.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/server emojis" data-desc="View all server emojis."><span class="cmd-row__name">/server emojis</span><span class="cmd-row__desc">View all server emojis.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/server banlist" data-desc="View the server's ban list."><span class="cmd-row__name">/server banlist</span><span class="cmd-row__desc">View the server's ban list.</span><span class="cmd-row__badge">Info</span></div>
+                        <div class="cmd-row" data-category="info" data-name="/stats" data-desc="View comprehensive bot statistics."><span class="cmd-row__name">/stats</span><span class="cmd-row__desc">View comprehensive bot statistics.</span><span class="cmd-row__badge">Info</span></div>
+
+                        <div class="cmd-group-label" data-cmd-group="utility">Utility</div>
+                        <div class="cmd-row" data-category="utility" data-name="/ping" data-desc="Check bot latency and response time."><span class="cmd-row__name">/ping</span><span class="cmd-row__desc">Check bot latency and response time.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/quote" data-desc="Quote a message with custom styling."><span class="cmd-row__name">/quote</span><span class="cmd-row__desc">Quote a message with custom styling.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/inrole" data-desc="View number of members in a role."><span class="cmd-row__name">/inrole</span><span class="cmd-row__desc">View number of members in a role.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/snipe delete" data-desc="Snipe a deleted message."><span class="cmd-row__name">/snipe delete</span><span class="cmd-row__desc">Snipe a deleted message.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/snipe edit" data-desc="Snipe an edited message."><span class="cmd-row__name">/snipe edit</span><span class="cmd-row__desc">Snipe an edited message.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/snipe react" data-desc="Snipe a reaction to a message."><span class="cmd-row__name">/snipe react</span><span class="cmd-row__desc">Snipe a reaction to a message.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/timestamp" data-desc="Generate timestamps in various formats."><span class="cmd-row__name">/timestamp</span><span class="cmd-row__desc">Generate timestamps in various formats.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/afk" data-desc="Set an AFK status with custom message."><span class="cmd-row__name">/afk</span><span class="cmd-row__desc">Set an AFK status with custom message.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/reminder add" data-desc="Set a reminder for later."><span class="cmd-row__name">/reminder add</span><span class="cmd-row__desc">Set a reminder for later.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/reminder remove" data-desc="Remove a reminder."><span class="cmd-row__name">/reminder remove</span><span class="cmd-row__desc">Remove a reminder.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/reminder list" data-desc="List all reminders."><span class="cmd-row__name">/reminder list</span><span class="cmd-row__desc">List all reminders.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/emoji-info" data-desc="Get information about an emoji."><span class="cmd-row__name">/emoji-info</span><span class="cmd-row__desc">Get information about an emoji.</span><span class="cmd-row__badge">Utility</span></div>
+                        <div class="cmd-row" data-category="utility" data-name="/steal" data-desc="Steal an emoji from another server."><span class="cmd-row__name">/steal</span><span class="cmd-row__desc">Steal an emoji from another server.</span><span class="cmd-row__badge">Utility</span></div>
+
+                        <div class="cmd-group-label" data-cmd-group="search">Search</div>
+                        <div class="cmd-row" data-category="search" data-name="/define" data-desc="Get the definition of a word."><span class="cmd-row__name">/define</span><span class="cmd-row__desc">Get the definition of a word.</span><span class="cmd-row__badge">Search</span></div>
+                        <div class="cmd-row" data-category="search" data-name="/urban-define" data-desc="Get Urban Dictionary definition."><span class="cmd-row__name">/urban-define</span><span class="cmd-row__desc">Get Urban Dictionary definition.</span><span class="cmd-row__badge">Search</span></div>
+                        <div class="cmd-row" data-category="search" data-name="/weather" data-desc="Get weather information for a location."><span class="cmd-row__name">/weather</span><span class="cmd-row__desc">Get weather information for a location.</span><span class="cmd-row__badge">Search</span></div>
+                        <div class="cmd-row" data-category="search" data-name="/google" data-desc="Search Google and return results directly in Discord."><span class="cmd-row__name">/google</span><span class="cmd-row__desc">Search Google and return results directly in Discord.</span><span class="cmd-row__badge">Search</span></div>
+                        <div class="cmd-row" data-category="search" data-name="/youtube" data-desc="Search YouTube for videos."><span class="cmd-row__name">/youtube</span><span class="cmd-row__desc">Search YouTube for videos.</span><span class="cmd-row__badge">Search</span></div>
+                        <div class="cmd-row" data-category="search" data-name="/reverse-image" data-desc="Reverse image search using Google or other engines."><span class="cmd-row__name">/reverse-image</span><span class="cmd-row__desc">Reverse image search using Google or other engines.</span><span class="cmd-row__badge">Search</span></div>
+
+                        <div class="cmd-group-label" data-cmd-group="ai">AI</div>
+                        <div class="cmd-row" data-category="ai" data-name="/grok" data-desc="Chat with Grok AI models."><span class="cmd-row__name">/grok</span><span class="cmd-row__desc">Chat with Grok AI models.</span><span class="cmd-row__badge">AI</span></div>
+                        <div class="cmd-row" data-category="ai" data-name="/grokvision" data-desc="Analyze images with Grok AI."><span class="cmd-row__name">/grokvision</span><span class="cmd-row__desc">Analyze images with Grok AI.</span><span class="cmd-row__badge">AI</span></div>
+                        <div class="cmd-row" data-category="ai" data-name="/grokimage" data-desc="Generate images with Grok AI."><span class="cmd-row__name">/grokimage</span><span class="cmd-row__desc">Generate images with Grok AI.</span><span class="cmd-row__badge">AI</span></div>
+
+                        <div class="cmd-group-label" data-cmd-group="member">Member</div>
+                        <div class="cmd-row" data-category="member" data-name="/member add-role" data-desc="Add a role to a member."><span class="cmd-row__name">/member add-role</span><span class="cmd-row__desc">Add a role to a member.</span><span class="cmd-row__badge">Member</span></div>
+                        <div class="cmd-row" data-category="member" data-name="/member remove-role" data-desc="Remove a role from a member."><span class="cmd-row__name">/member remove-role</span><span class="cmd-row__desc">Remove a role from a member.</span><span class="cmd-row__badge">Member</span></div>
+                        <div class="cmd-row" data-category="member" data-name="/member rename" data-desc="Set a member's nickname."><span class="cmd-row__name">/member rename</span><span class="cmd-row__desc">Set a member's nickname.</span><span class="cmd-row__badge">Member</span></div>
+                        <div class="cmd-row" data-category="member" data-name="/member reset-nick" data-desc="Reset a member's nickname."><span class="cmd-row__name">/member reset-nick</span><span class="cmd-row__desc">Reset a member's nickname.</span><span class="cmd-row__badge">Member</span></div>
+
+                        <div class="cmd-group-label" data-cmd-group="role">Role</div>
+                        <div class="cmd-row" data-category="role" data-name="/role humans" data-desc="Add a role to all humans in the server."><span class="cmd-row__name">/role humans</span><span class="cmd-row__desc">Add a role to all humans in the server.</span><span class="cmd-row__badge">Role</span></div>
+                        <div class="cmd-row" data-category="role" data-name="/role kick" data-desc="Kick all users within a specific role."><span class="cmd-row__name">/role kick</span><span class="cmd-row__desc">Kick all users within a specific role.</span><span class="cmd-row__badge">Role</span></div>
+
+                        <div class="cmd-group-label" data-cmd-group="config">Config</div>
+                        <div class="cmd-row" data-category="config" data-name="/prefix add" data-desc="Add a custom prefix for this server."><span class="cmd-row__name">/prefix add</span><span class="cmd-row__desc">Add a custom prefix for this server.</span><span class="cmd-row__badge">Config</span></div>
+                        <div class="cmd-row" data-category="config" data-name="/prefix remove" data-desc="Remove a custom prefix from this server."><span class="cmd-row__name">/prefix remove</span><span class="cmd-row__desc">Remove a custom prefix from this server.</span><span class="cmd-row__badge">Config</span></div>
+                        <div class="cmd-row" data-category="config" data-name="/prefix list" data-desc="List current prefixes for this server."><span class="cmd-row__name">/prefix list</span><span class="cmd-row__desc">List current prefixes for this server.</span><span class="cmd-row__badge">Config</span></div>
+                        <div class="cmd-row" data-category="config" data-name="/prefix reset" data-desc="Reset all custom prefixes for this server."><span class="cmd-row__name">/prefix reset</span><span class="cmd-row__desc">Reset all custom prefixes for this server.</span><span class="cmd-row__badge">Config</span></div>
+
+                        <div class="cmd-group-label" data-cmd-group="creative">Creative</div>
+                        <div class="cmd-row" data-category="creative" data-name="/embed create" data-desc="Create customizable embeds."><span class="cmd-row__name">/embed create</span><span class="cmd-row__desc">Create customizable embeds.</span><span class="cmd-row__badge">Creative</span></div>
+                        <div class="cmd-row" data-category="creative" data-name="/tts voice" data-desc="Generate Text-to-Speech audio."><span class="cmd-row__name">/tts voice</span><span class="cmd-row__desc">Generate Text-to-Speech audio.</span><span class="cmd-row__badge">Fun</span></div>
+                        <div class="cmd-row" data-category="creative" data-name="/tts convert" data-desc="Convert text to speech in any language."><span class="cmd-row__name">/tts convert</span><span class="cmd-row__desc">Convert text to speech in any language.</span><span class="cmd-row__badge">Fun</span></div>
+                        <div class="cmd-row" data-category="creative" data-name="/imagefx_1" data-desc="Apply effects to user avatars or images."><span class="cmd-row__name">/imagefx_1</span><span class="cmd-row__desc">Apply effects to user avatars or images.</span><span class="cmd-row__badge">Fun</span></div>
                     </div>
-                    <p class="command-desc">Ban a member from the server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/unban</span>
-                        <span class="command-badge">Moderation</span>
-                    </div>
-                    <p class="command-desc">Unban a user from the server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/mute</span>
-                        <span class="command-badge">Moderation</span>
-                    </div>
-                    <p class="command-desc">Mute a member in the server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/unmute</span>
-                        <span class="command-badge">Moderation</span>
-                    </div>
-                    <p class="command-desc">Unmute a member in the server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/clean</span>
-                        <span class="command-badge">Moderation</span>
-                    </div>
-                    <p class="command-desc">Clean a specified number of messages.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/anti-raid</span>
-                        <span class="command-badge">Moderation</span>
-                    </div>
-                    <p class="command-desc">Enable or disable anti-raid protection.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/perspective</span>
-                        <span class="command-badge">Moderation</span>
-                    </div>
-                    <p class="command-desc">Judge the toxicity of a prompt.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/analyze</span>
-                        <span class="command-badge">Moderation</span>
-                    </div>
-                    <p class="command-desc">Analyze a word or sentence for toxicity.</p>
                 </div>
             </div>
 
-            <h3 id="channel" style="display: flex; align-items: center; gap: 12px; color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-management"></use></svg></span>
-                Channel Management
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/channel lock</span>
-                        <span class="command-badge">Channel</span>
-                    </div>
-                    <p class="command-desc">Lock a text channel.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/channel unlock</span>
-                        <span class="command-badge">Channel</span>
-                    </div>
-                    <p class="command-desc">Unlock a text channel.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/channel slowmode</span>
-                        <span class="command-badge">Channel</span>
-                    </div>
-                    <p class="command-desc">Set slowmode for the channel.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/channel server-lock</span>
-                        <span class="command-badge">Channel</span>
-                    </div>
-                    <p class="command-desc">Lock the entire server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/channel lock-vc</span>
-                        <span class="command-badge">Channel</span>
-                    </div>
-                    <p class="command-desc">Lock a voice channel.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/channel vc-move</span>
-                        <span class="command-badge">Channel</span>
-                    </div>
-                    <p class="command-desc">Move members between voice channels.</p>
-                </div>
-            </div>
-
-            <h3 id="information" style="display: flex; align-items: center; gap: 12px; color: #ff3b5c; margin: 50px 0 30px 0; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-user"></use></svg></span>
-                User Information
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/avatar</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">Get a user's avatar in high quality.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/banner</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">Get a user's profile banner.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/info</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">Get detailed information about a user.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/server icon</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">Get the server's icon.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/server banner</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">Get the server's banner.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/server info</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">Get comprehensive server information.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/server role-info</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">Get information about a server role.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/server roles</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">View all server roles.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/server emojis</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">View all server emojis.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/server banlist</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">View the server's ban list.</p>
-                </div>
-            </div>
-
-            <h3 id="utility" style="display: flex; align-items: center; gap: 12px; color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-utility"></use></svg></span>
-                Utility
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/ping</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Check bot latency and response time.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/quote</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Quote a message with custom styling.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/inrole</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">View number of members in a role.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/snipe delete</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Snipe a deleted message.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/snipe edit</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Snipe an edited message.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/snipe react</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Snipe a reaction to a message.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/timestamp</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Generate timestamps in various formats.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/afk</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Set an AFK status with custom message.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/reminder add</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Set a reminder for later.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/reminder remove</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Remove a reminder.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/reminder list</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">List all reminders.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/emoji-info</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Get information about an emoji.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/steal</span>
-                        <span class="command-badge">Utility</span>
-                    </div>
-                    <p class="command-desc">Steal an emoji from another server.</p>
-                </div>
-            </div>
-
-            <h3 id="search" style="display: flex; align-items: center; gap: 12px; color: #ff3b5c; margin: 50px 0 30px 0; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-search"></use></svg></span>
-                Search
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/define</span>
-                        <span class="command-badge">Search</span>
-                    </div>
-                    <p class="command-desc">Get the definition of a word.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/urban-define</span>
-                        <span class="command-badge">Search</span>
-                    </div>
-                    <p class="command-desc">Get Urban Dictionary definition.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/weather</span>
-                        <span class="command-badge">Search</span>
-                    </div>
-                    <p class="command-desc">Get weather information for a location.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/google</span>
-                        <span class="command-badge">Search</span>
-                    </div>
-                    <p class="command-desc">Search Google and return results directly in Discord.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/youtube</span>
-                        <span class="command-badge">Search</span>
-                    </div>
-                    <p class="command-desc">Search YouTube for videos.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/reverse-image</span>
-                        <span class="command-badge">Search</span>
-                    </div>
-                    <p class="command-desc">Reverse image search using Google or other engines.</p>
-                </div>
-            </div>
-
-            <h3 id="ai" style="display: flex; align-items: center; gap: 12px; color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-robot"></use></svg></span>
-                AI
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/grok</span>
-                        <span class="command-badge">AI</span>
-                    </div>
-                    <p class="command-desc">Chat with Grok AI models.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/grokvision</span>
-                        <span class="command-badge">AI</span>
-                    </div>
-                    <p class="command-desc">Analyze images with Grok AI.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/grokimage</span>
-                        <span class="command-badge">AI</span>
-                    </div>
-                    <p class="command-desc">Generate images with Grok AI.</p>
-                </div>
-            </div>
-
-            <h3 id="member" style="display: flex; align-items: center; gap: 12px; color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-member"></use></svg></span>
-                Member
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/member add-role</span>
-                        <span class="command-badge">Member</span>
-                    </div>
-                    <p class="command-desc">Add a role to a member.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/member remove-role</span>
-                        <span class="command-badge">Member</span>
-                    </div>
-                    <p class="command-desc">Remove a role from a member.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/member rename</span>
-                        <span class="command-badge">Member</span>
-                    </div>
-                    <p class="command-desc">Set a member's nickname.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/member reset-nick</span>
-                        <span class="command-badge">Member</span>
-                    </div>
-                    <p class="command-desc">Reset a member's nickname.</p>
-                </div>
-            </div>
-
-            <h3 id="role" style="display: flex; align-items: center; gap: 12px; color: #ff3b5c; margin: 50px 0 30px 0; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-role"></use></svg></span>
-                Role
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/role humans</span>
-                        <span class="command-badge">Role</span>
-                    </div>
-                    <p class="command-desc">Add a role to all humans in the server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/role kick</span>
-                        <span class="command-badge">Role</span>
-                    </div>
-                    <p class="command-desc">Kick all users within a specific role.</p>
-                </div>
-            </div>
-
-            <h3 id="config" style="display: flex; align-items: center; gap: 12px; color: #2dd4ff; margin: 50px 0 30px 0; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-config"></use></svg></span>
-                Config
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/prefix add</span>
-                        <span class="command-badge">Config</span>
-                    </div>
-                    <p class="command-desc">Add a custom prefix for this server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/prefix remove</span>
-                        <span class="command-badge">Config</span>
-                    </div>
-                    <p class="command-desc">Remove a custom prefix from this server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/prefix list</span>
-                        <span class="command-badge">Config</span>
-                    </div>
-                    <p class="command-desc">List current prefixes for this server.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/prefix reset</span>
-                        <span class="command-badge">Config</span>
-                    </div>
-                    <p class="command-desc">Reset all custom prefixes for this server.</p>
-                </div>
-            </div>
-
-            <h3 id="creative" style="display: flex; align-items: center; gap: 12px; color: #ff3b5c; margin: 50px 0 30px 0; font-size: 20px;">
-                <span class="icon-sheen"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-creativity"></use></svg></span>
-                Creative & Fun
-            </h3>
-            <div class="commands-grid">
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/embed create</span>
-                        <span class="command-badge">Creative</span>
-                    </div>
-                    <p class="command-desc">Create customizable embeds.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/tts voice</span>
-                        <span class="command-badge">Fun</span>
-                    </div>
-                    <p class="command-desc">Generate Text-to-Speech audio.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/tts convert</span>
-                        <span class="command-badge">Fun</span>
-                    </div>
-                    <p class="command-desc">Convert text to speech in any language.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/imagefx_1</span>
-                        <span class="command-badge">Fun</span>
-                    </div>
-                    <p class="command-desc">Apply effects to user avatars or images.</p>
-                </div>
-                <div class="command-card group group-hover:command-card">
-                    <div class="command-header">
-                        <span class="command-name">/stats</span>
-                        <span class="command-badge">Info</span>
-                    </div>
-                    <p class="command-desc">View comprehensive bot statistics.</p>
-                </div>
+            <div style="margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;justify-content:space-between;">
+                <p style="color:var(--ink-dim);max-width:42ch;">Missing a permission mid-slash? Open diagnostics from Cypher’s incognito notice.</p>
+                <a class="btn btn--ember" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite &amp; try live</a>
             </div>
         </div>
-    </section>
+    </main>
 
-    <section style="padding: 80px 0; background: transparent;">
-        <div class="container">
-            <h2 class="section-title">
-                <span class="title-line"></span>
-                <span class="title-text glossy-text">COMMAND CATEGORIES</span>
-                <span class="title-line"></span>
-            </h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-                <a href="#moderation" style="text-decoration: none;" class="category-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><svg class="icon-badge icon-badge--sm" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-moderation"></use></svg></span>
-                        <h3 style="color: #ff3b5c; margin: 0; font-size: 18px;">Moderation</h3>
-                    </div>
-                    <p style="color: #b7c1d1;">Kick, ban, mute, anti-raid, and toxicity analysis.</p>
-                </a>
-                <a href="#channel" style="text-decoration: none;" class="category-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><svg class="icon-badge icon-badge--sm" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-management"></use></svg></span>
-                        <h3 style="color: #2dd4ff; margin: 0; font-size: 18px;">Channel</h3>
-                    </div>
-                    <p style="color: #b7c1d1;">Lock/unlock channels, slowmode, voice channel management.</p>
-                </a>
-                <a href="#information" style="text-decoration: none;" class="category-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><svg class="icon-badge icon-badge--sm" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-user"></use></svg></span>
-                        <h3 style="color: #ff3b5c; margin: 0; font-size: 18px;">Information</h3>
-                    </div>
-                    <p style="color: #b7c1d1;">Avatar, banner, user info, server details, and more.</p>
-                </a>
-                <a href="#utility" style="text-decoration: none;" class="category-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><svg class="icon-badge icon-badge--sm" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-utility"></use></svg></span>
-                        <h3 style="color: #2dd4ff; margin: 0; font-size: 18px;">Utility</h3>
-                    </div>
-                    <p style="color: #b7c1d1;">Snipe, quote, timestamp, AFK, reminders, and utilities.</p>
-                </a>
-                <a href="#search" style="text-decoration: none;" class="category-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><svg class="icon-badge icon-badge--sm" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-search"></use></svg></span>
-                        <h3 style="color: #ff3b5c; margin: 0; font-size: 18px;">Search</h3>
-                    </div>
-                    <p style="color: #b7c1d1;">Dictionary, Urban, and weather lookups.</p>
-                </a>
-                <a href="#ai" style="text-decoration: none;" class="category-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><svg class="icon-badge icon-badge--sm" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-robot"></use></svg></span>
-                        <h3 style="color: #2dd4ff; margin: 0; font-size: 18px;">AI</h3>
-                    </div>
-                    <p style="color: #b7c1d1;">Grok chat, vision, and image generation.</p>
-                </a>
-                <a href="#member" style="text-decoration: none;" class="category-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><svg class="icon-badge icon-badge--sm" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-member"></use></svg></span>
-                        <h3 style="color: #ff3b5c; margin: 0; font-size: 18px;">Member</h3>
-                    </div>
-                    <p style="color: #b7c1d1;">Add/remove roles and rename members.</p>
-                </a>
-                <a href="#role" style="text-decoration: none;" class="category-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><svg class="icon-badge icon-badge--sm" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-role"></use></svg></span>
-                        <h3 style="color: #2dd4ff; margin: 0; font-size: 18px;">Role</h3>
-                    </div>
-                    <p style="color: #b7c1d1;">Bulk role actions and prefixes.</p>
-                </a>
-                <a href="#creative" style="text-decoration: none;" class="category-card">
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;" class="card-hover">
-                        <span class="icon-sheen"><svg class="icon-badge icon-badge--sm" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-creativity"></use></svg></span>
-                        <h3 style="color: #ff3b5c; margin: 0; font-size: 18px;">Creative</h3>
-                    </div>
-                    <p style="color: #b7c1d1;">Embeds, TTS, image effects, emoji stealing.</p>
-                </a>
+    <footer class="site-footer">
+        <div class="shell">
+            <div class="footer-invite">
+                <div>
+                    <h2>Commands only matter in-server.</h2>
+                    <p>Invite Cypher and put the library to work.</p>
+                </div>
+                <a class="btn btn--ember" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite to Discord</a>
             </div>
-        </div>
-    </section>
-
-    <section class="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Use These Commands?</h2>
-                <p>Add Cypher to your server and start managing it like a professional</p>
-                <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="btn btn-large btn-primary group">
-                                        <span>Invite Cypher Now</span>
-                                        <span class="btn-icon" style="font-size:1.2em;display:inline-flex;align-items:center;vertical-align:middle;color:#08111a;">
-                                            <span class="btn-icon-shift group-hover:translate-y-6">
-                                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                                                    <path d="M6 4L12 9L6 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
-                                            </span>
-                                        </span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <button class="back-to-top" id="backToTop"></button>
-
-        <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="logo">
-                        <img src="../images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
-                        <span class="logo-text">Cypher</span>
-                    </div>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a class="brand" href="/">
+                        <img class="brand__mark" src="../images/cypher rebrand logo (No BG).png" alt="">
+                        <span class="brand__meta">
+                            <span class="brand__name">Cypher</span>
+                            <span class="brand__path">since 2023</span>
+                        </span>
+                    </a>
                     <p>Empowering Discord communities since 2023.</p>
                 </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Resources</h4>
-                    <ul>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="/commands">Commands</a></li>
-                        <li><a href="/features">Features</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h3>Product</h3>
+                    <a href="/features">Features</a>
+                    <a href="/commands">Commands</a>
+                    <a href="/status">Status</a>
                 </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Community</h4>
-                    <ul>
-                        <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
-                        <li><a href="https://top.gg/bot/1121314550969532476/vote">Vote For Us</a></li>
-                        <li><a href="/status">Status Page</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h3>Community</h3>
+                    <a href="https://discord.gg/Zygr52jpme">Support server</a>
+                    <a href="https://top.gg/bot/1121314550969532476/vote">Vote</a>
+                    <a href="/about">About</a>
                 </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Legal</h4>
-                    <ul>
-                        <li><a href="/tos">Terms of Service</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <a href="/tos">Terms</a>
+                    <a href="/privacy">Privacy</a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Cypher. Built for communities. Designed for excellence.</p>
+            <div class="footer-base">
+                <span>© 2026 Cypher</span>
+                <span>Built for communities</span>
             </div>
         </div>
     </footer>
+
+    <button class="cy-rise" id="cyRise" type="button" aria-label="Back to top"></button>
 
     <script type="importmap">
     {
@@ -698,6 +213,6 @@
       }
     }
     </script>
-    <script type="module" src="../assets/js/main.js"></script>
+    <script type="module" src="../assets/js/main.js?v=20260801v33"></script>
 </body>
 </html>

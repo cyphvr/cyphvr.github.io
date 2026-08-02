@@ -1,93 +1,350 @@
-export function initAnimations() {
-    const glitchElement = document.querySelector('.glitch');
-    if (glitchElement) {
-        let glitchTimeout;
-        const animateGlitch = () => {
-            if (Math.random() > 0.95) {
-                glitchElement.style.textShadow = '2px 2px var(--primary-color), -2px -2px var(--secondary-color)';
-                glitchTimeout = setTimeout(() => {
-                    glitchElement.style.textShadow = 'none';
-                    glitchTimeout = setTimeout(animateGlitch, 100);
-                }, 50);
-            } else {
-                glitchTimeout = setTimeout(animateGlitch, 100);
-            }
-        };
-        animateGlitch();
-    }
+/**
+ * Cypher motion engine v2
+ * - Hierarchical reveals (groups + units) → less stacked fade-up spam
+ * - One scroll-progress driver
+ * - Shared pointer-glow + magnetic CTA
+ * - Debounced command reflow
+ */
 
-    const titleTyping = document.querySelector('.hero-title-typing');
-    if (titleTyping) {
-        const text = titleTyping.dataset.text || titleTyping.textContent;
-        titleTyping.textContent = '';
-        let i = 0;
-        let textNode = document.createTextNode('');
-        let cursorSpan = document.createElement('span');
-        cursorSpan.className = 'typing-cursor';
-        cursorSpan.textContent = '_';
-        cursorSpan.setAttribute('aria-hidden', 'true');
-        titleTyping.appendChild(textNode);
-        titleTyping.appendChild(cursorSpan);
+const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-        const typeWriter = () => {
-            if (i < text.length) {
-                textNode.textContent = text.substring(0, i + 1);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
-        };
+/** Major single blocks — one entrance each */
+const UNITS = [
+    ['.page-intro', null],
+    ['.about-mast', null],
+    ['.about-split > *:first-child', 'left'],
+    ['.about-split > *:last-child', 'right'],
+    ['.band__head', null],
+    ['.feature-row', null],
+    ['.feature-chapter', null],
+    ['.marquee', null],
+    ['.cmd-app', 'scale'],
+    ['.status-orb', 'scale'],
+    ['.history-panel', null],
+    ['.diag-intro', null],
+    ['.diag-panel', null],
+    ['.legal-doc', null],
+    ['.legal-toc', 'left'],
+    ['.footer-invite', null],
+    ['.lost > div', null],
+    ['.features-nav', 'left'],
+];
 
-        setTimeout(typeWriter, 1000);
-    }
+/**
+ * Groups: parent becomes the observer target; children cascade once.
+ * Avoids marking both parent AND every child as separate IO targets.
+ */
+const GROUPS = [
+    { root: '.stat-wall', child: ':scope > article', util: 'lift' },
+    { root: '.bullet-grid', child: ':scope > li', util: 'lift' },
+    { root: '.values-scroll', child: ':scope > .value-card', util: 'lift glow-border' },
+    { root: '.timeline', child: ':scope > article', util: 'nudge' },
+    { root: '.status-side', child: ':scope > .status-tile', util: 'lift glow-border' },
+    { root: '.footer-grid', child: ':scope > *', util: 'nudge' },
+    { root: '.matrix tbody', child: ':scope > tr', util: null },
+    { root: '.checklist', child: ':scope > li', util: 'nudge' },
+];
 
-    const binaryTargets = document.querySelectorAll('.binary-roll');
-    binaryTargets.forEach((el) => {
-        const original = el.textContent.trim();
-        const chars = original.split('');
-        const spans = [];
+function skip(el) {
+    return Boolean(
+        el.closest('.hero-split') ||
+        el.closest('.navbar') ||
+        el.closest('.page-transition-overlay')
+    );
+}
 
-        el.textContent = '';
+function markMotionTree() {
+    const seen = new Set();
 
-        chars.forEach((ch) => {
-            const span = document.createElement('span');
-            span.className = 'binary-char';
+    // Groups first
+    GROUPS.forEach(({ root, child, util, directional }) => {
+        document.querySelectorAll(root).forEach((parent) => {
+            if (skip(parent) || seen.has(parent)) return;
+            seen.add(parent);
+            parent.classList.add('reveal-group');
 
-            if (ch === ' ') {
-                span.classList.add('is-space');
-                span.textContent = '\u00A0';
-            } else {
-                span.dataset.final = ch;
-                span.textContent = Math.random() > 0.5 ? '0' : '1';
-            }
-
-            spans.push(span);
-            el.appendChild(span);
-        });
-
-        const roll = () => {
-            spans.forEach((span, idx) => {
-                if (span.classList.contains('is-space')) return;
-
-                span.classList.remove('locked');
-                let cycles = 4 + Math.floor(Math.random() * 3);
-
-                const shuffle = () => {
-                    if (cycles > 0) {
-                        span.textContent = Math.random() > 0.5 ? '0' : '1';
-                        cycles--;
-                        setTimeout(shuffle, 48 + Math.random() * 32);
-                    } else {
-                        span.textContent = span.dataset.final || '';
-                        span.classList.add('locked');
-                    }
-                };
-
-                setTimeout(shuffle, idx * 50);
+            const kids = parent.querySelectorAll(child);
+            kids.forEach((kid, i) => {
+                kid.classList.add('reveal-child');
+                kid.style.setProperty('--reveal-delay', `${Math.min(i, 10) * 0.065}s`);
+                if (util) util.split(/\s+/).forEach((c) => kid.classList.add(c));
+                seen.add(kid);
             });
-        };
-
-        roll();
-        el.addEventListener('mouseenter', roll);
-        setInterval(roll, 9000);
+        });
     });
+
+    // Units
+    UNITS.forEach(([selector, variant]) => {
+        document.querySelectorAll(selector).forEach((el, i) => {
+            if (skip(el) || seen.has(el)) return;
+            // don't double-wrap if already a group child
+            if (el.classList.contains('reveal-child') || el.classList.contains('reveal-group')) return;
+            seen.add(el);
+            el.classList.add('reveal-unit');
+            if (variant === 'left') el.classList.add('reveal-unit--left');
+            if (variant === 'right') el.classList.add('reveal-unit--right');
+            if (variant === 'scale') el.classList.add('reveal-unit--scale');
+            // gentle cascade for repeated units (feature rows / chapters)
+            if (el.matches('.feature-row, .feature-chapter')) {
+                el.style.setProperty('--reveal-delay', `${Math.min(i, 5) * 0.07}s`);
+            }
+            // interactive cards get shared util classes once
+            if (el.matches('.cmd-app, .status-orb, .history-panel, .legal-doc, .diag-panel')) {
+                el.classList.add('glow-border', 'pointer-glow');
+            }
+            if (el.matches('.value-card')) {
+                el.classList.add('lift', 'glow-border', 'pointer-glow');
+            }
+        });
+    });
+
+    // History bars: index via CSS var (no 30 keyframe delay rules)
+    document.querySelectorAll('.history-bar .history-item').forEach((item, i) => {
+        item.style.setProperty('--hi', String(i));
+    });
+
+    // Shared interactive surfaces
+    document.querySelectorAll('.value-card, .status-tile, .bullet-grid li, .stat-wall article').forEach((el) => {
+        if (!el.classList.contains('lift') && el.matches('.status-tile, .stat-wall article, .bullet-grid li')) {
+            el.classList.add('lift');
+        }
+        if (el.matches('.status-tile, .value-card')) {
+            el.classList.add('glow-border', 'pointer-glow');
+        }
+    });
+}
+
+function initReveals() {
+    const targets = [
+        ...document.querySelectorAll('.reveal-unit'),
+        ...document.querySelectorAll('.reveal-group'),
+    ];
+
+    if (!targets.length) return;
+
+    if (reduced()) {
+        targets.forEach((el) => el.classList.add('is-visible'));
+        return;
+    }
+
+    const io = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+            });
+        },
+        { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.14 }
+    );
+
+    targets.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        const nearTop = rect.top < window.innerHeight * 0.6 && rect.bottom > 40;
+        if (nearTop) {
+            requestAnimationFrame(() => el.classList.add('is-visible'));
+        } else {
+            io.observe(el);
+        }
+    });
+}
+
+function initScrollProgress() {
+    // Intentionally minimal — progress was fighting the pill trail visuals.
+}
+
+function initMarquee() {
+    document.querySelectorAll('.marquee').forEach((el) => {
+        const track = el.querySelector('.marquee__track');
+        if (!track) return;
+        el.addEventListener('mouseenter', () => {
+            track.style.animationPlayState = 'paused';
+        });
+        el.addEventListener('mouseleave', () => {
+            track.style.animationPlayState = 'running';
+        });
+    });
+}
+
+function animateCounter(el, endValue, duration = 1100) {
+    if (reduced()) {
+        el.textContent = endValue;
+        return;
+    }
+
+    const text = String(endValue);
+    const numeric = parseFloat(text.replace(/[^\d.]/g, ''));
+    if (Number.isNaN(numeric)) {
+        el.textContent = endValue;
+        el.classList.add('metric-pop');
+        return;
+    }
+
+    const suffix = text.replace(/[\d.,\s]/g, '');
+    const prefix = text.match(/^[^\d]*/)?.[0] || '';
+    const isInt = Number.isInteger(numeric) || !text.includes('.');
+    const start = performance.now();
+
+    const tick = (now) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - (1 - t) ** 3;
+        const current = numeric * eased;
+        el.textContent = `${prefix}${isInt ? Math.round(current) : current.toFixed(1)}${suffix}`;
+        if (t < 1) requestAnimationFrame(tick);
+        else {
+            el.textContent = endValue;
+            el.classList.add('metric-pop');
+        }
+    };
+
+    requestAnimationFrame(tick);
+}
+
+function initCounters() {
+    if (reduced()) return;
+
+    const nodes = document.querySelectorAll('.hero-metrics strong, .stat-wall strong, #serverCount');
+    const io = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target;
+                if (el.dataset.counted === '1') return;
+
+                if (el.id === 'serverCount') {
+                    const val = el.textContent.trim();
+                    if (val && val !== '—' && val !== 'Loading...') {
+                        el.dataset.counted = '1';
+                        animateCounter(el, val, 1000);
+                        io.unobserve(el);
+                    }
+                    return;
+                }
+
+                const value = el.textContent.trim();
+                if (!value || value === '—') return;
+                el.dataset.counted = '1';
+                animateCounter(el, value);
+                io.unobserve(el);
+            });
+        },
+        { threshold: 0.45 }
+    );
+
+    nodes.forEach((el) => io.observe(el));
+
+    const serverCount = document.getElementById('serverCount');
+    if (serverCount) {
+        const mo = new MutationObserver(() => {
+            const val = serverCount.textContent.trim();
+            if (val && val !== '—' && val !== 'Loading...' && serverCount.dataset.counted !== '1') {
+                serverCount.dataset.counted = '1';
+                animateCounter(serverCount, val, 1000);
+                mo.disconnect();
+            }
+        });
+        mo.observe(serverCount, { childList: true, characterData: true, subtree: true });
+    }
+}
+
+function initPointerGlow() {
+    if (reduced() || !finePointer()) return;
+
+    document.querySelectorAll('.pointer-glow').forEach((el) => {
+        el.addEventListener('pointermove', (e) => {
+            const r = el.getBoundingClientRect();
+            el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+            el.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+        });
+    });
+}
+
+function initMagneticButtons() {
+    if (reduced() || !finePointer()) return;
+
+    document.querySelectorAll('.btn--ember').forEach((btn) => {
+        btn.addEventListener('pointermove', (e) => {
+            const r = btn.getBoundingClientRect();
+            const x = e.clientX - r.left - r.width / 2;
+            const y = e.clientY - r.top - r.height / 2;
+            btn.style.transform = `translate(${x * 0.1}px, ${y * 0.14}px)`;
+        });
+        btn.addEventListener('pointerleave', () => {
+            btn.style.transform = '';
+        });
+    });
+}
+
+function initParallaxDeck() {
+    if (reduced() || !finePointer()) return;
+    const deck = document.querySelector('.hero-split__visual .deck');
+    if (!deck) return;
+
+    const visual = deck.closest('.hero-split__visual') || deck.parentElement;
+    let floating = true;
+
+    // Pause CSS float while user is steering the deck
+    visual.addEventListener('pointerenter', () => {
+        floating = false;
+        deck.style.animationPlayState = 'paused';
+    });
+    visual.addEventListener('pointerleave', () => {
+        floating = true;
+        deck.style.animationPlayState = 'running';
+        deck.style.transform = '';
+        deck.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)';
+    });
+    visual.addEventListener('pointermove', (e) => {
+        if (floating) return;
+        const r = visual.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        deck.style.transition = 'transform 0.12s ease-out';
+        deck.style.transform = `rotateY(${px * 7}deg) rotateX(${-py * 5}deg) translateY(-4px)`;
+    });
+}
+
+function initAnchorPulse() {
+    document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener('click', () => {
+            const id = a.getAttribute('href')?.slice(1);
+            if (!id || reduced()) return;
+            const target = document.getElementById(id);
+            if (!target) return;
+            window.setTimeout(() => {
+                target.classList.add('metric-pop');
+                window.setTimeout(() => target.classList.remove('metric-pop'), 500);
+            }, 380);
+        });
+    });
+}
+
+export function initAnimations() {
+    markMotionTree();
+    initReveals();
+    initScrollProgress();
+    initMarquee();
+    initCounters();
+    initPointerGlow();
+    initMagneticButtons();
+    initParallaxDeck();
+    initAnchorPulse();
+}
+
+/** Soft reflow after command filter/search — first 12 visible only */
+let cmdAnimTimer = 0;
+export function animateCommandRows() {
+    if (reduced()) return;
+    window.clearTimeout(cmdAnimTimer);
+    cmdAnimTimer = window.setTimeout(() => {
+        const rows = document.querySelectorAll('.cmd-row:not(.is-hidden)');
+        rows.forEach((row, i) => {
+            if (i > 11) return;
+            row.classList.remove('cmd-enter');
+            void row.offsetWidth;
+            row.style.animationDelay = `${i * 0.025}s`;
+            row.classList.add('cmd-enter');
+        });
+    }, 40);
 }

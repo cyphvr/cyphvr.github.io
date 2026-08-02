@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher</title>
+    <meta name="description" content="Cypher is a free all-in-one Discord bot for moderation, utilities, search, AI, and community tools.">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-
-
-    <nav class="navbar">
+        <nav class="navbar">
         <div class="container">
             <div class="navbar-logo">
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
@@ -29,161 +28,353 @@
                 <a href="/features" class="navbar-link">Features</a>
                 <a href="/commands" class="navbar-link">Commands</a>
                 <a href="/about" class="navbar-link">About</a>
+                <a href="/status" class="navbar-link">Status</a>
                 <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="navbar-invite">Invite Now</a>
             </div>
         </div>
     </nav>
 
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    <span class="hero-title-brand glitch" data-text="Cypher">Cypher</span>
-                    <span class="hero-title-separator">-</span>
-                    <span class="hero-title-typing" data-text="Decode the Future of Discord">Decode the Future of Discord</span>
-                </h1>
-                <p class="hero-description">
-                    Enhanced moderation, robust utilities, and enjoyment <span class="hero-emphasis">all-in-one</span> app. Discover effortless server management with powerful tools, automated processes, and premium features tailored to your community.
+<main class="site-main">
+        <section class="shell hero-split">
+            <div class="hero-split__copy">
+                <p class="eyebrow">Discord bot · free forever</p>
+                <h1>Decode the chaos.<span>Run the room.</span></h1>
+                <p class="hero-split__lead">
+                    Cypher folds moderation, utilities, search, AI, and creative tools into one calm operator console for your server.
                 </p>
-                <div class="server-stats">
-                    <div class="stat-item">
-                        <span class="stat-value" id="serverCount">Loading...</span>
-                        <span class="stat-label">Communities</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value stat-value-sm">24/7</span>
-                        <span class="stat-label">Uptime</span>
-                    </div>
-                </div>
-                <div class="hero-buttons">
-                          <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="btn btn-primary group hero-invite-btn" style="padding:0.74rem 1.6rem;font-size:1.07rem;">
-                                                <span class="star-icon" aria-hidden="true" style="display:inline-flex;align-items:center;margin-right:-2px;">
-                                                                     <svg width="20" height="20" viewBox="0 0 24 24" style="display:block;" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#icon-star"></use></svg>
-                                                </span>
-                                                <span>Invite to Discord</span>
-                                                <span class="btn-icon hero-invite-arrow" style="font-size:1.2em;display:inline-flex;align-items:center;vertical-align:middle;">
-                                                    <span class="btn-icon-shift group-hover:translate-y-6">
-                                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                                                            <path d="M6 4L12 9L6 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                    </span>
-                                                </span>
+                <div class="hero-split__actions">
+                    <a class="btn btn--ember" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">
+                        Add to Discord
+                        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
-                    <a href="/features" class="btn btn-secondary group about-cta-btn about-cta-btn--secondary" style="padding:0.74rem 1.6rem;font-size:1.07rem;display:inline-flex;align-items:center;justify-content:center;gap:0.7rem;white-space:nowrap;text-decoration:none;">
-                        <span>Explore Features</span>
-                    </a>
+                    <a class="btn btn--ghost" href="/commands">Browse commands</a>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title">
-                <span class="title-line"></span>
-                <span class="title-text glossy-text">CORE FEATURES</span>
-                <span class="title-line"></span>
-            </h2>
-            <div class="features-grid">
-                <div class="feature-card group group-hover:feature-card" style="--feature-accent-rgb: 255 82 106;">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-moderation"></use></svg>
-                    <h3>Advanced Moderation</h3>
-                    <p>Keep your server safe with auto-moderation, custom filters, and comprehensive logging systems.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card" style="--feature-accent-rgb: 45 212 255;">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-search"></use></svg>
-                    <h3>Search &amp; Information</h3>
-                    <p>Powerful search capabilities to find information across the web instantly within Discord.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card" style="--feature-accent-rgb: 156 114 255;">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-customizable"></use></svg>
-                    <h3>Fully Customizable</h3>
-                    <p>Tailor every aspect to fit your server with custom commands, welcome messages, and role management.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card" style="--feature-accent-rgb: 250 204 21;">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-analytics"></use></svg>
-                    <h3>Analytics &amp; Insights</h3>
-                    <p>Track server statistics, member activity, and growth metrics with beautiful visualizations.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card" style="--feature-accent-rgb: 59 130 246;">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-management"></use></svg>
-                    <h3>Management</h3>
-                    <p>Channel locks, unlocks, slowmode, voice controls, and server-wide safeguards to keep every channel organized and under control.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card" style="--feature-accent-rgb: 20 184 166;">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-utility"></use></svg>
-                    <h3>Utility</h3>
-                    <p>A comprehensive set of utility commands including avatar viewing, user info, server stats, message sniping, and more.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card" style="--feature-accent-rgb: 236 72 153;">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-creativity"></use></svg>
-                    <h3>Creativity</h3>
-                    <p>Embeds, text-to-speech, image effects, emoji tools, and playful extras that make community engagement feel fresh.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="invite" class="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Elevate Your Discord Experience?</h2>
-                <p>Transform your server with Cypher's powerful features</p>
-                <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="btn btn-large btn-primary group">
-                                        <span>Invite Cypher Now</span>
-                                        <span class="btn-icon" style="font-size:1.2em;display:inline-flex;align-items:center;vertical-align:middle;color:#08111a;">
-                                            <span class="btn-icon-shift group-hover:translate-y-6">
-                                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                                                    <path d="M6 4L12 9L6 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
-                                            </span>
-                                        </span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <button class="back-to-top" id="backToTop" aria-label="Back to top" title="Back to top"></button>
-
-        <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="logo">
-                        <img src="images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
-                        <span class="logo-text">Cypher</span>
+                <div class="hero-metrics">
+                    <div>
+                        <strong id="serverCount">-</strong>
+                        <span>Communities</span>
                     </div>
-                    <p>Empowering Discord communities since 2023.</p>
-                </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Resources</h4>
-                    <ul>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="/commands">Commands</a></li>
-                        <li><a href="/features">Features</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Community</h4>
-                    <ul>
-                        <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
-                        <li><a href="https://top.gg/bot/1121314550969532476/vote">Vote For Us</a></li>
-                        <li><a href="/status">Status Page</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Legal</h4>
-                    <ul>
-                        <li><a href="/tos">Terms of Service</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                    </ul>
+                    <div>
+                        <strong>50+</strong>
+                        <span>Commands</span>
+                    </div>
+                    <div>
+                        <strong>24/7</strong>
+                        <span>Online</span>
+                    </div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Cypher. Built for communities. Designed for excellence.</p>
+
+            <div class="hero-split__visual">
+                <div class="deck deck--live" id="opsDeck" aria-hidden="true">
+                    <div class="deck__bar">
+                        <span class="deck__dot"></span>
+                        <span class="deck__dot"></span>
+                        <span class="deck__dot"></span>
+                        <span class="deck__title"># operations · cypher online</span>
+                    </div>
+                    <div class="deck__body" id="deckBody">
+                        <div class="msg" data-deck-step="bot-ready" hidden>
+                            <img class="msg__avatar" src="images/cypher rebrand logo round (No BG).png" alt="">
+                            <div>
+                                <div class="msg__head">
+                                    <span class="msg__name msg__name--bot">Cypher</span>
+                                    <span class="msg__tag">App</span>
+                                    <span class="msg__time">Today at 4:02 PM</span>
+                                </div>
+                                <div class="msg__text">Moderation pipeline ready. Anti-raid armed.</div>
+                            </div>
+                        </div>
+                        <div class="msg" data-deck-step="admin-cmd" hidden>
+                            <div class="msg__avatar msg__avatar--user" aria-hidden="true"></div>
+                            <div>
+                                <div class="msg__head">
+                                    <span class="msg__name">admin</span>
+                                    <span class="msg__time">Today at 4:03 PM</span>
+                                </div>
+                                <span class="msg__cmd"><span class="msg__cmd-typed" id="deckCmdTyped"></span><span class="msg__caret" id="deckCmdCaret" hidden></span></span>
+                            </div>
+                        </div>
+                        <div class="msg" data-deck-step="bot-reply" hidden>
+                            <img class="msg__avatar" src="images/cypher rebrand logo round (No BG).png" alt="">
+                            <div>
+                                <div class="msg__head">
+                                    <span class="msg__name msg__name--bot">Cypher</span>
+                                    <span class="msg__tag">App</span>
+                                    <span class="msg__time">Today at 4:03 PM</span>
+                                </div>
+                                <div class="msg__embed">
+                                    <strong>Channel locked</strong>
+                                    <p>#general is now read-only for @everyone. Mods retain send access.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="deck__typing" id="deckTyping" hidden>
+                        <div class="typing">
+                            <div class="typing__avatars">
+                                <img class="typing__avatar" id="deckTypingAvatarBot" src="images/cypher rebrand logo round (No BG).png" alt="" hidden>
+                                <div class="typing__avatar--user" id="deckTypingAvatarUser" hidden></div>
+                            </div>
+                            <div class="typing__cluster">
+                                <div class="typing__bubble" aria-hidden="true">
+                                    <span class="typing__dot"></span>
+                                    <span class="typing__dot"></span>
+                                    <span class="typing__dot"></span>
+                                </div>
+                                <p class="typing__label"><strong id="deckTypingName">Cypher</strong> is typing<span class="typing__ellipsis" aria-hidden="true"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="marquee" aria-hidden="true">
+            <div class="marquee__track">
+                <span><b>/kick</b> moderation</span>
+                <span><b>/ban</b> moderation</span>
+                <span><b>/channel lock</b> control</span>
+                <span><b>/snipe</b> utility</span>
+                <span><b>/google</b> search</span>
+                <span><b>/grok</b> ai</span>
+                <span><b>/embed create</b> creative</span>
+                <span><b>/anti-raid</b> safety</span>
+                <span><b>/weather</b> lookup</span>
+                <span><b>/reminder</b> utility</span>
+                <span><b>/kick</b> moderation</span>
+                <span><b>/ban</b> moderation</span>
+                <span><b>/channel lock</b> control</span>
+                <span><b>/snipe</b> utility</span>
+                <span><b>/google</b> search</span>
+                <span><b>/grok</b> ai</span>
+                <span><b>/embed create</b> creative</span>
+                <span><b>/anti-raid</b> safety</span>
+                <span><b>/weather</b> lookup</span>
+                <span><b>/reminder</b> utility</span>
+            </div>
+        </div>
+
+        <section class="band">
+            <div class="shell">
+                <div class="band__head">
+                    <div>
+                        <p class="kicker">01 - Surface area</p>
+                        <h2>One bot. Whole ops stack.</h2>
+                    </div>
+                    <p>Not a pile of mini-bots. A single surface for safety, speed, and play.</p>
+                </div>
+
+                <article class="feature-row">
+                    <div class="feature-row__idx">01</div>
+                    <div>
+                        <h3>Moderation that stays calm under heat</h3>
+                        <p>Kick, ban, mute, clean, anti-raid, and toxicity analysis; structured for staff who need to move fast without guessing.</p>
+                    </div>
+                    <div class="feature-row__meta">
+                        <span class="tag">/kick</span>
+                        <span class="tag">/ban</span>
+                        <span class="tag">/anti-raid</span>
+                        <span class="tag">/analyze</span>
+                    </div>
+                </article>
+                <article class="feature-row">
+                    <div class="feature-row__idx">02</div>
+                    <div>
+                        <h3>Channel &amp; voice control</h3>
+                        <p>Lock rooms, slowmode spikes, server-wide freezes, and voice moves when the chat starts boiling.</p>
+                    </div>
+                    <div class="feature-row__meta">
+                        <span class="tag">/channel lock</span>
+                        <span class="tag">/channel slowmode</span>
+                        <span class="tag">/channel vc-move</span>
+                    </div>
+                </article>
+                <article class="feature-row">
+                    <div class="feature-row__idx">03</div>
+                    <div>
+                        <h3>Utility &amp; intel on demand</h3>
+                        <p>Snipes, reminders, AFK, avatars, server digests, search, weather; answers without tab-switching.</p>
+                    </div>
+                    <div class="feature-row__meta">
+                        <span class="tag">/snipe</span>
+                        <span class="tag">/info</span>
+                        <span class="tag">/google</span>
+                        <span class="tag">/weather</span>
+                    </div>
+                </article>
+                <article class="feature-row">
+                    <div class="feature-row__idx">04</div>
+                    <div>
+                        <h3>AI + creative tools</h3>
+                        <p>Grok chat, vision, image gen, embeds, TTS, and image effects for servers that want more than moderation.</p>
+                    </div>
+                    <div class="feature-row__meta">
+                        <span class="tag">/grok</span>
+                        <span class="tag">/grokimage</span>
+                        <span class="tag">/embed create</span>
+                        <span class="tag">/tts</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="band band--tight">
+            <div class="shell">
+                <div class="band__head">
+                    <div>
+                        <p class="kicker">02 - Capability map</p>
+                        <h2>What lands when you invite.</h2>
+                    </div>
+                    <p>A plain map of the stack, not a marketing carousel.</p>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="matrix">
+                        <thead>
+                            <tr>
+                                <th>Domain</th>
+                                <th>What you get</th>
+                                <th>Start with</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Safety</td>
+                                <td>Member actions, cleans, anti-raid, toxicity checks</td>
+                                <td>/anti-raid</td>
+                            </tr>
+                            <tr>
+                                <td>Control</td>
+                                <td>Channel locks, slowmode, server freeze, voice tools</td>
+                                <td>/channel lock</td>
+                            </tr>
+                            <tr>
+                                <td>Intel</td>
+                                <td>User/server info, roles, banlist, snipes</td>
+                                <td>/server info</td>
+                            </tr>
+                            <tr>
+                                <td>Lookup</td>
+                                <td>Dictionary, Urban, weather, Google, YouTube</td>
+                                <td>/google</td>
+                            </tr>
+                            <tr>
+                                <td>AI</td>
+                                <td>Chat, vision, image generation via Grok</td>
+                                <td>/grok</td>
+                            </tr>
+                            <tr>
+                                <td>Creative</td>
+                                <td>Embeds, TTS, image effects, emoji steal</td>
+                                <td>/embed create</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section class="band band--tight">
+            <div class="shell">
+                <div class="stat-wall">
+                    <article>
+                        <strong>10K+</strong>
+                        <span>Active servers</span>
+                    </article>
+                    <article>
+                        <strong>1M+</strong>
+                        <span>Commands / day</span>
+                    </article>
+                    <article>
+                        <strong>99.99%</strong>
+                        <span>Uptime target</span>
+                    </article>
+                    <article>
+                        <strong>2023</strong>
+                        <span>Shipping since</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="band">
+            <div class="shell">
+                <div class="band__head">
+                    <div>
+                        <p class="kicker">03 - Path</p>
+                        <h2>Three moves. Done.</h2>
+                    </div>
+                    <p>No dashboard maze. Invite, configure, operate.</p>
+                </div>
+                <div class="stat-wall" style="grid-template-columns: repeat(3, 1fr);">
+                    <article>
+                        <strong style="font-size:1.6rem;">Invite</strong>
+                        <span>One OAuth flow · pick permissions</span>
+                    </article>
+                    <article>
+                        <strong style="font-size:1.6rem;">Tune</strong>
+                        <span>Prefixes · staff roles · channels</span>
+                    </article>
+                    <article>
+                        <strong style="font-size:1.6rem;">Operate</strong>
+                        <span>Slash commands for the whole stack</span>
+                    </article>
+                </div>
+                <div style="margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+                    <a class="btn btn--ember" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite Cypher</a>
+                    <a class="btn btn--ghost" href="/features">Deep dive features</a>
+                    <a class="btn btn--line" href="/about">Read the story</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="shell">
+            <div class="footer-invite">
+                <div>
+                    <h2>Put Cypher on duty tonight.</h2>
+                    <p>Free, always-on tooling for communities that take moderation and velocity seriously.</p>
+                </div>
+                <a class="btn btn--ember" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite to Discord</a>
+            </div>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a class="brand" href="/">
+                        <img class="brand__mark" src="images/cypher rebrand logo (No BG).png" alt="">
+                        <span class="brand__meta">
+                            <span class="brand__name">Cypher</span>
+                            <span class="brand__path">since 2023</span>
+                        </span>
+                    </a>
+                    <p>Empowering Discord communities with moderation, utility, and creative firepower.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Product</h3>
+                    <a href="/features">Features</a>
+                    <a href="/commands">Commands</a>
+                    <a href="/status">Status</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Community</h3>
+                    <a href="https://discord.gg/Zygr52jpme">Support server</a>
+                    <a href="https://top.gg/bot/1121314550969532476/vote">Vote on top.gg</a>
+                    <a href="/about">About</a>
+                </div>
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <a href="/tos">Terms</a>
+                    <a href="/privacy">Privacy</a>
+                </div>
+            </div>
+            <div class="footer-base">
+                <span>© 2026 Cypher</span>
+                <span>Built for communities · designed for operators</span>
             </div>
         </div>
     </footer>
+
+    <button class="cy-rise" id="cyRise" type="button" aria-label="Back to top"></button>
 
     <script type="importmap">
     {
@@ -193,30 +384,23 @@
       }
     }
     </script>
-    <script type="module" src="assets/js/main.js?v=20260726mobile"></script>
+    <script type="module" src="assets/js/main.js?v=20260801v33"></script>
     <script>
         async function fetchServerCount() {
+            const el = document.getElementById('serverCount');
+            if (!el) return;
             try {
-                const API_URL = 'https://cypher-bot-gamma.vercel.app/api/server-count';
-                
-                const response = await fetch(API_URL, {
-                    method: 'GET'
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    const serverCount = data.count;
-                    document.getElementById('serverCount').textContent = serverCount;
-                } else {
-                    console.error('Failed to fetch server count:', response.status);
-                    document.getElementById('serverCount').textContent = '1000+';
+                const res = await fetch('https://cypher-bot-gamma.vercel.app/api/server-count');
+                if (res.ok) {
+                    const data = await res.json();
+                    el.textContent = data.count;
+                    return;
                 }
-            } catch (error) {
-                console.error('Error fetching server count:', error);
-                document.getElementById('serverCount').textContent = '1000+';
+            } catch (e) {
+                console.error(e);
             }
+            el.textContent = '1000+';
         }
-        
         document.addEventListener('DOMContentLoaded', fetchServerCount);
     </script>
 </body>

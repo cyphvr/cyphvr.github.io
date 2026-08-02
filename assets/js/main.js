@@ -2,7 +2,19 @@ import { initNavigation } from './navigation.js';
 import { initAnimations } from './animations.js';
 import { initCards } from './cards.js';
 import { initButtons } from './buttons.js';
-import { initThreeBackground } from './three-bg-advanced.js?v=20260726mobile';
+import { initCommands } from './commands.js';
+import { initDeckDemo } from './deck-demo.js';
+import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260801v33';
+import { initThreeBackground } from './three-bg-advanced.js?v=20260801v33';
+
+// Smooth inertia scroll; Three.js reads progress each frame
+try {
+    initScrollFlight();
+} catch (error) {
+    console.error('Scroll flight failed to initialize:', error);
+}
+
+window.__cyScrollTo = scrollToY;
 
 try {
     initThreeBackground();
@@ -18,9 +30,7 @@ function initPageTransitions() {
 
     const ensureTransitionOverlay = () => {
         let overlay = document.querySelector('.page-transition-overlay');
-        if (overlay || prefersReducedMotion) {
-            return overlay;
-        }
+        if (overlay || prefersReducedMotion) return overlay;
 
         overlay = document.createElement('div');
         overlay.className = 'page-transition-overlay';
@@ -31,14 +41,12 @@ function initPageTransitions() {
                 <div class="page-transition-overlay__progress" aria-hidden="true"></div>
             </div>
         `;
-
         body.insertBefore(overlay, body.firstChild);
         overlay.setAttribute('aria-hidden', 'true');
         return overlay;
     };
 
     const transitionOverlay = ensureTransitionOverlay();
-
     if (!prefersReducedMotion) {
         body.classList.add('page-transition', 'page-ready');
     }
@@ -74,47 +82,34 @@ function initPageTransitions() {
 
         isNavigating = true;
 
-        if (prefersReducedMotion) {
-            return;
-        }
+        if (prefersReducedMotion) return;
 
         event.preventDefault();
         body.classList.add('page-leaving');
-        if (transitionOverlay) {
-            transitionOverlay.setAttribute('aria-hidden', 'false');
-        }
+        if (transitionOverlay) transitionOverlay.setAttribute('aria-hidden', 'false');
 
-        const navigate = () => {
+        window.setTimeout(() => {
             window.location.assign(destination.href);
-        };
-
-        window.setTimeout(navigate, 260);
+        }, 240);
     }, true);
 
     window.addEventListener('pageshow', () => {
         body.classList.remove('page-leaving');
-        if (transitionOverlay) {
-            transitionOverlay.setAttribute('aria-hidden', 'true');
-        }
+        if (transitionOverlay) transitionOverlay.setAttribute('aria-hidden', 'true');
         isNavigating = false;
     });
 }
 
-/** Soft image protect: block right-click save menu + native drag (sitewide). */
 function initImageProtect() {
     const isImageTarget = (target) =>
         target instanceof Element && Boolean(target.closest('img'));
 
     document.addEventListener('contextmenu', (event) => {
-        if (isImageTarget(event.target)) {
-            event.preventDefault();
-        }
+        if (isImageTarget(event.target)) event.preventDefault();
     });
 
     document.addEventListener('dragstart', (event) => {
-        if (isImageTarget(event.target)) {
-            event.preventDefault();
-        }
+        if (isImageTarget(event.target)) event.preventDefault();
     });
 }
 
@@ -124,5 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAnimations();
     initCards();
     initButtons();
+    initCommands();
+    initDeckDemo();
     initImageProtect();
 });

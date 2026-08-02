@@ -3,284 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cypher - Page Not Found</title>
+    <title>Cypher - Not Found</title>
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <style>
-        .not-found-page {
-            min-height: 100vh;
-            padding: 108px 0 72px;
-            position: relative;
-            z-index: 5;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-        }
-
-        .not-found-layout {
-            display: grid;
-            grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-            gap: 2rem;
-            align-items: center;
-            max-width: 1060px;
-            margin: 0 auto;
-        }
-
-        .not-found-copy,
-        .not-found-visual {
-            position: relative;
-            z-index: 1;
-        }
-
-        .not-found-copy {
-            text-align: center;
-            margin: 0 auto;
-        }
-
-        .not-found-actions,
-        .not-found-links {
-            justify-content: center;
-        }
-
-        .not-found-kicker {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.65rem;
-            padding: 0.5rem 0.9rem;
-            border-radius: 999px;
-            border: 1px solid rgba(139, 220, 255, 0.28);
-            background: transparent;
-            color: #d8f4ff;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            font-size: 0.76rem;
-            margin-bottom: 1.2rem;
-        }
-
-        .not-found-kicker::before {
-            content: '';
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #8bdcff, #dff6ff);
-            box-shadow: 0 0 14px rgba(139, 220, 255, 0.6);
-        }
-
-        .not-found-title {
-            margin: 0 0 0.8rem;
-            font-family: var(--font-display);
-            font-size: clamp(4rem, 10vw, 7.4rem);
-            line-height: 0.92;
-            letter-spacing: -0.05em;
-        }
-
-        .not-found-title .glitch {
-            font-size: inherit;
-            display: inline-block;
-        }
-
-        .not-found-copy h2 {
-            font-family: var(--font-display);
-            font-size: clamp(1.8rem, 3vw, 2.6rem);
-            margin-bottom: 1rem;
-        }
-
-        .not-found-copy p {
-            max-width: 620px;
-            color: var(--text-gray);
-            font-size: 1.08rem;
-            line-height: 1.8;
-            margin-bottom: 1.6rem;
-        }
-
-        /* All 404 actions share Explore Features secondary button treatment */
-        .not-found-actions,
-        .not-found-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.85rem;
-            align-items: center;
-        }
-
-        .not-found-actions {
-            margin-bottom: 1.3rem;
-        }
-
-        .not-found-page .btn.btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 3rem;
-            padding: 0.74rem 1.6rem;
-            font-size: 1.07rem;
-            line-height: 1.2;
-            white-space: nowrap;
-            text-decoration: none;
-            box-sizing: border-box;
-            vertical-align: middle;
-        }
-
-        .not-found-visual-card {
-            position: relative;
-            padding: 1.9rem 1.4rem 1.5rem;
-            border-radius: 28px;
-            border: 1px solid rgba(139, 220, 255, 0.22);
-            background: transparent;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-        }
-
-        .not-found-visual-card::before {
-            content: '';
-            position: absolute;
-            inset: 12px;
-            border-radius: 22px;
-            border: 1px solid rgba(214, 242, 255, 0.08);
-            pointer-events: none;
-        }
-
-        .not-found-logo-wrap {
-            width: 118px;
-            height: 118px;
-            /* Clear room for the outer ring (extends 14px outside this box) */
-            margin: 14px 0 0;
-            border-radius: 50%;
-            padding: 10px;
-            background: transparent;
-            border: 1px solid rgba(139, 220, 255, 0.28);
-            display: grid;
-            place-items: center;
-            position: relative;
-            flex-shrink: 0;
-            box-sizing: border-box;
-        }
-
-        .not-found-logo-wrap::before {
-            content: '';
-            position: absolute;
-            inset: -14px;
-            border-radius: inherit;
-            border: 1px solid rgba(214, 242, 255, 0.12);
-            animation: notFoundRing 8s linear infinite;
-            pointer-events: none;
-        }
-
-        .not-found-logo {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 50%;
-            position: relative;
-            z-index: 1;
-        }
-
-        /*
-          Entire Cypher network pill — not the text.
-          Equal air above and below the whole control:
-          14px (ring below logo) + 1.75rem = space after logo edge
-          matching 1.75rem + 0 under the pill before signals.
-        */
-        .not-found-status {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            width: fit-content;
-            min-height: 2rem;
-            margin: calc(14px + 1.75rem) 0 1.75rem;
-            padding: 0.5rem 0.95rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.16em;
-            line-height: 1;
-            text-transform: uppercase;
-            color: #d7efff;
-            border: 1px solid rgba(139, 220, 255, 0.22);
-            background: transparent;
-            box-sizing: border-box;
-        }
-
-        .not-found-signal {
-            display: grid;
-            gap: 0.75rem;
-            margin: 0;
-            width: 100%;
-            flex-shrink: 0;
-        }
-
-        .not-found-signal-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 0.85rem 1rem;
-            border-radius: 16px;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #e8f3ff;
-        }
-
-        .not-found-signal-item span:last-child {
-            color: #9fc9dd;
-        }
-
-        @keyframes notFoundRing {
-            0% { transform: rotate(0deg); opacity: 0.55; }
-            50% { transform: rotate(180deg); opacity: 0.95; }
-            100% { transform: rotate(360deg); opacity: 0.55; }
-        }
-
-        @media (max-width: 980px) {
-            .not-found-page {
-                padding-top: 98px;
-            }
-
-            .not-found-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .not-found-visual {
-                max-width: 680px;
-                margin: 0 auto;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .not-found-page {
-                padding: 92px 0 58px;
-            }
-
-            .not-found-actions,
-            .not-found-links {
-                width: 100%;
-            }
-
-            .not-found-actions .btn,
-            .not-found-links .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .not-found-visual-card {
-                padding: 1.1rem;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .not-found-logo-wrap::before {
-                animation: none;
-            }
-
-        }
-    </style>
     <script>
-        (function() {
+        (function () {
             var redirect = sessionStorage.redirect;
             delete sessionStorage.redirect;
             if (redirect && redirect != location.href) {
@@ -290,7 +17,7 @@
     </script>
 </head>
 <body>
-    <nav class="navbar">
+        <nav class="navbar">
         <div class="container">
             <div class="navbar-logo">
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
@@ -307,102 +34,40 @@
                 <a href="/features" class="navbar-link">Features</a>
                 <a href="/commands" class="navbar-link">Commands</a>
                 <a href="/about" class="navbar-link">About</a>
+                <a href="/status" class="navbar-link">Status</a>
                 <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="navbar-invite">Invite Now</a>
             </div>
         </div>
     </nav>
 
-    <section class="not-found-page">
-        <div class="container">
-            <div class="not-found-layout">
-                <div class="not-found-copy">
-                    <div class="not-found-kicker">Lost signal</div>
-                    <h1 class="not-found-title"><span class="glitch" data-text="404">404</span></h1>
-                    <h2>Page Not Found</h2>
-                    <p>
-                        The path you tried to open doesn't exist anymore, or never existed at all. Use the routes below to get back to the main network.
-                    </p>
-                    <div class="not-found-actions">
-                        <a href="/" class="btn btn-secondary about-cta-btn about-cta-btn--secondary">
-                            <span>Go to Home</span>
-                        </a>
-                        <a href="/features" class="btn btn-secondary about-cta-btn about-cta-btn--secondary">
-                            <span>Explore Features</span>
-                        </a>
-                    </div>
-                    <div class="not-found-links" aria-label="Quick links">
-                        <a href="/commands" class="btn btn-secondary about-cta-btn about-cta-btn--secondary">
-                            <span>Commands</span>
-                        </a>
-                        <a href="/about" class="btn btn-secondary about-cta-btn about-cta-btn--secondary">
-                            <span>About</span>
-                        </a>
-                        <a href="/status" class="btn btn-secondary about-cta-btn about-cta-btn--secondary">
-                            <span>Status</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="not-found-visual">
-                    <div class="not-found-visual-card">
-                        <div class="not-found-logo-wrap" aria-hidden="true">
-                            <img class="not-found-logo" src="/images/cypher rebrand logo round (No BG).png" alt="">
-                        </div>
-                        <div class="not-found-status" role="status">Cypher network</div>
-                        <div class="not-found-signal" aria-label="Recovery hints">
-                            <div class="not-found-signal-item"><span>Site status</span><span>Stable</span></div>
-                            <div class="not-found-signal-item"><span>Navigation</span><span>Available</span></div>
-                            <div class="not-found-signal-item"><span>Recovery path</span><span>Home / Features</span></div>
-                        </div>
-                    </div>
+<main class="site-main">
+        <div class="shell lost">
+            <div>
+                <p class="eyebrow">Lost signal</p>
+                <h1>404</h1>
+                <h2>This route isn’t on the map.</h2>
+                <p>The path you opened doesn’t exist - or it was decommissioned. Jump back into a known channel.</p>
+                <div class="lost__actions">
+                    <a class="btn btn--ember" href="/">Home</a>
+                    <a class="btn btn--ghost" href="/commands">Commands</a>
+                    <a class="btn btn--ghost" href="/features">Features</a>
+                    <a class="btn btn--line" href="/status">Status</a>
                 </div>
             </div>
         </div>
-    </section>
+    </main>
 
-    <button class="back-to-top" id="backToTop"></button>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="logo">
-                        <img src="/images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
-                        <span class="logo-text">Cypher</span>
-                    </div>
-                    <p>Empowering Discord communities since 2023.</p>
-                </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Resources</h4>
-                    <ul>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="/commands">Commands</a></li>
-                        <li><a href="/features">Features</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Community</h4>
-                    <ul>
-                        <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
-                        <li><a href="https://top.gg/bot/1121314550969532476/vote">Vote For Us</a></li>
-                        <li><a href="/status">Status Page</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Legal</h4>
-                    <ul>
-                        <li><a href="/tos">Terms of Service</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Cypher. Built for communities. Designed for excellence.</p>
+    <footer class="site-footer">
+        <div class="shell">
+            <div class="footer-base" style="border-top:0;padding-top:0;">
+                <span>© 2026 Cypher</span>
+                <span>Built for communities</span>
             </div>
         </div>
     </footer>
 
-    <script type="importmap">
+    <button class="cy-rise" id="cyRise" type="button" aria-label="Back to top"></button>
+<script type="importmap">
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
@@ -410,6 +75,6 @@
       }
     }
     </script>
-    <script type="module" src="/assets/js/main.js"></script>
+    <script type="module" src="/assets/js/main.js?v=20260801v33"></script>
 </body>
 </html>

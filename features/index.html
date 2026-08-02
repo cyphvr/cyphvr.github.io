@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher - Features</title>
+    <meta name="description" content="Deep dive into Cypher's moderation, management, utility, search, AI, and creative features.">
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-    <nav class="navbar">
+        <nav class="navbar">
         <div class="container">
             <div class="navbar-logo">
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
@@ -27,198 +28,212 @@
                 <a href="/features" class="navbar-link">Features</a>
                 <a href="/commands" class="navbar-link">Commands</a>
                 <a href="/about" class="navbar-link">About</a>
+                <a href="/status" class="navbar-link">Status</a>
                 <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="navbar-invite">Invite Now</a>
             </div>
         </div>
     </nav>
 
-    <section style="padding: 100px 0 50px;">
-        <div class="container">
-            <h1 class="glitch" data-text="Features" style="text-align: center; margin-bottom: 30px; font-size:2.8rem;">Features</h1>
-            <p style="text-align: center; font-size: 18px; color: #b7c1d1; margin-bottom: 40px;">
-                Discover all the powerful capabilities Cypher brings to your Discord server
-            </p>
+<main class="site-main">
+        <div class="shell page-intro">
+            <p class="eyebrow">Product surface</p>
+            <h1>Features, filed by intent.</h1>
+            <p>Skip the card grid. Read each capability as an operator brief - what it is, why it exists, what to try first.</p>
         </div>
-    </section>
 
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title">
-                <span class="title-line"></span>
-                <span class="title-text glossy-text">CORE FEATURES</span>
-                <span class="title-line"></span>
-            </h2>
-            <div class="features-grid">
-                <div class="feature-card group group-hover:feature-card">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-moderation"></use></svg>
-                    <h3>Advanced Moderation</h3>
-                    <p>Keep your server safe with auto-moderation, custom filters, and comprehensive logging systems. Manage member roles, permissions, and enforce server rules effectively.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-search"></use></svg>
-                    <h3>Search &amp; Information</h3>
-                    <p>Powerful search capabilities to find information across the web instantly within Discord. Get Google results, Wikipedia articles, and more without leaving your server.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-customizable"></use></svg>
-                    <h3>Fully Customizable</h3>
-                    <p>Tailor every aspect to fit your server with custom commands, welcome messages, role management, and personalized configurations that match your community needs.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-analytics"></use></svg>
-                    <h3>Analytics &amp; Insights</h3>
-                    <p>Track server statistics, member activity, and growth metrics with beautiful visualizations. Understand your community better with detailed reports and analytics.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-management"></use></svg>
-                    <h3>Management</h3>
-                    <p>Channel locks, unlocks, slowmode, voice controls, and server-wide safeguards to keep every channel organized and under control.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-utility"></use></svg>
-                    <h3>Utility</h3>
-                    <p>A comprehensive set of utility commands including avatar viewing, user info, server stats, message sniping, and much more to enhance server functionality.</p>
-                </div>
-                <div class="feature-card group group-hover:feature-card">
-                    <svg class="feature-icon" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-creativity"></use></svg>
-                    <h3>Creativity</h3>
-                    <p>Embeds, text-to-speech, image effects, emoji tools, and playful extras that make community engagement feel fresh.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        <div class="shell features-stage">
+            <nav class="features-nav" aria-label="Feature chapters">
+                <a href="#moderation" class="is-active">Moderation</a>
+                <a href="#search">Search &amp; info</a>
+                <a href="#customize">Customization</a>
+                <a href="#analytics">Analytics</a>
+                <a href="#management">Management</a>
+                <a href="#utility">Utility</a>
+                <a href="#creative">Creativity</a>
+                <a href="#why">Why Cypher</a>
+            </nav>
 
-    <section class="why-choose" aria-labelledby="why-choose-heading">
-        <div class="container why-choose-container">
-            <div class="why-choose-left">
-                <h2 id="why-choose-heading" class="section-title">
-                    <span class="title-line"></span>
-                    <span class="title-text glossy-text">WHY CHOOSE CYPHER</span>
-                    <span class="title-line"></span>
-                </h2>
-                <p class="lead">Built for communities that expect speed, trust, and control. Cypher brings enterprise grade tools with Discord first UX, ready for both small servers and large organizations.</p>
-
-                <ul class="why-highlights" aria-hidden="false">
-                    <li>
-                        <strong>99.99% Uptime</strong>
-                        <span>Reliable hosting and failover for continuous operation.</span>
-                    </li>
-                    <li>
-                        <strong>Privacy-first</strong>
-                        <span>We never sell data - focused on security and minimal data retention.</span>
-                    </li>
-                    <li>
-                        <strong>Instant Setup</strong>
-                        <span>One click invite and ready to use configurations for any server size.</span>
-                    </li>
-                </ul>
-
-                <div class="why-cta">
-                    <a class="btn btn-primary" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite Cypher</a>
-                    <a class="btn btn-secondary group about-cta-btn about-cta-btn--secondary" href="/features" style="text-decoration: none; display:inline-flex; align-items:center; justify-content:center; white-space:nowrap;">Explore Features</a>
-                </div>
-            </div>
-
-            <div class="why-choose-right" role="list">
-                <article class="wc-card" role="listitem">
-                    <div class="wc-badge"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-performance"></use></svg></div>
-                    <h3>High Performance</h3>
-                    <p>Optimized command pipeline and low latency systems for fast responses.</p>
-                </article>
-
-                <article class="wc-card" role="listitem">
-                    <div class="wc-badge"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-secure"></use></svg></div>
-                    <h3>Secure &amp; Compliant</h3>
-                    <p>Encrypted communications, role aware access, and best practice security.</p>
-                </article>
-
-                <article class="wc-card" role="listitem">
-                    <div class="wc-badge"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-scalable"></use></svg></div>
-                    <h3>Scalable</h3>
-                    <p>Horizontally scalable services that adapt to sudden growth and activity spikes.</p>
-                </article>
-
-                <article class="wc-card" role="listitem">
-                    <div class="wc-badge"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-easy"></use></svg></div>
-                    <h3>Easy to Use</h3>
-                    <p>Clear commands, guided setup, and helpful defaults so admins can move fast.</p>
-                </article>
-
-                <article class="wc-card" role="listitem">
-                    <div class="wc-badge"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-updates"></use></svg></div>
-                    <h3>Continuous Improvements</h3>
-                    <p>Active roadmap and frequent releases driven by community feedback.</p>
-                </article>
-
-                <article class="wc-card" role="listitem">
-                    <div class="wc-badge"><svg class="icon-badge icon-badge--md" aria-hidden="true" viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-support"></use></svg></div>
-                    <h3>Dedicated Support</h3>
-                    <p>Responsive support channels and documentation to resolve issues quickly.</p>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <section class="cta">
-        <div class="container">
-            <div class="cta-content">
-                <h2>Ready to Experience All These Features?</h2>
-                <p>Add Cypher to your server and unlock the full potential</p>
-                <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="btn btn-large btn-primary group">
-                    <span>Invite Cypher Now</span>
-                    <span class="btn-icon" style="font-size:1.2em;display:inline-flex;align-items:center;vertical-align:middle;color:#08111a;">
-                        <span class="btn-icon-shift group-hover:translate-y-6">
-                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                                <path d="M6 4L12 9L6 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </span>
-                    </span>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <button class="back-to-top" id="backToTop"></button>
-
-        <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="logo">
-                        <img src="../images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
-                        <span class="logo-text">Cypher</span>
+            <div>
+                <section class="feature-chapter" id="moderation">
+                    <div class="feature-chapter__top">
+                        <h2>Advanced moderation</h2>
+                        <div class="feature-chapter__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-moderation"></use></svg>
+                        </div>
                     </div>
+                    <p>Keep your server safe with auto-moderation, custom filters, and comprehensive logging. Manage member roles, permissions, and enforce server rules without juggling five bots.</p>
+                    <ul class="bullet-grid">
+                        <li><strong>Member actions</strong>Kick, ban, mute, unmute with clear staff workflows.</li>
+                        <li><strong>Cleanup</strong>Bulk clean messages when spam hits.</li>
+                        <li><strong>Anti-raid</strong>Toggle protection when join velocity spikes.</li>
+                        <li><strong>Toxicity</strong>Perspective + analyze for prompt and sentence risk.</li>
+                    </ul>
+                </section>
+
+                <section class="feature-chapter" id="search">
+                    <div class="feature-chapter__top">
+                        <h2>Search &amp; information</h2>
+                        <div class="feature-chapter__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-search"></use></svg>
+                        </div>
+                    </div>
+                    <p>Powerful search across the web without leaving Discord; Google, YouTube, dictionaries, weather, reverse image, and more.</p>
+                    <ul class="bullet-grid">
+                        <li><strong>Web search</strong>Google results rendered in-channel.</li>
+                        <li><strong>Media</strong>YouTube lookup and reverse image search.</li>
+                        <li><strong>Reference</strong>Dictionary, Urban, weather for quick facts.</li>
+                        <li><strong>Zero context switch</strong>Answers stay where the conversation is.</li>
+                    </ul>
+                </section>
+
+                <section class="feature-chapter" id="customize">
+                    <div class="feature-chapter__top">
+                        <h2>Fully customizable</h2>
+                        <div class="feature-chapter__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-customizable"></use></svg>
+                        </div>
+                    </div>
+                    <p>Tailor prefixes, roles, and configurations so Cypher feels native to your staff culture, not a generic template.</p>
+                    <ul class="bullet-grid">
+                        <li><strong>Prefixes</strong>Add, list, remove, or reset per server.</li>
+                        <li><strong>Roles</strong>Bulk human role grants and role kicks.</li>
+                        <li><strong>Member tools</strong>Add/remove roles, rename, reset nick.</li>
+                        <li><strong>Staff-first defaults</strong>Sensible permissions out of the box.</li>
+                    </ul>
+                </section>
+
+                <section class="feature-chapter" id="analytics">
+                    <div class="feature-chapter__top">
+                        <h2>Analytics &amp; insights</h2>
+                        <div class="feature-chapter__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-analytics"></use></svg>
+                        </div>
+                    </div>
+                    <p>Track server statistics, member activity, and growth signals with clear bot-side reporting via <span class="mono">/stats</span> and info commands.</p>
+                    <ul class="bullet-grid">
+                        <li><strong>Bot stats</strong>Operational visibility for admins.</li>
+                        <li><strong>Server digests</strong>Roles, emojis, bans, banners at a glance.</li>
+                        <li><strong>User intel</strong>Avatar, banner, and detailed profiles.</li>
+                        <li><strong>Decision support</strong>Data when staff need context, not dashboards for vanity.</li>
+                    </ul>
+                </section>
+
+                <section class="feature-chapter" id="management">
+                    <div class="feature-chapter__top">
+                        <h2>Management</h2>
+                        <div class="feature-chapter__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-management"></use></svg>
+                        </div>
+                    </div>
+                    <p>Channel locks, unlocks, slowmode, voice controls, and server-wide safeguards so every room stays organized under pressure.</p>
+                    <ul class="bullet-grid">
+                        <li><strong>Text control</strong>Lock / unlock channels instantly.</li>
+                        <li><strong>Slowmode</strong>Throttle spikes without nuking the room.</li>
+                        <li><strong>Server lock</strong>Freeze the map when needed.</li>
+                        <li><strong>Voice</strong>Lock VCs and move members cleanly.</li>
+                    </ul>
+                </section>
+
+                <section class="feature-chapter" id="utility">
+                    <div class="feature-chapter__top">
+                        <h2>Utility</h2>
+                        <div class="feature-chapter__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-utility"></use></svg>
+                        </div>
+                    </div>
+                    <p>Avatar viewing, user info, sniping, timestamps, AFK, reminders, emoji tools, the daily glue of an active server.</p>
+                    <ul class="bullet-grid">
+                        <li><strong>Snipes</strong>Deleted, edited, and reaction recovery.</li>
+                        <li><strong>Reminders</strong>Add, list, remove personal timers.</li>
+                        <li><strong>Emoji</strong>Info + steal from other servers.</li>
+                        <li><strong>Quality of life</strong>Ping, quote, inrole, timestamps, AFK.</li>
+                    </ul>
+                </section>
+
+                <section class="feature-chapter" id="creative">
+                    <div class="feature-chapter__top">
+                        <h2>Creativity</h2>
+                        <div class="feature-chapter__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><use href="/assets/icons.svg#icon-creativity"></use></svg>
+                        </div>
+                    </div>
+                    <p>Embeds, text-to-speech, image effects, and playful extras that keep engagement feeling fresh - not only policed.</p>
+                    <ul class="bullet-grid">
+                        <li><strong>Embeds</strong>Customizable announcements and cards.</li>
+                        <li><strong>TTS</strong>Voice + convert across languages.</li>
+                        <li><strong>Image FX</strong>Effects for avatars and images.</li>
+                        <li><strong>AI layer</strong>Grok chat, vision, and image generation.</li>
+                    </ul>
+                </section>
+
+                <section class="feature-chapter" id="why">
+                    <div class="feature-chapter__top">
+                        <h2>Why teams pick Cypher</h2>
+                    </div>
+                    <p>Built for communities that expect speed, trust, and control; enterprise-grade habits with Discord-first UX.</p>
+                    <ul class="bullet-grid">
+                        <li><strong>99.99% uptime target</strong>Reliable hosting and continuous operation.</li>
+                        <li><strong>Privacy-first</strong>We never sell data; minimal retention mindset.</li>
+                        <li><strong>Instant setup</strong>One-click invite and usable defaults.</li>
+                        <li><strong>Active roadmap</strong>Updates driven by community feedback.</li>
+                        <li><strong>High performance</strong>Low-latency command pipeline.</li>
+                        <li><strong>Dedicated support</strong>Live help in the support server.</li>
+                    </ul>
+                    <div style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+                        <a class="btn btn--ember" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite Cypher</a>
+                        <a class="btn btn--ghost" href="/commands">Open command library</a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="shell">
+            <div class="footer-invite">
+                <div>
+                    <h2>Ready when your server is.</h2>
+                    <p>Invite Cypher and turn the feature list into muscle memory.</p>
+                </div>
+                <a class="btn btn--ember" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite to Discord</a>
+            </div>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a class="brand" href="/">
+                        <img class="brand__mark" src="../images/cypher rebrand logo (No BG).png" alt="">
+                        <span class="brand__meta">
+                            <span class="brand__name">Cypher</span>
+                            <span class="brand__path">since 2023</span>
+                        </span>
+                    </a>
                     <p>Empowering Discord communities since 2023.</p>
                 </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Resources</h4>
-                    <ul>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="/commands">Commands</a></li>
-                        <li><a href="/features">Features</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h3>Product</h3>
+                    <a href="/features">Features</a>
+                    <a href="/commands">Commands</a>
+                    <a href="/status">Status</a>
                 </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Community</h4>
-                    <ul>
-                        <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
-                        <li><a href="https://top.gg/bot/1121314550969532476/vote">Vote For Us</a></li>
-                        <li><a href="/status">Status Page</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h3>Community</h3>
+                    <a href="https://discord.gg/Zygr52jpme">Support server</a>
+                    <a href="https://top.gg/bot/1121314550969532476/vote">Vote</a>
+                    <a href="/about">About</a>
                 </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Legal</h4>
-                    <ul>
-                        <li><a href="/tos">Terms of Service</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <a href="/tos">Terms</a>
+                    <a href="/privacy">Privacy</a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Cypher. Built for communities. Designed for excellence.</p>
+            <div class="footer-base">
+                <span>© 2026 Cypher</span>
+                <span>Built for communities</span>
             </div>
         </div>
     </footer>
+
+    <button class="cy-rise" id="cyRise" type="button" aria-label="Back to top"></button>
 
     <script type="importmap">
     {
@@ -228,6 +243,6 @@
       }
     }
     </script>
-    <script type="module" src="../assets/js/main.js"></script>
+    <script type="module" src="../assets/js/main.js?v=20260801v33"></script>
 </body>
 </html>

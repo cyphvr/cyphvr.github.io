@@ -4,373 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher - Permission Diagnostics</title>
+    <meta name="description" content="Channel permission diagnostics for Cypher private slash responses.">
     <link rel="stylesheet" href="../assets/css/main.css">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <style>
-        :root {
-            --diag-accent: #8a9bff;
-            --diag-accent-soft: rgba(138, 155, 255, 0.16);
-            --diag-cyan: #8bdcff;
-            --diag-ok: #44f0a8;
-            --diag-missing: #ff6b8a;
-            --diag-surface: rgba(255, 255, 255, 0.05);
-        }
-
-        .diag-shell {
-            position: relative;
-            z-index: 10;
-            max-width: 760px;
-            margin: 142px auto 40px;
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        /* Kill global `section { padding: 5rem 0 }`, then set intentional card padding */
-        .diag-shell > section {
-            margin: 0;
-            padding: 0;
-        }
-
-        .diag-shell > .diag-hero {
-            padding: 24px 22px;
-        }
-
-        .diag-shell > .diag-panel {
-            padding: 0;
-        }
-
-        .diag-hero {
-            border-radius: 24px;
-            background:
-                radial-gradient(620px 260px at 0% -10%, rgba(138, 155, 255, 0.2), transparent 62%),
-                radial-gradient(480px 220px at 100% 0%, rgba(139, 220, 255, 0.14), transparent 58%),
-                linear-gradient(150deg, rgba(9, 16, 42, 0.96), rgba(5, 8, 26, 0.96));
-            border: 1px solid rgba(138, 155, 255, 0.28);
-            box-shadow:
-                0 26px 46px rgba(0, 0, 0, 0.38),
-                inset 0 1px 0 rgba(255, 255, 255, 0.06);
-        }
-
-        .diag-eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border-radius: 999px;
-            padding: 6px 14px;
-            border: 1px solid rgba(139, 220, 255, 0.28);
-            background: linear-gradient(135deg, rgba(138, 155, 255, 0.16), rgba(139, 220, 255, 0.1));
-            color: #dff6ff;
-            font-size: 0.82rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-bottom: 14px;
-        }
-
-        .diag-headline {
-            margin: 0;
-            font-family: var(--font-display);
-            font-size: clamp(1.5rem, 3vw, 2rem);
-            line-height: 1.1;
-            color: #f4fbff;
-        }
-
-        .diag-subline {
-            margin: 10px 0 0;
-            color: #b7c1d1;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .diag-panel {
-            border-radius: 20px;
-            border: 1px solid rgba(104, 116, 255, 0.22);
-            background: linear-gradient(150deg, rgba(10, 12, 31, 0.94), rgba(8, 12, 25, 0.94));
-            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.34);
-            overflow: hidden;
-        }
-
-        .diag-panel-head {
-            padding: 14px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .diag-panel-title {
-            margin: 0;
-            color: #f5fbff;
-            font-size: 1rem;
-            font-weight: 700;
-        }
-
-        .diag-summary {
-            color: #afc2d6;
-            font-size: 0.88rem;
-        }
-
-        .diag-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .diag-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 14px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            opacity: 0;
-            transform: translateY(8px);
-            animation: diag-item-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            animation-delay: calc(var(--diag-i, 0) * 55ms);
-        }
-
-        .diag-item:last-child {
-            border-bottom: none;
-        }
-
-        .diag-perm-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .diag-perm-icon-box {
-            flex-shrink: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid rgba(169, 184, 212, 0.22);
-            background: rgba(255, 255, 255, 0.04);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-            transform-origin: center;
-            transition:
-                border-color 0.25s ease,
-                background 0.25s ease,
-                box-shadow 0.25s ease,
-                transform 0.25s ease,
-                color 0.25s ease;
-        }
-
-        .diag-item:hover .diag-perm-icon-box {
-            transform: translateY(-1px) scale(1.06);
-            border-color: rgba(139, 220, 255, 0.42);
-            background: rgba(138, 155, 255, 0.12);
-            box-shadow:
-                0 0 0 1px rgba(139, 220, 255, 0.1),
-                0 6px 16px rgba(138, 155, 255, 0.18),
-                inset 0 1px 0 rgba(255, 255, 255, 0.06);
-        }
-
-        .diag-perm-icon {
-            width: 16px;
-            height: 16px;
-            color: #a9b8d4;
-            opacity: 0.95;
-            transition: color 0.25s ease, transform 0.25s ease;
-        }
-
-        .diag-item:hover .diag-perm-icon {
-            color: #dff6ff;
-            transform: scale(1.05);
-        }
-
-        @keyframes diag-item-in {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .diag-item {
-                opacity: 1;
-                transform: none;
-                animation: none;
-            }
-
-            .diag-item:hover .diag-perm-icon-box,
-            .diag-item:hover .diag-perm-icon {
-                transform: none;
-            }
-
-            .diag-status-mark path {
-                stroke-dasharray: none;
-                stroke-dashoffset: 0;
-                animation: none;
-            }
-
-            .diag-status::before {
-                transition: none;
-            }
-        }
-
-        .diag-perm-name {
-            color: #eef5ff;
-            font-size: 0.98rem;
-            font-weight: 600;
-        }
-
-        .diag-status {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            border-radius: 999px;
-            padding: 6px 12px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-            text-transform: uppercase;
-            white-space: nowrap;
-            overflow: hidden;
-            transition:
-                background 0.25s ease,
-                border-color 0.25s ease,
-                box-shadow 0.25s ease;
-        }
-
-        /* Same light trail as navbar link pills */
-        .diag-status::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .diag-status:hover::before {
-            left: 100%;
-        }
-
-        .diag-status > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .diag-status.ok {
-            color: #d8ffef;
-            background: rgba(68, 240, 168, 0.12);
-            border: 1px solid rgba(68, 240, 168, 0.28);
-        }
-
-        .diag-status.ok:hover {
-            background: rgba(68, 240, 168, 0.18);
-            border-color: rgba(68, 240, 168, 0.42);
-            box-shadow: 0 0 14px rgba(68, 240, 168, 0.12);
-        }
-
-        .diag-status.missing {
-            color: #ffd6df;
-            background: rgba(255, 107, 138, 0.12);
-            border: 1px solid rgba(255, 107, 138, 0.28);
-        }
-
-        .diag-status.missing:hover {
-            background: rgba(255, 107, 138, 0.18);
-            border-color: rgba(255, 107, 138, 0.42);
-            box-shadow: 0 0 14px rgba(255, 107, 138, 0.12);
-        }
-
-        .diag-status-mark {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 14px;
-            height: 14px;
-            flex-shrink: 0;
-        }
-
-        .diag-status-mark svg {
-            width: 14px;
-            height: 14px;
-            display: block;
-            overflow: visible;
-        }
-
-        /* #29 trial: one-shot stroke draw on check/X (revert removes this block + pathLength on icons) */
-        .diag-status-mark path {
-            stroke-dasharray: 1;
-            stroke-dashoffset: 1;
-            animation: diag-mark-draw 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            animation-delay: calc(0.28s + var(--diag-i, 0) * 55ms);
-        }
-
-        @keyframes diag-mark-draw {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        .diag-working,
-        .diag-error {
-            padding: 28px 20px;
-            text-align: center;
-            color: #b7c1d1;
-            font-size: 1rem;
-        }
-
-        .diag-error {
-            color: #ffb4c4;
-        }
-
-        .diag-footer-note {
-            margin: 0;
-            color: #8f9bb0;
-            font-size: 0.86rem;
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        .diag-footer-note a {
-            color: #a9ecff;
-            text-decoration: none;
-        }
-
-        .diag-footer-note a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 640px) {
-            .diag-shell {
-                margin-top: 98px;
-            }
-
-            .diag-hero,
-            .diag-panel {
-                border-radius: 16px;
-            }
-
-            .diag-item {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-        }
-    </style>
 </head>
 <body>
-    <nav class="navbar">
+        <nav class="navbar">
         <div class="container">
             <div class="navbar-logo">
                 <a href="/" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
@@ -387,72 +26,74 @@
                 <a href="/features" class="navbar-link">Features</a>
                 <a href="/commands" class="navbar-link">Commands</a>
                 <a href="/about" class="navbar-link">About</a>
+                <a href="/status" class="navbar-link">Status</a>
                 <a href="https://discord.com/oauth2/authorize?client_id=1121314550969532476" class="navbar-invite">Invite Now</a>
             </div>
         </div>
     </nav>
 
-    <main class="diag-shell">
-        <section class="diag-hero">
-            <span class="diag-eyebrow">Incognito Diagnostics</span>
-            <h1 class="diag-headline">Permission Diagnostics</h1>
-            <p class="diag-subline">
-                This page shows which channel permissions you have when Cypher makes a slash response private.
-                Ask a server moderator to grant any missing permissions if you want public responses again.
+<main class="site-main">
+        <div class="shell diag-layout">
+            <div class="diag-intro">
+                <p class="eyebrow">Incognito diagnostics</p>
+                <h1>Permission diagnostics</h1>
+                <p>
+                    This page shows which channel permissions you have when Cypher makes a slash response private.
+                    Ask a server moderator to grant any missing permissions if you want public responses again.
+                </p>
+            </div>
+
+            <section class="diag-panel" id="diagPanel">
+                <div class="diag-working" id="diagWorking">Working...</div>
+            </section>
+
+            <p class="diag-footer-note">
+                Learn more about channel permissions in
+                <a href="https://support.discord.com/hc/en-us/articles/10543994968087" target="_blank" rel="noopener noreferrer">Discord's help center</a>.
             </p>
-        </section>
-
-        <section class="diag-panel" id="diagPanel">
-            <div class="diag-working" id="diagWorking">Working...</div>
-        </section>
-
-        <p class="diag-footer-note">
-            Learn more about channel permissions in
-            <a href="https://support.discord.com/hc/en-us/articles/10543994968087" target="_blank" rel="noopener noreferrer">Discord's help center</a>.
-        </p>
+        </div>
     </main>
 
-        <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="logo">
-                        <img src="../images/cypher rebrand logo (No BG).png" alt="Cypher Logo" class="logo-icon">
-                        <span class="logo-text">Cypher</span>
-                    </div>
+    <footer class="site-footer">
+        <div class="shell">
+            <div class="footer-grid" style="padding-top:2.5rem;">
+                <div class="footer-brand">
+                    <a class="brand" href="/">
+                        <img class="brand__mark" src="../images/cypher rebrand logo (No BG).png" alt="">
+                        <span class="brand__meta">
+                            <span class="brand__name">Cypher</span>
+                            <span class="brand__path">since 2023</span>
+                        </span>
+                    </a>
                     <p>Empowering Discord communities since 2023.</p>
                 </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Resources</h4>
-                    <ul>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="/commands">Commands</a></li>
-                        <li><a href="/features">Features</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h3>Product</h3>
+                    <a href="/features">Features</a>
+                    <a href="/commands">Commands</a>
+                    <a href="/status">Status</a>
                 </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Community</h4>
-                    <ul>
-                        <li><a href="https://discord.gg/Zygr52jpme">Support Server</a></li>
-                        <li><a href="https://top.gg/bot/1121314550969532476/vote">Vote For Us</a></li>
-                        <li><a href="/status">Status Page</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h3>Community</h3>
+                    <a href="https://discord.gg/Zygr52jpme">Support server</a>
+                    <a href="https://top.gg/bot/1121314550969532476/vote">Vote</a>
+                    <a href="/about">About</a>
                 </div>
-                <div class="footer-section">
-                    <h4 class="binary-roll">Legal</h4>
-                    <ul>
-                        <li><a href="/tos">Terms of Service</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                    </ul>
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <a href="/tos">Terms</a>
+                    <a href="/privacy">Privacy</a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Cypher. Built for communities. Designed for excellence.</p>
+            <div class="footer-base">
+                <span>© 2026 Cypher</span>
+                <span>Built for communities</span>
             </div>
         </div>
     </footer>
 
-    <script type="importmap">
+    <button class="cy-rise" id="cyRise" type="button" aria-label="Back to top"></button>
+<script type="importmap">
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
@@ -460,7 +101,8 @@
       }
     }
     </script>
-    <script type="module" src="../assets/js/main.js"></script>
+    <script type="module" src="../assets/js/main.js?v=20260801v33"></script>
+
     <script>
         (function () {
             const panel = document.getElementById('diagPanel');

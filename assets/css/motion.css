@@ -1,0 +1,535 @@
+/* =========================================================
+   Cypher motion system v2
+   Hierarchical reveals · shared utilities · less repetition
+   ========================================================= */
+
+:root {
+    --motion-duration: 0.7s;
+    --motion-stagger: 0.065s;
+    --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --motion-lift: translateY(-4px);
+    --motion-nudge: translateX(4px);
+}
+
+/* ---------- Shared utilities (one definition, many uses) ---------- */
+.lift,
+.nudge,
+.glow-border {
+    transition:
+        transform 0.35s var(--motion-ease),
+        border-color 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.35s ease,
+        color 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .lift:hover { transform: var(--motion-lift); }
+    .nudge:hover { transform: var(--motion-nudge); }
+    .glow-border:hover {
+        border-color: rgba(124, 155, 255, 0.35);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
+    }
+    .lift.glow-border:hover {
+        transform: var(--motion-lift);
+    }
+}
+
+/* ---------- Page enter / leave ---------- */
+body.page-ready .site-main {
+    animation: page-in 0.5s var(--motion-ease) both;
+}
+
+body.page-leaving .site-main {
+    animation: page-out 0.26s ease both;
+}
+
+@keyframes page-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes page-out {
+    to { opacity: 0; transform: translateY(-6px); }
+}
+
+/* ---------- Hero (load choreography only — not scroll-reveal) ---------- */
+.hero-split__copy > * {
+    animation: rise 0.75s var(--motion-ease) both;
+}
+
+.hero-split__copy > *:nth-child(1) { animation-delay: 0.04s; }
+.hero-split__copy > *:nth-child(2) { animation-delay: 0.12s; }
+.hero-split__copy > *:nth-child(3) { animation-delay: 0.2s; }
+.hero-split__copy > *:nth-child(4) { animation-delay: 0.28s; }
+.hero-split__copy > *:nth-child(5) { animation-delay: 0.36s; }
+
+.hero-split__visual {
+    animation: rise 0.85s var(--motion-ease) 0.18s both;
+    perspective: 1000px;
+}
+
+.hero-split__visual .deck {
+    animation: deck-float 8s ease-in-out 1.1s infinite;
+    will-change: transform;
+}
+
+/* Static decks only — live deck is driven by deck-demo.js */
+.deck:not(.deck--live) .deck__body .msg {
+    opacity: 0;
+    animation: rise 0.6s var(--motion-ease) both;
+}
+
+.deck:not(.deck--live) .deck__body .msg:nth-child(1) { animation-delay: 0.4s; }
+.deck:not(.deck--live) .deck__body .msg:nth-child(2) { animation-delay: 0.62s; }
+.deck:not(.deck--live) .deck__body .msg:nth-child(3) { animation-delay: 0.84s; }
+
+@keyframes deck-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+/* ---------- Hierarchical scroll reveals ---------- */
+/*
+  .reveal-unit  — one block fades in
+  .reveal-group — parent gate; children cascade when parent is .is-visible
+*/
+.reveal-unit,
+.reveal-group > .reveal-child {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+    transition:
+        opacity var(--motion-duration) var(--motion-ease),
+        transform var(--motion-duration) var(--motion-ease);
+    transition-delay: var(--reveal-delay, 0s);
+    will-change: opacity, transform;
+}
+
+.reveal-unit.is-visible,
+.reveal-group.is-visible > .reveal-child {
+    opacity: 1;
+    transform: none;
+}
+
+.reveal-unit.reveal-unit--left { transform: translate3d(-24px, 0, 0); }
+.reveal-unit.reveal-unit--right { transform: translate3d(24px, 0, 0); }
+.reveal-unit.reveal-unit--scale { transform: scale(0.96); }
+
+.reveal-unit.reveal-unit--left.is-visible,
+.reveal-unit.reveal-unit--right.is-visible,
+.reveal-unit.reveal-unit--scale.is-visible {
+    transform: none;
+}
+
+/* Directional children inside a group (optional) */
+.reveal-group > .reveal-child.from-left { transform: translate3d(-20px, 0, 0); }
+.reveal-group > .reveal-child.from-right { transform: translate3d(20px, 0, 0); }
+.reveal-group.is-visible > .reveal-child.from-left,
+.reveal-group.is-visible > .reveal-child.from-right {
+    transform: none;
+}
+
+/* Title line draw when band heads enter */
+.band__head.is-visible .kicker::before,
+.page-intro.is-visible .eyebrow::before,
+.about-mast.is-visible .eyebrow::before {
+    animation: line-grow 0.9s var(--motion-ease) both;
+}
+
+.eyebrow::before {
+    transform-origin: left center;
+}
+
+@keyframes line-grow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+/* Clip-style title emphasis once per major heading */
+.reveal-unit.is-visible > h1,
+.reveal-unit.is-visible > h2,
+.band__head.is-visible h2,
+.page-intro.is-visible h1,
+.about-mast.is-visible h1 {
+    animation: title-settle 0.85s var(--motion-ease) both;
+}
+
+@keyframes title-settle {
+    from {
+        letter-spacing: -0.04em;
+        opacity: 0.65;
+    }
+    to {
+        letter-spacing: -0.03em;
+        opacity: 1;
+    }
+}
+
+/* ---------- Ambient (only where it earns its keep) ---------- */
+.marquee__track span {
+    transition: color 0.25s ease, background 0.25s ease;
+}
+
+.marquee__track span:hover {
+    color: var(--ink);
+    background: rgba(124, 155, 255, 0.06);
+}
+
+.status-chip__dot,
+.status-live .dot {
+    animation: pulse-ok 2.2s ease-out infinite;
+}
+
+.navbar {
+    animation: rise 0.55s var(--motion-ease) both;
+}
+
+/* ---------- Focused micro-interactions ---------- */
+
+.btn {
+    transition:
+        transform 0.25s var(--motion-ease),
+        background 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.35s var(--motion-ease);
+}
+
+.btn--ember:hover {
+    box-shadow: 0 14px 36px rgba(124, 155, 255, 0.35);
+}
+
+.btn svg {
+    transition: transform 0.3s var(--motion-ease);
+}
+
+.btn:hover svg {
+    transform: translateX(3px);
+}
+
+/* Feature rows — unique index accent, not generic lift copy */
+.feature-row {
+    transition: background 0.35s ease;
+}
+
+.feature-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.feature-row__idx {
+    transition: transform 0.35s var(--motion-ease), color 0.25s ease;
+}
+
+.feature-row:hover .feature-row__idx {
+    transform: translateX(4px);
+    color: var(--amber);
+}
+
+.feature-row h3 {
+    transition: color 0.25s ease;
+}
+
+.feature-row:hover h3 {
+    color: #fff;
+}
+
+.tag {
+    transition: transform 0.25s var(--motion-ease), border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+
+.feature-row:hover .tag {
+    border-color: rgba(124, 155, 255, 0.35);
+    color: var(--ink);
+}
+
+.tag:hover {
+    transform: translateY(-2px);
+    background: var(--ember-soft);
+    border-color: rgba(124, 155, 255, 0.4);
+    color: var(--ember);
+}
+
+.stat-wall article:hover strong {
+    color: var(--ember);
+}
+
+.stat-wall strong {
+    transition: color 0.3s ease;
+}
+
+.matrix tbody tr {
+    transition: background 0.25s ease, transform 0.25s var(--motion-ease);
+}
+
+.matrix tbody tr:hover {
+    transform: translateX(4px);
+}
+
+.matrix tbody tr:hover td:last-child {
+    color: var(--ember);
+}
+
+.timeline article:hover::before {
+    transform: scale(1.35);
+    background: var(--ember);
+    box-shadow: 0 0 0 6px var(--ember-soft);
+}
+
+.timeline article::before {
+    transition: transform 0.35s var(--motion-ease), box-shadow 0.35s ease, background 0.25s ease;
+}
+
+.feature-chapter__icon {
+    transition: transform 0.4s var(--motion-ease), border-color 0.3s ease, box-shadow 0.35s ease;
+}
+
+.feature-chapter:hover .feature-chapter__icon {
+    transform: rotate(-6deg) scale(1.06);
+    border-color: rgba(124, 155, 255, 0.4);
+    box-shadow: 0 10px 24px rgba(124, 155, 255, 0.15);
+}
+
+.features-nav a {
+    transition: color 0.2s ease, border-color 0.25s ease, background 0.25s ease, transform 0.25s var(--motion-ease);
+}
+
+.features-nav a:hover,
+.features-nav a.is-active {
+    transform: translateX(2px);
+}
+
+.cmd-rail button,
+.cmd-rail a {
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s var(--motion-ease);
+}
+
+.cmd-rail button:hover,
+.cmd-rail a:hover {
+    transform: translateX(3px);
+}
+
+.cmd-row {
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.25s var(--motion-ease), opacity 0.2s ease;
+}
+
+.cmd-row:hover {
+    transform: translateX(3px);
+}
+
+.cmd-row:hover .cmd-row__name {
+    color: var(--ember);
+}
+
+.cmd-row__name {
+    transition: color 0.2s ease;
+}
+
+/* Soft list reflow after filter — only a few rows, not a wall of identical pops */
+.cmd-row.cmd-enter {
+    animation: rise 0.32s var(--motion-ease) both;
+}
+
+.history-item {
+    transition: transform 0.25s var(--motion-ease), filter 0.2s ease;
+    transform-origin: bottom;
+}
+
+.history-panel.is-visible .history-item {
+    animation: history-rise 0.55s var(--motion-ease) both;
+    animation-delay: calc(var(--hi, 0) * 0.018s);
+}
+
+.history-item:hover {
+    transform: scaleY(1.12);
+    filter: brightness(1.12);
+}
+
+@keyframes history-rise {
+    from { opacity: 0; transform: scaleY(0.15); }
+    to { opacity: 0.9; transform: scaleY(1); }
+}
+
+.legal-toc a {
+    transition: color 0.2s ease, border-color 0.25s ease, padding-left 0.25s var(--motion-ease);
+}
+
+.legal-toc a:hover {
+    padding-left: 0.95rem;
+}
+
+.diag-perm-icon-box {
+    transition: transform 0.3s var(--motion-ease), border-color 0.25s ease, color 0.25s ease;
+}
+
+.diag-item:hover .diag-perm-icon-box {
+    transform: scale(1.08) rotate(-4deg);
+    border-color: rgba(124, 155, 255, 0.35);
+    color: var(--ember);
+}
+
+.checklist li:hover::before {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 6px var(--ember-soft);
+}
+
+.checklist li::before {
+    transition: transform 0.3s var(--motion-ease), box-shadow 0.3s ease;
+}
+
+/* 404 — one signature loop, not competing effects */
+.lost h1 {
+    animation: glitch-soft 5s ease-in-out infinite;
+}
+
+.lost h2 { animation: rise 0.65s var(--motion-ease) 0.08s both; }
+.lost p { animation: rise 0.65s var(--motion-ease) 0.16s both; }
+.lost__actions { animation: rise 0.65s var(--motion-ease) 0.24s both; }
+
+@keyframes glitch-soft {
+    0%, 94%, 100% { transform: none; filter: none; }
+    95% { transform: translate(-2px, 1px); filter: drop-shadow(2px 0 var(--ember)); }
+    96% { transform: translate(2px, -1px); filter: drop-shadow(-2px 0 var(--amber)); }
+    97% { transform: none; filter: none; }
+}
+
+.metric-pop {
+    animation: metric-pop 0.5s var(--motion-ease);
+}
+
+@keyframes metric-pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.06); color: var(--ember); }
+    100% { transform: scale(1); }
+}
+
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.page-transition-overlay__logo {
+    animation: logo-breathe 0.9s var(--motion-ease) infinite alternate;
+}
+
+@keyframes logo-breathe {
+    from { transform: scale(0.94); opacity: 0.85; }
+    to { transform: scale(1.04); opacity: 1; }
+}
+
+/* cy-rise enter/exit is handled with CSS transitions in chrome.css (no keyframes) */
+
+/* Pointer glow on interactive surfaces (driven by --mx/--my from JS) */
+.pointer-glow {
+    position: relative;
+    overflow: hidden;
+}
+
+.pointer-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        280px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(124, 155, 255, 0.1),
+        transparent 55%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.pointer-glow:hover::after {
+    opacity: 1;
+}
+
+.pointer-glow > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Deck hover depth without fighting float keyframes when idle */
+.deck {
+    transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.deck:hover {
+    border-color: rgba(124, 155, 255, 0.35);
+    box-shadow: 0 36px 90px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 155, 255, 0.08);
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .reveal-unit,
+    .reveal-group > .reveal-child,
+    .hero-split__copy > *,
+    .hero-split__visual,
+    .deck__body .msg,
+    .navbar,
+    body.page-ready .site-main {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .hero-split__visual .deck,
+    .marquee__track,
+    .lost h1,
+    .status-chip__dot,
+    .status-live .dot,
+    .typing__dot,
+    .typing__ellipsis::after,
+    .msg__caret {
+        animation: none !important;
+    }
+
+    .history-panel.is-visible .history-item {
+        animation: none !important;
+        opacity: 0.9 !important;
+        transform: none !important;
+    }
+
+    .cy-rise,
+    .cy-rise.is-on {
+        transition-duration: 0.01ms !important;
+        filter: none !important;
+    }
+
+    .cy-rise.is-on {
+        animation: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: translate3d(-50%, 0, 0) scale(1) !important;
+    }
+
+    .diag-item {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
+
+    .diag-status-mark path {
+        stroke-dasharray: none !important;
+        stroke-dashoffset: 0 !important;
+        animation: none !important;
+    }
+}
