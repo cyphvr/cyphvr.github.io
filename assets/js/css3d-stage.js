@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
-import { getFlightState, refreshScrollMetrics } from './scroll-flight.js?v=20260801v29';
-import { onThreeFrame, sampleTheatre } from './three-bg-advanced.js?v=20260801v29';
+import { getFlightState, refreshScrollMetrics } from './scroll-flight.js?v=20260803v3';
+import { onThreeFrame, sampleTheatre } from './three-bg-advanced.js?v=20260803v3';
 
 const FOV = 45;
 

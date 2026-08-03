@@ -1,4 +1,4 @@
-import { API_BASE } from './api-config.js?v=20260803v1';
+import { API_BASE } from './api-config.js?v=20260803v3';
 
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
