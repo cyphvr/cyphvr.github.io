@@ -1,12 +1,12 @@
 // Version every local import so browsers cannot keep a stale commands.js / animations.js
-import { initNavigation } from './navigation.js?v=20260801v36';
-import { initAnimations } from './animations.js?v=20260801v36';
-import { initCards } from './cards.js?v=20260801v36';
-import { initButtons } from './buttons.js?v=20260801v36';
-import { initCommands } from './commands.js?v=20260801v36';
-import { initDeckDemo } from './deck-demo.js?v=20260801v36';
-import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260801v36';
-import { initThreeBackground } from './three-bg-advanced.js?v=20260801v36';
+import { initNavigation } from './navigation.js?v=20260803v1';
+import { initAnimations } from './animations.js?v=20260803v1';
+import { initCards } from './cards.js?v=20260803v1';
+import { initButtons } from './buttons.js?v=20260803v1';
+import { initCommands } from './commands.js?v=20260803v1';
+import { initDeckDemo } from './deck-demo.js?v=20260803v1';
+import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260803v1';
+import { initThreeBackground } from './three-bg-advanced.js?v=20260803v1';
 
 // Smooth inertia scroll; Three.js reads progress each frame
 try {

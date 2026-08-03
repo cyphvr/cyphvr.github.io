@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher - Commands</title>
-    <meta name="description" content="Searchable library of every Cypher slash command.">
-    <link rel="stylesheet" href="../assets/css/main.css?v=20260801v36">
+    <meta name="description" content="Live searchable library of every Cypher slash command registered on Discord.">
+    <link rel="stylesheet" href="../assets/css/main.css?v=20260803v1">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,23 +38,13 @@
         <div class="shell page-intro">
             <p class="eyebrow">Operator library</p>
             <h1>Commands as a console.</h1>
-            <p>Filter by category or type to search. Same slash names your staff will use in Discord.</p>
+            <p>Live from Discord — every public slash command currently registered on Cypher. Filter by group or search by name.</p>
         </div>
 
         <div class="shell" style="padding-bottom:4rem;">
             <div class="cmd-app">
                 <aside class="cmd-rail" aria-label="Categories">
-                    <button type="button" class="is-active" data-cmd-filter="all">All</button>
-                    <button type="button" data-cmd-filter="moderation">Moderation</button>
-                    <button type="button" data-cmd-filter="channel">Channel</button>
-                    <button type="button" data-cmd-filter="info">Info</button>
-                    <button type="button" data-cmd-filter="utility">Utility</button>
-                    <button type="button" data-cmd-filter="search">Search</button>
-                    <button type="button" data-cmd-filter="ai">AI</button>
-                    <button type="button" data-cmd-filter="member">Member</button>
-                    <button type="button" data-cmd-filter="role">Role</button>
-                    <button type="button" data-cmd-filter="config">Config</button>
-                    <button type="button" data-cmd-filter="creative">Creative</button>
+                    <button type="button" class="is-active" data-cmd-filter="all" disabled>All</button>
                 </aside>
                 <div class="cmd-main">
                     <div class="cmd-toolbar">
@@ -63,90 +53,10 @@
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                             <input id="commandSearch" type="search" placeholder="Search name or description…" autocomplete="off">
                         </label>
-                        <span class="cmd-count" id="commandCount">0 commands</span>
+                        <span class="cmd-count" id="commandCount">…</span>
                     </div>
                     <div class="cmd-list" id="commandList">
-                        <div class="cmd-group-label" data-cmd-group="moderation">Moderation</div>
-                        <div class="cmd-row" data-category="moderation" data-name="/kick" data-desc="Kick a member from the server."><span class="cmd-row__name">/kick</span><span class="cmd-row__desc">Kick a member from the server.</span><span class="cmd-row__badge">Moderation</span></div>
-                        <div class="cmd-row" data-category="moderation" data-name="/ban" data-desc="Ban a member from the server."><span class="cmd-row__name">/ban</span><span class="cmd-row__desc">Ban a member from the server.</span><span class="cmd-row__badge">Moderation</span></div>
-                        <div class="cmd-row" data-category="moderation" data-name="/unban" data-desc="Unban a user from the server."><span class="cmd-row__name">/unban</span><span class="cmd-row__desc">Unban a user from the server.</span><span class="cmd-row__badge">Moderation</span></div>
-                        <div class="cmd-row" data-category="moderation" data-name="/mute" data-desc="Mute a member in the server."><span class="cmd-row__name">/mute</span><span class="cmd-row__desc">Mute a member in the server.</span><span class="cmd-row__badge">Moderation</span></div>
-                        <div class="cmd-row" data-category="moderation" data-name="/unmute" data-desc="Unmute a member in the server."><span class="cmd-row__name">/unmute</span><span class="cmd-row__desc">Unmute a member in the server.</span><span class="cmd-row__badge">Moderation</span></div>
-                        <div class="cmd-row" data-category="moderation" data-name="/clean" data-desc="Clean a specified number of messages."><span class="cmd-row__name">/clean</span><span class="cmd-row__desc">Clean a specified number of messages.</span><span class="cmd-row__badge">Moderation</span></div>
-                        <div class="cmd-row" data-category="moderation" data-name="/anti-raid" data-desc="Enable or disable anti-raid protection."><span class="cmd-row__name">/anti-raid</span><span class="cmd-row__desc">Enable or disable anti-raid protection.</span><span class="cmd-row__badge">Moderation</span></div>
-                        <div class="cmd-row" data-category="moderation" data-name="/perspective" data-desc="Judge the toxicity of a prompt."><span class="cmd-row__name">/perspective</span><span class="cmd-row__desc">Judge the toxicity of a prompt.</span><span class="cmd-row__badge">Moderation</span></div>
-                        <div class="cmd-row" data-category="moderation" data-name="/analyze" data-desc="Analyze a word or sentence for toxicity."><span class="cmd-row__name">/analyze</span><span class="cmd-row__desc">Analyze a word or sentence for toxicity.</span><span class="cmd-row__badge">Moderation</span></div>
-
-                        <div class="cmd-group-label" data-cmd-group="channel">Channel</div>
-                        <div class="cmd-row" data-category="channel" data-name="/channel lock" data-desc="Lock a text channel."><span class="cmd-row__name">/channel lock</span><span class="cmd-row__desc">Lock a text channel.</span><span class="cmd-row__badge">Channel</span></div>
-                        <div class="cmd-row" data-category="channel" data-name="/channel unlock" data-desc="Unlock a text channel."><span class="cmd-row__name">/channel unlock</span><span class="cmd-row__desc">Unlock a text channel.</span><span class="cmd-row__badge">Channel</span></div>
-                        <div class="cmd-row" data-category="channel" data-name="/channel slowmode" data-desc="Set slowmode for the channel."><span class="cmd-row__name">/channel slowmode</span><span class="cmd-row__desc">Set slowmode for the channel.</span><span class="cmd-row__badge">Channel</span></div>
-                        <div class="cmd-row" data-category="channel" data-name="/channel server-lock" data-desc="Lock the entire server."><span class="cmd-row__name">/channel server-lock</span><span class="cmd-row__desc">Lock the entire server.</span><span class="cmd-row__badge">Channel</span></div>
-                        <div class="cmd-row" data-category="channel" data-name="/channel lock-vc" data-desc="Lock a voice channel."><span class="cmd-row__name">/channel lock-vc</span><span class="cmd-row__desc">Lock a voice channel.</span><span class="cmd-row__badge">Channel</span></div>
-                        <div class="cmd-row" data-category="channel" data-name="/channel vc-move" data-desc="Move members between voice channels."><span class="cmd-row__name">/channel vc-move</span><span class="cmd-row__desc">Move members between voice channels.</span><span class="cmd-row__badge">Channel</span></div>
-
-                        <div class="cmd-group-label" data-cmd-group="info">Info</div>
-                        <div class="cmd-row" data-category="info" data-name="/avatar" data-desc="Get a user's avatar in high quality."><span class="cmd-row__name">/avatar</span><span class="cmd-row__desc">Get a user's avatar in high quality.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/banner" data-desc="Get a user's profile banner."><span class="cmd-row__name">/banner</span><span class="cmd-row__desc">Get a user's profile banner.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/info" data-desc="Get detailed information about a user."><span class="cmd-row__name">/info</span><span class="cmd-row__desc">Get detailed information about a user.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/server icon" data-desc="Get the server's icon."><span class="cmd-row__name">/server icon</span><span class="cmd-row__desc">Get the server's icon.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/server banner" data-desc="Get the server's banner."><span class="cmd-row__name">/server banner</span><span class="cmd-row__desc">Get the server's banner.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/server info" data-desc="Get comprehensive server information."><span class="cmd-row__name">/server info</span><span class="cmd-row__desc">Get comprehensive server information.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/server role-info" data-desc="Get information about a server role."><span class="cmd-row__name">/server role-info</span><span class="cmd-row__desc">Get information about a server role.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/server roles" data-desc="View all server roles."><span class="cmd-row__name">/server roles</span><span class="cmd-row__desc">View all server roles.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/server emojis" data-desc="View all server emojis."><span class="cmd-row__name">/server emojis</span><span class="cmd-row__desc">View all server emojis.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/server banlist" data-desc="View the server's ban list."><span class="cmd-row__name">/server banlist</span><span class="cmd-row__desc">View the server's ban list.</span><span class="cmd-row__badge">Info</span></div>
-                        <div class="cmd-row" data-category="info" data-name="/stats" data-desc="View comprehensive bot statistics."><span class="cmd-row__name">/stats</span><span class="cmd-row__desc">View comprehensive bot statistics.</span><span class="cmd-row__badge">Info</span></div>
-
-                        <div class="cmd-group-label" data-cmd-group="utility">Utility</div>
-                        <div class="cmd-row" data-category="utility" data-name="/ping" data-desc="Check bot latency and response time."><span class="cmd-row__name">/ping</span><span class="cmd-row__desc">Check bot latency and response time.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/quote" data-desc="Quote a message with custom styling."><span class="cmd-row__name">/quote</span><span class="cmd-row__desc">Quote a message with custom styling.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/inrole" data-desc="View number of members in a role."><span class="cmd-row__name">/inrole</span><span class="cmd-row__desc">View number of members in a role.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/snipe delete" data-desc="Snipe a deleted message."><span class="cmd-row__name">/snipe delete</span><span class="cmd-row__desc">Snipe a deleted message.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/snipe edit" data-desc="Snipe an edited message."><span class="cmd-row__name">/snipe edit</span><span class="cmd-row__desc">Snipe an edited message.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/snipe react" data-desc="Snipe a reaction to a message."><span class="cmd-row__name">/snipe react</span><span class="cmd-row__desc">Snipe a reaction to a message.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/timestamp" data-desc="Generate timestamps in various formats."><span class="cmd-row__name">/timestamp</span><span class="cmd-row__desc">Generate timestamps in various formats.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/afk" data-desc="Set an AFK status with custom message."><span class="cmd-row__name">/afk</span><span class="cmd-row__desc">Set an AFK status with custom message.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/reminder add" data-desc="Set a reminder for later."><span class="cmd-row__name">/reminder add</span><span class="cmd-row__desc">Set a reminder for later.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/reminder remove" data-desc="Remove a reminder."><span class="cmd-row__name">/reminder remove</span><span class="cmd-row__desc">Remove a reminder.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/reminder list" data-desc="List all reminders."><span class="cmd-row__name">/reminder list</span><span class="cmd-row__desc">List all reminders.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/emoji-info" data-desc="Get information about an emoji."><span class="cmd-row__name">/emoji-info</span><span class="cmd-row__desc">Get information about an emoji.</span><span class="cmd-row__badge">Utility</span></div>
-                        <div class="cmd-row" data-category="utility" data-name="/steal" data-desc="Steal an emoji from another server."><span class="cmd-row__name">/steal</span><span class="cmd-row__desc">Steal an emoji from another server.</span><span class="cmd-row__badge">Utility</span></div>
-
-                        <div class="cmd-group-label" data-cmd-group="search">Search</div>
-                        <div class="cmd-row" data-category="search" data-name="/define" data-desc="Get the definition of a word."><span class="cmd-row__name">/define</span><span class="cmd-row__desc">Get the definition of a word.</span><span class="cmd-row__badge">Search</span></div>
-                        <div class="cmd-row" data-category="search" data-name="/urban-define" data-desc="Get Urban Dictionary definition."><span class="cmd-row__name">/urban-define</span><span class="cmd-row__desc">Get Urban Dictionary definition.</span><span class="cmd-row__badge">Search</span></div>
-                        <div class="cmd-row" data-category="search" data-name="/weather" data-desc="Get weather information for a location."><span class="cmd-row__name">/weather</span><span class="cmd-row__desc">Get weather information for a location.</span><span class="cmd-row__badge">Search</span></div>
-                        <div class="cmd-row" data-category="search" data-name="/google" data-desc="Search Google and return results directly in Discord."><span class="cmd-row__name">/google</span><span class="cmd-row__desc">Search Google and return results directly in Discord.</span><span class="cmd-row__badge">Search</span></div>
-                        <div class="cmd-row" data-category="search" data-name="/youtube" data-desc="Search YouTube for videos."><span class="cmd-row__name">/youtube</span><span class="cmd-row__desc">Search YouTube for videos.</span><span class="cmd-row__badge">Search</span></div>
-                        <div class="cmd-row" data-category="search" data-name="/reverse-image" data-desc="Reverse image search using Google or other engines."><span class="cmd-row__name">/reverse-image</span><span class="cmd-row__desc">Reverse image search using Google or other engines.</span><span class="cmd-row__badge">Search</span></div>
-
-                        <div class="cmd-group-label" data-cmd-group="ai">AI</div>
-                        <div class="cmd-row" data-category="ai" data-name="/grok" data-desc="Chat with Grok AI models."><span class="cmd-row__name">/grok</span><span class="cmd-row__desc">Chat with Grok AI models.</span><span class="cmd-row__badge">AI</span></div>
-                        <div class="cmd-row" data-category="ai" data-name="/grokvision" data-desc="Analyze images with Grok AI."><span class="cmd-row__name">/grokvision</span><span class="cmd-row__desc">Analyze images with Grok AI.</span><span class="cmd-row__badge">AI</span></div>
-                        <div class="cmd-row" data-category="ai" data-name="/grokimage" data-desc="Generate images with Grok AI."><span class="cmd-row__name">/grokimage</span><span class="cmd-row__desc">Generate images with Grok AI.</span><span class="cmd-row__badge">AI</span></div>
-
-                        <div class="cmd-group-label" data-cmd-group="member">Member</div>
-                        <div class="cmd-row" data-category="member" data-name="/member add-role" data-desc="Add a role to a member."><span class="cmd-row__name">/member add-role</span><span class="cmd-row__desc">Add a role to a member.</span><span class="cmd-row__badge">Member</span></div>
-                        <div class="cmd-row" data-category="member" data-name="/member remove-role" data-desc="Remove a role from a member."><span class="cmd-row__name">/member remove-role</span><span class="cmd-row__desc">Remove a role from a member.</span><span class="cmd-row__badge">Member</span></div>
-                        <div class="cmd-row" data-category="member" data-name="/member rename" data-desc="Set a member's nickname."><span class="cmd-row__name">/member rename</span><span class="cmd-row__desc">Set a member's nickname.</span><span class="cmd-row__badge">Member</span></div>
-                        <div class="cmd-row" data-category="member" data-name="/member reset-nick" data-desc="Reset a member's nickname."><span class="cmd-row__name">/member reset-nick</span><span class="cmd-row__desc">Reset a member's nickname.</span><span class="cmd-row__badge">Member</span></div>
-
-                        <div class="cmd-group-label" data-cmd-group="role">Role</div>
-                        <div class="cmd-row" data-category="role" data-name="/role humans" data-desc="Add a role to all humans in the server."><span class="cmd-row__name">/role humans</span><span class="cmd-row__desc">Add a role to all humans in the server.</span><span class="cmd-row__badge">Role</span></div>
-                        <div class="cmd-row" data-category="role" data-name="/role kick" data-desc="Kick all users within a specific role."><span class="cmd-row__name">/role kick</span><span class="cmd-row__desc">Kick all users within a specific role.</span><span class="cmd-row__badge">Role</span></div>
-
-                        <div class="cmd-group-label" data-cmd-group="config">Config</div>
-                        <div class="cmd-row" data-category="config" data-name="/prefix add" data-desc="Add a custom prefix for this server."><span class="cmd-row__name">/prefix add</span><span class="cmd-row__desc">Add a custom prefix for this server.</span><span class="cmd-row__badge">Config</span></div>
-                        <div class="cmd-row" data-category="config" data-name="/prefix remove" data-desc="Remove a custom prefix from this server."><span class="cmd-row__name">/prefix remove</span><span class="cmd-row__desc">Remove a custom prefix from this server.</span><span class="cmd-row__badge">Config</span></div>
-                        <div class="cmd-row" data-category="config" data-name="/prefix list" data-desc="List current prefixes for this server."><span class="cmd-row__name">/prefix list</span><span class="cmd-row__desc">List current prefixes for this server.</span><span class="cmd-row__badge">Config</span></div>
-                        <div class="cmd-row" data-category="config" data-name="/prefix reset" data-desc="Reset all custom prefixes for this server."><span class="cmd-row__name">/prefix reset</span><span class="cmd-row__desc">Reset all custom prefixes for this server.</span><span class="cmd-row__badge">Config</span></div>
-
-                        <div class="cmd-group-label" data-cmd-group="creative">Creative</div>
-                        <div class="cmd-row" data-category="creative" data-name="/embed create" data-desc="Create customizable embeds."><span class="cmd-row__name">/embed create</span><span class="cmd-row__desc">Create customizable embeds.</span><span class="cmd-row__badge">Creative</span></div>
-                        <div class="cmd-row" data-category="creative" data-name="/tts voice" data-desc="Generate Text-to-Speech audio."><span class="cmd-row__name">/tts voice</span><span class="cmd-row__desc">Generate Text-to-Speech audio.</span><span class="cmd-row__badge">Fun</span></div>
-                        <div class="cmd-row" data-category="creative" data-name="/tts convert" data-desc="Convert text to speech in any language."><span class="cmd-row__name">/tts convert</span><span class="cmd-row__desc">Convert text to speech in any language.</span><span class="cmd-row__badge">Fun</span></div>
-                        <div class="cmd-row" data-category="creative" data-name="/imagefx_1" data-desc="Apply effects to user avatars or images."><span class="cmd-row__name">/imagefx_1</span><span class="cmd-row__desc">Apply effects to user avatars or images.</span><span class="cmd-row__badge">Fun</span></div>
+                        <div class="cmd-status cmd-status--loading" role="status">Loading commands from Discord…</div>
                     </div>
                 </div>
             </div>
@@ -213,6 +123,6 @@
       }
     }
     </script>
-    <script type="module" src="../assets/js/main.js?v=20260801v36"></script>
+    <script type="module" src="../assets/js/main.js?v=20260803v1"></script>
 </body>
 </html>

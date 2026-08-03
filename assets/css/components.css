@@ -723,6 +723,26 @@
     padding: 1rem 1rem 0.35rem;
 }
 
+.cmd-status {
+    padding: 2.5rem 1.25rem;
+    text-align: center;
+    color: var(--ink-dim);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.cmd-status--loading {
+    color: var(--ink-faint);
+}
+
+.cmd-status--error {
+    color: var(--status-warn, #e8a54b);
+}
+
+.cmd-status--empty {
+    color: var(--ink-faint);
+}
+
 /* Legal layout */
 .legal-layout {
     display: grid;
