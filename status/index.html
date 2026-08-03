@@ -133,9 +133,10 @@
     }
     </script>
     <script type="module" src="../assets/js/main.js?v=20260801v36"></script>
-    <script>
+    <script type="module">
+        import { API_BASE } from '../assets/js/api-config.js';
         const CONFIG = {
-            proxyUrl: 'https://cypher-bot-gamma.vercel.app/api/status',
+            proxyUrl: `${API_BASE}/api/status`,
             refreshInterval: 60,
             timeout: 5000
         };
@@ -253,11 +254,17 @@
             tick();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        function initStatusPage() {
             displayCachedStatus();
             updateStatusPage();
             startRefreshTimer();
-        });
+        }
+        // Modules are deferred; DOM may already be ready when this runs
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initStatusPage);
+        } else {
+            initStatusPage();
+        }
     </script>
 </body>
 </html>

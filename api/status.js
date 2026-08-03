@@ -1,20 +1,41 @@
-const http = require('http');
+const BOT_STATUS_URL = 'http://cypher.hype.surf:10001';
 
-module.exports = async (req, res) => {
-  if (req.method !== 'GET') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
+}
+
+export default async function handler(request, env) {
+  if (request.method !== 'GET') {
+    return json({ error: 'Method not allowed' }, 405);
   }
 
-  http.get('http://cypher.hype.surf:10001', (proxyRes) => {
-    let data = '';
-    proxyRes.on('data', chunk => data += chunk);
-    proxyRes.on('end', () => {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Content-Type', proxyRes.headers['content-type'] || 'application/json');
-      res.status(proxyRes.statusCode).send(data);
+  try {
+    const proxyRes = await fetch(BOT_STATUS_URL, {
+      method: 'GET',
+      signal: AbortSignal.timeout(8000),
     });
-  }).on('error', (err) => {
-    res.status(502).json({ error: 'Bad gateway', details: err.message });
-  });
-};
+
+    const body = await proxyRes.arrayBuffer();
+    const contentType = proxyRes.headers.get('content-type') || 'application/json';
+
+    return new Response(body, {
+      status: proxyRes.status,
+      headers: {
+        'Content-Type': contentType,
+        'Access-Control-Allow-Origin': '*',
+      },
+    });
+  } catch (err) {
+    console.error('Status proxy error:', err);
+    return json(
+      { error: 'Bad gateway', details: err instanceof Error ? err.message : String(err) },
+      502
+    );
+  }
+}

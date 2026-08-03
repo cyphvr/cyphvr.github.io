@@ -1,0 +1,20 @@
+name = "cyphvr-github-io"
+main = "api/index.js"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# Do not upload the static site as Worker assets (site stays on GitHub Pages)
+# No [assets] section on purpose.
+
+[triggers]
+crons = ["* * * * *"]
+
+[vars]
+STATUS_PAGE_URL = "https://cyphvr.xyz/status/"
+
+# Secrets (dashboard → Settings → Variables and Secrets):
+#   BOT_TOKEN, WEBHOOK_URL, ROLE
+#
+# Optional KV for alert cooldown (dashboard → Bindings):
+#   Variable name: ALERT_STATE  →  create/select a KV namespace

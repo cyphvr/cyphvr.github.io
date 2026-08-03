@@ -1,74 +1,89 @@
-import https from 'https';
+import handleStatus from './status.js';
 
-export const config = {
-  maxDuration: 60
-};
+const ALERT_INTERVAL_MS = 60_000;
+const LAST_ALERT_KEY = 'last_alert_time';
 
-export default async function handler(req, res) {
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+async function getLastAlertTime(env) {
+  if (!env.ALERT_STATE) return 0;
+  const raw = await env.ALERT_STATE.get(LAST_ALERT_KEY);
+  return raw ? parseInt(raw, 10) || 0 : 0;
+}
+
+async function setLastAlertTime(env, timestamp) {
+  if (!env.ALERT_STATE) return;
+  await env.ALERT_STATE.put(LAST_ALERT_KEY, String(timestamp));
+}
+
+export default async function handler(request, env) {
   try {
-    const statusResponse = await fetch('https://cypher-bot-gamma.vercel.app/api/status');
-    const statusData = await statusResponse.json();
+    const statusResponse = await handleStatus(
+      new Request('https://internal/api/status', { method: 'GET' }),
+      env
+    );
+    const statusData = await statusResponse.json().catch(() => ({}));
     const isBotDown = !statusData.success;
 
-    const lastAlertTime = parseInt(process.env.LAST_ALERT_TIME || '0');
+    const lastAlertTime = await getLastAlertTime(env);
     const now = Date.now();
     const timeSinceLastAlert = now - lastAlertTime;
-    const ALERT_INTERVAL = 60000;
+    const canAlert = isBotDown && timeSinceLastAlert >= ALERT_INTERVAL_MS;
 
-    if (isBotDown && timeSinceLastAlert >= ALERT_INTERVAL) {
-      const WEBHOOK_URL = process.env.WEBHOOK_URL;
-      const ROLE = process.env.ROLE;
+    let alertSent = false;
 
-      if (!WEBHOOK_URL || !ROLE) {
-        return res.status(500).json({ error: 'Webhook credentials not configured' });
+    if (canAlert) {
+      const webhookUrl = env.WEBHOOK_URL;
+      const role = env.ROLE;
+
+      if (!webhookUrl || !role) {
+        return json({ error: 'Webhook credentials not configured' }, 500);
       }
 
-      const payload = JSON.stringify({
-        content: `<@&${ROLE}>`,
-        embeds: [{
-          author: {
-            name: 'Cypher Monitoring thinks the bot is down.',
-            icon_url: 'https://i.imgur.com/ZDYu6Kp.png',
-            url: 'https://cyphvr.github.io/status/'
-          },
-          color: 16732280
-        }]
-      });
+      const statusPage = env.STATUS_PAGE_URL || 'https://cyphvr.xyz/status/';
 
-      const url = new URL(WEBHOOK_URL);
-      const options = {
-        hostname: url.hostname,
-        path: url.pathname + url.search,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': Buffer.byteLength(payload)
-        }
+      const payload = {
+        content: `<@&${role}>`,
+        embeds: [
+          {
+            author: {
+              name: 'Cypher Monitoring thinks the bot is down.',
+              icon_url: 'https://i.imgur.com/ZDYu6Kp.png',
+              url: statusPage,
+            },
+            color: 16732280,
+          },
+        ],
       };
 
-      await new Promise((resolve, reject) => {
-        const request = https.request(options, (response) => {
-          resolve();
-        });
-
-        request.on('error', (error) => {
-          reject(error);
-        });
-
-        request.write(payload);
-        request.end();
+      const webhookRes = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
-      process.env.LAST_ALERT_TIME = now.toString();
+      if (!webhookRes.ok) {
+        const text = await webhookRes.text().catch(() => '');
+        console.error('Webhook failed:', webhookRes.status, text);
+        return json({ error: 'Webhook delivery failed', status: webhookRes.status }, 502);
+      }
+
+      await setLastAlertTime(env, now);
+      alertSent = true;
     }
 
-    return res.status(200).json({
+    return json({
       success: true,
       botDown: isBotDown,
-      alertSent: isBotDown && timeSinceLastAlert >= ALERT_INTERVAL
+      alertSent,
     });
   } catch (error) {
     console.error('Monitor error:', error);
-    return res.status(500).json({ error: 'Monitor check failed' });
+    return json({ error: 'Monitor check failed' }, 500);
   }
 }
