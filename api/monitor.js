@@ -182,34 +182,45 @@ async function checkDiscordRestApi(env) {
   }
 }
 
-function buildAlertEmbed(issues, statusPage) {
-  const lines = issues.map((i) => `• ${i}`).join('\n');
-  const title =
-    issues.length === 1
-      ? 'Cypher Monitoring detected a disruption'
-      : `Cypher Monitoring detected ${issues.length} issues`;
+/**
+ * Default embed matches the old bot-only alert.
+ * Discord details are appended only when Discord itself has issues.
+ */
+function buildAlertEmbed(botIssues, discordIssues, statusPage) {
+  const botDown = botIssues.length > 0;
+  const discordDown = discordIssues.length > 0;
+
+  // Original default when our bot is the problem (with or without Discord extras)
+  // If only Discord is broken, use a Discord-focused title instead of a false "bot is down"
+  const authorName = botDown
+    ? 'Cypher Monitoring thinks the bot is down.'
+    : 'Cypher Monitoring detected a Discord disruption.';
+
+  const embed = {
+    author: {
+      name: authorName,
+      icon_url: 'https://i.imgur.com/ZDYu6Kp.png',
+      url: statusPage,
+    },
+    color: 16732280,
+  };
+
+  // Append Discord-only context when Discord has a real issue
+  if (discordDown) {
+    const lines = discordIssues.map((i) => `• ${i}`).join('\n');
+    embed.description = lines.slice(0, 3500);
+    embed.fields = [
+      {
+        name: 'Discord status',
+        value: '[discordstatus.com](https://discordstatus.com)',
+        inline: false,
+      },
+    ];
+  }
 
   return {
     content: null, // filled by caller with role ping
-    embeds: [
-      {
-        author: {
-          name: title,
-          icon_url: 'https://i.imgur.com/ZDYu6Kp.png',
-          url: statusPage,
-        },
-        description: lines.slice(0, 3500) || 'Unknown issue',
-        color: 16732280,
-        fields: [
-          {
-            name: 'Status page',
-            value: `[cyphvr.xyz/status](${statusPage}) · [discordstatus.com](https://discordstatus.com)`,
-            inline: false,
-          },
-        ],
-        timestamp: new Date().toISOString(),
-      },
-    ],
+    embeds: [embed],
   };
 }
 
@@ -221,9 +232,9 @@ export default async function handler(request, env) {
       checkDiscordRestApi(env),
     ]);
 
-    const issues = [...bot.issues, ...discordPage.issues, ...discordApi.issues];
-    // De-dupe while preserving order
-    const uniqueIssues = [...new Set(issues)];
+    const botIssues = [...new Set(bot.issues)];
+    const discordIssues = [...new Set([...discordPage.issues, ...discordApi.issues])];
+    const uniqueIssues = [...botIssues, ...discordIssues];
     const hasProblems = uniqueIssues.length > 0;
     const signature = uniqueIssues.slice().sort().join('|');
 
@@ -248,7 +259,7 @@ export default async function handler(request, env) {
       }
 
       const statusPage = env.STATUS_PAGE_URL || 'https://cyphvr.xyz/status/';
-      const payload = buildAlertEmbed(uniqueIssues, statusPage);
+      const payload = buildAlertEmbed(botIssues, discordIssues, statusPage);
       payload.content = `<@&${role}>`;
 
       const webhookRes = await fetch(webhookUrl, {
