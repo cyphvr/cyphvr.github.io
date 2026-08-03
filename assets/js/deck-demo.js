@@ -1,5 +1,4 @@
 const CMD = '/channel lock #general';
-const LOGO = 'images/cypher rebrand logo round (No BG).png';
 
 const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
@@ -11,7 +10,6 @@ function show(el) {
     if (!el) return;
     el.hidden = false;
     el.classList.remove('is-enter');
-
     void el.offsetWidth;
     el.classList.add('is-enter');
 }
@@ -44,17 +42,15 @@ export function initDeckDemo() {
     const reduced = prefersReducedMotion();
 
     const setTyping = (who) => {
-
         if (!who) {
-            hide(typing);
+            typing.classList.remove('is-active');
             return;
         }
 
         if (typingName) typingName.textContent = who === 'admin' ? 'admin' : 'Cypher';
         if (avatarBot) avatarBot.hidden = who !== 'cypher';
         if (avatarUser) avatarUser.hidden = who !== 'admin';
-
-        show(typing);
+        typing.classList.add('is-active');
     };
 
     const typeCommand = async (token) => {
@@ -83,7 +79,7 @@ export function initDeckDemo() {
         hide(botReady);
         hide(adminCmd);
         hide(botReply);
-        hide(typing);
+        setTyping(null);
         if (cmdTyped) cmdTyped.textContent = '';
         if (cmdCaret) cmdCaret.hidden = true;
     };
@@ -102,7 +98,7 @@ export function initDeckDemo() {
             await wait(reduced ? 450 : 1150);
             if (token !== runId) return;
 
-            hide(typing);
+            setTyping(null);
             show(adminCmd);
             await typeCommand(token);
             if (token !== runId) return;
@@ -113,7 +109,7 @@ export function initDeckDemo() {
             await wait(reduced ? 650 : 1550);
             if (token !== runId) return;
 
-            hide(typing);
+            setTyping(null);
             show(botReply);
             await wait(reduced ? 1400 : 3000);
         }
@@ -127,7 +123,7 @@ export function initDeckDemo() {
             show(adminCmd);
             if (cmdTyped) cmdTyped.textContent = CMD;
             show(botReply);
-            hide(typing);
+            setTyping(null);
             return;
         }
         wait(650).then(() => cycle(token));

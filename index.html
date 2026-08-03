@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher</title>
     <meta name="description" content="Cypher is a free all-in-one Discord bot for moderation, utilities, search, AI, and community tools.">
-    <link rel="stylesheet" href="assets/css/main.css?v=20260801v36">
+    <link rel="stylesheet" href="assets/css/main.css?v=20260803v2">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,20 +110,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="deck__typing" id="deckTyping" hidden>
-                        <div class="typing">
-                            <div class="typing__avatars">
-                                <img class="typing__avatar" id="deckTypingAvatarBot" src="images/cypher rebrand logo round (No BG).png" alt="" hidden>
-                                <div class="typing__avatar--user" id="deckTypingAvatarUser" hidden></div>
+                    <div class="deck__status" aria-live="polite">
+                        <div class="deck__typing" id="deckTyping">
+                            <div class="typing__who">
+                                <img class="typing__avatar" id="deckTypingAvatarBot" src="images/cypher rebrand logo round (No BG).png" alt="">
+                                <div class="typing__avatar typing__avatar--user" id="deckTypingAvatarUser" hidden></div>
                             </div>
-                            <div class="typing__cluster">
-                                <div class="typing__bubble" aria-hidden="true">
-                                    <span class="typing__dot"></span>
-                                    <span class="typing__dot"></span>
-                                    <span class="typing__dot"></span>
-                                </div>
-                                <p class="typing__label"><strong id="deckTypingName">Cypher</strong> is typing<span class="typing__ellipsis" aria-hidden="true"></span></p>
+                            <div class="typing__bubble" aria-hidden="true">
+                                <span class="typing__dot"></span>
+                                <span class="typing__dot"></span>
+                                <span class="typing__dot"></span>
                             </div>
+                            <p class="typing__label"><strong id="deckTypingName">Cypher</strong> is typing<span class="typing__ellipsis" aria-hidden="true"></span></p>
                         </div>
                     </div>
                 </div>
@@ -384,7 +382,7 @@
       }
     }
     </script>
-    <script type="module" src="assets/js/main.js?v=20260801v36"></script>
+    <script type="module" src="assets/js/main.js?v=20260803v2"></script>
     <script type="module">
         import { API_BASE } from './assets/js/api-config.js';
         async function fetchServerCount() {

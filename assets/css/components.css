@@ -200,15 +200,17 @@
 .deck--live {
     display: flex;
     flex-direction: column;
+    height: 360px;
 }
 
 .deck__body {
-    padding: 1.1rem 1.15rem 0.85rem;
+    padding: 1.1rem 1.15rem 0.75rem;
     display: flex;
     flex-direction: column;
     gap: 0.95rem;
-    min-height: 248px;
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .msg {
@@ -333,41 +335,54 @@
     font-size: 0.84rem;
 }
 
-.deck__typing {
-    padding: 0.15rem 1.15rem 0.95rem;
-    min-height: 2.75rem;
-}
-
-.deck__typing[hidden] {
-    display: none !important;
-}
-
-.typing {
+.deck__status {
+    flex: 0 0 48px;
     display: flex;
     align-items: center;
-    gap: 0.65rem;
-    animation: rise 0.28s var(--motion-ease, cubic-bezier(0.16, 1, 0.3, 1)) both;
+    padding: 0 1.15rem;
+    border-top: 1px solid var(--line);
+    background: rgba(0, 0, 0, 0.18);
 }
 
-.typing__avatars {
-    width: 36px;
-    flex-shrink: 0;
+.deck__typing {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    gap: 0.55rem;
+    width: 100%;
+    min-width: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition:
+        opacity 0.22s ease,
+        visibility 0.22s ease,
+        transform 0.22s var(--motion-ease, cubic-bezier(0.16, 1, 0.3, 1));
+    pointer-events: none;
 }
 
-.typing__avatar,
-.typing__avatar--user {
+.deck__typing.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.typing__who {
+    position: relative;
     width: 22px;
     height: 22px;
-    border-radius: 50%;
-    border: 1px solid var(--line);
-    box-shadow: 0 0 0 2px var(--paper-2);
+    flex-shrink: 0;
 }
 
 .typing__avatar {
+    position: absolute;
+    inset: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
     object-fit: cover;
     background: var(--paper-3);
+    border: 1px solid var(--line);
+    box-shadow: 0 0 0 2px rgba(10, 14, 24, 0.9);
 }
 
 .typing__avatar--user {
@@ -381,31 +396,22 @@
     display: none !important;
 }
 
-.typing__cluster {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.3rem;
-    min-width: 0;
-}
-
 .typing__bubble {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    min-width: 52px;
-    height: 28px;
-    padding: 0 0.7rem;
-    border-radius: 12px;
-    background: #1e2438;
+    gap: 3px;
+    flex-shrink: 0;
+    width: 42px;
+    height: 22px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(238, 242, 255, 0.08);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .typing__dot {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background: #b5bfd4;
     opacity: 0.45;
@@ -422,16 +428,20 @@
         opacity: 0.4;
     }
     30% {
-        transform: translateY(-4px);
+        transform: translateY(-3px);
         opacity: 1;
     }
 }
 
 .typing__label {
     margin: 0;
+    min-width: 0;
     font-size: 0.78rem;
     color: var(--ink-faint);
     line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .typing__label strong {
