@@ -1,4 +1,3 @@
-/* ========== HOME ========== */
 .hero-split {
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
@@ -70,7 +69,6 @@
     color: var(--ink-faint);
 }
 
-/* Matrix / capability table */
 .matrix {
     width: 100%;
     border-collapse: collapse;
@@ -113,7 +111,6 @@
     background: rgba(255, 255, 255, 0.02);
 }
 
-/* ========== FEATURES PAGE ========== */
 .features-stage {
     display: grid;
     grid-template-columns: 240px minmax(0, 1fr);
@@ -214,7 +211,6 @@
     font-size: 0.92rem;
 }
 
-/* ========== ABOUT ========== */
 .about-mast {
     padding: 3.5rem 0 2rem;
     border-bottom: 1px solid var(--line);
@@ -363,7 +359,6 @@
     font-size: 0.92rem;
 }
 
-/* ========== STATUS ========== */
 .status-board {
     padding: 2.5rem 0 4rem;
 }
@@ -521,7 +516,6 @@
     font-weight: 500;
 }
 
-/* ========== DIAG ========== */
 .diag-layout {
     max-width: 720px;
     margin: 0 auto;
@@ -679,7 +673,6 @@
     text-underline-offset: 3px;
 }
 
-/* ========== 404 ========== */
 .lost {
     min-height: calc(100vh - var(--header-h));
     display: grid;
@@ -716,7 +709,6 @@
     justify-content: center;
 }
 
-/* Page intro strip (shared) */
 .page-intro {
     padding: 2.75rem 0 1.5rem;
 }

@@ -1,5 +1,3 @@
-/* ========== FOOTER + shared chrome (original pill lives in navbar.css) ========== */
-
 .brand {
     display: inline-flex;
     align-items: center;
@@ -92,7 +90,6 @@
     margin-bottom: 0.9rem;
 }
 
-/* Original footer link hover (from footer.css): gradient underline + soft glow */
 .footer-col a {
     display: block;
     width: fit-content;
@@ -160,10 +157,10 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    /* Exit resting pose — soft drift down + fade */
+
     transform: translate3d(-50%, 16px, 0) scale(0.92);
     filter: blur(1.5px);
-    /* Exit timing: fade out first, then hide */
+
     transition:
         opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
         transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
@@ -189,7 +186,7 @@
     pointer-events: auto;
     transform: translate3d(-50%, 0, 0) scale(1);
     filter: blur(0);
-    /* Enter timing: show immediately, ease in slowly */
+
     transition:
         opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
         transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
@@ -274,7 +271,6 @@
         color 0.4s ease 0.08s;
 }
 
-/* Soften exit so label doesn’t snap shut */
 .cy-rise:not(:hover):not(:focus-visible) .cy-rise__label {
     transition:
         max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),

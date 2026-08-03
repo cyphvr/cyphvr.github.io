@@ -31,7 +31,6 @@ export function initNavigation() {
     const updateNavbarState = () => {
         if (!navbar) return;
 
-        // Original behavior: pill compact only on desktop
         if (window.innerWidth <= 768) {
             navbar.classList.remove('scrolled');
             navbar.classList.remove('is-compact');
@@ -96,7 +95,6 @@ export function initNavigation() {
     window.addEventListener('resize', setMenuTop);
     setMenuTop();
 
-    // Mark current page
     const path = window.location.pathname.replace(/\/$/, '') || '/';
     document.querySelectorAll('.navbar-link').forEach((link) => {
         try {
@@ -104,7 +102,7 @@ export function initNavigation() {
             const linkPath = url.pathname.replace(/\/$/, '') || '/';
             if (linkPath === path) link.setAttribute('aria-current', 'page');
         } catch {
-            /* ignore */
+
         }
     });
 }

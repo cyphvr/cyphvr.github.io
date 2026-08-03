@@ -1,5 +1,5 @@
 export function initCards() {
-    // Feature page: highlight TOC item while scrolling chapters
+
     const chapters = document.querySelectorAll('.feature-chapter[id]');
     const navLinks = document.querySelectorAll('.features-nav a[href^="#"]');
     if (!chapters.length || !navLinks.length) return;

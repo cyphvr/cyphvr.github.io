@@ -5,7 +5,7 @@ const LAST_ALERT_KEY = 'last_alert_time';
 const LAST_ALERT_SIG_KEY = 'last_alert_signature';
 
 const DISCORD_STATUS_URL = 'https://discordstatus.com/api/v2/summary.json';
-// Core Discord systems that affect bots (skip regional voice PoPs / client-only noise)
+
 const CRITICAL_DISCORD_COMPONENTS = new Set([
   'API',
   'Gateway',
@@ -40,7 +40,6 @@ async function setKv(env, key, value) {
   await env.ALERT_STATE.put(key, value);
 }
 
-/** @returns {Promise<{ ok: boolean, issues: string[] }>} */
 async function checkBotHealth(env) {
   try {
     const statusResponse = await handleStatus(
@@ -71,7 +70,6 @@ async function checkBotHealth(env) {
   }
 }
 
-/** Official Discord status page (API, Gateway, etc.) */
 async function checkDiscordStatusPage() {
   try {
     const res = await fetch(DISCORD_STATUS_URL, {
@@ -89,7 +87,7 @@ async function checkDiscordStatusPage() {
     const data = await res.json();
     const issues = [];
 
-    const indicator = data?.status?.indicator; // none | minor | major | critical
+    const indicator = data?.status?.indicator;
     const description = data?.status?.description || 'Unknown Discord status';
     if (indicator && indicator !== 'none') {
       issues.push(`Discord platform: ${description} (${indicator})`);
@@ -108,7 +106,7 @@ async function checkDiscordStatusPage() {
     for (const incident of incidents) {
       const name = incident?.name || 'Unnamed incident';
       const status = incident?.status || 'active';
-      // unresolved / investigating / identified / monitoring
+
       if (status && status !== 'resolved' && status !== 'postmortem') {
         issues.push(`Discord incident: ${name} (${status})`);
       }
@@ -125,10 +123,6 @@ async function checkDiscordStatusPage() {
   }
 }
 
-/**
- * Live probe of Discord's REST API with the bot token.
- * Confirms API is reachable from Cloudflare (status page can lag).
- */
 async function checkDiscordRestApi(env) {
   const token = env.BOT_TOKEN;
   if (!token) {
@@ -146,7 +140,6 @@ async function checkDiscordRestApi(env) {
       return { ok: true, issues: [] };
     }
 
-    // 401/403 = token problem (your side), not a Discord outage
     if (res.status === 401 || res.status === 403) {
       return {
         ok: false,
@@ -182,16 +175,10 @@ async function checkDiscordRestApi(env) {
   }
 }
 
-/**
- * Default embed matches the old bot-only alert.
- * Discord details are appended only when Discord itself has issues.
- */
 function buildAlertEmbed(botIssues, discordIssues, statusPage) {
   const botDown = botIssues.length > 0;
   const discordDown = discordIssues.length > 0;
 
-  // Original default when our bot is the problem (with or without Discord extras)
-  // If only Discord is broken, use a Discord-focused title instead of a false "bot is down"
   const authorName = botDown
     ? 'Cypher Monitoring thinks the bot is down.'
     : 'Cypher Monitoring detected a Discord disruption.';
@@ -205,7 +192,6 @@ function buildAlertEmbed(botIssues, discordIssues, statusPage) {
     color: 16732280,
   };
 
-  // Append Discord-only context when Discord has a real issue
   if (discordDown) {
     const lines = discordIssues.map((i) => `• ${i}`).join('\n');
     embed.description = lines.slice(0, 3500);
@@ -219,7 +205,7 @@ function buildAlertEmbed(botIssues, discordIssues, statusPage) {
   }
 
   return {
-    content: null, // filled by caller with role ping
+    content: null,
     embeds: [embed],
   };
 }
@@ -243,7 +229,6 @@ export default async function handler(request, env) {
     const now = Date.now();
     const timeSinceLastAlert = now - lastAlertTime;
 
-    // Alert if problems exist AND (cooldown passed OR the issue set changed)
     const issuesChanged = signature !== lastSignature;
     const canAlert =
       hasProblems && (timeSinceLastAlert >= ALERT_INTERVAL_MS || (issuesChanged && timeSinceLastAlert >= 15_000));
@@ -282,7 +267,6 @@ export default async function handler(request, env) {
       alertSent = true;
     }
 
-    // Clear signature when healthy so the next incident always alerts
     if (!hasProblems && lastSignature) {
       await setKv(env, LAST_ALERT_SIG_KEY, '');
     }

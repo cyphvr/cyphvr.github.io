@@ -375,7 +375,7 @@
     }
 }
 
-/* ===== mobile (from original responsive.css) ===== */
+
 @media (max-width: 768px) {
     .navbar {
         top: 8px;

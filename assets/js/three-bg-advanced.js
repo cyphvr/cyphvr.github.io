@@ -5,47 +5,38 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { getFlightState } from './scroll-flight.js?v=20260801v36';
 
-/**
- * Site-wide Three.js background — Sky Theatre.
- * Scroll stages an orbital diorama + phase morph (not plain scroll-zoom).
- */
 
-/* Match site CSS tokens: navy void + indigo + cyan/teal + soft violet */
+
+
+
 const PALETTE = {
     deep: 0x06080f,
     mid: 0x0b1020,
     edge: 0x121a2e,
-    primary: 0x7c9bff, // --ember
-    cyan: 0x5eead4, // --amber (teal)
-    violet: 0xa78bfa, // --violet
-    mint: 0x67e8f9 // cool aqua accent
+    primary: 0x7c9bff,
+    cyan: 0x5eead4,
+    violet: 0xa78bfa,
+    mint: 0x67e8f9
 };
 
-/** Smoothstep for path blending */
+
 function smoothstep(edge0, edge1, x) {
     const t = Math.min(1, Math.max(0, (x - edge0) / Math.max(1e-6, edge1 - edge0)));
     return t * t * (3 - 2 * t);
 }
 
-/**
- * Sky Theatre mode — NOT plain scroll-zoom.
- * Scroll stages a scene like a revolving set:
- *  - Orbital camera (yaw/pitch on a radius) around a soft focal volume
- *  - Scene counter-rotates (multiplane diorama)
- *  - Phase morph: dusk → midnight → afterglow (color / density)
- *  - Particles swirl & rise like a weather system, not a tunnel dive
- * FOV stays fixed; no “push into the screen” zoom language.
- */
+
+
 export function sampleTheatre(s, v = 0, dir = 0) {
     const p = Math.min(1, Math.max(0, s));
-    // Ease the act so mid-page is the dramatic middle of the orbit
+
     const e = p * p * (3 - 2 * p);
-    // ~70° horizontal arc, gentle elevation lift
+
     const yaw = -0.42 + e * 1.15 + dir * v * 0.12;
     const pitch = 0.06 + e * 0.28 + Math.sin(e * Math.PI) * 0.04;
-    // Radius breathes only slightly — never collapses into a zoom
+
     const radius = 168 + Math.sin(e * Math.PI) * 10 - v * 4;
-    // Stage focus drifts slowly upward (crane of the *subject*, not the lens)
+
     const focus = {
         x: Math.sin(e * 1.2) * 8,
         y: 2 + e * 14,
@@ -60,15 +51,15 @@ export function sampleTheatre(s, v = 0, dir = 0) {
         pitch,
         radius,
         focus,
-        // Camera on a sphere around focus
+
         cam: {
             x: focus.x + sy * radius * cp,
             y: focus.y + sp * radius * 0.72 + 6,
             z: focus.z + cy * radius * cp
         },
-        // Phase for grade: 0 dusk → 0.5 night → 1 afterglow
+
         phase: e,
-        // Counter-rotation of the diorama
+
         stageYaw: -yaw * 0.55,
         stagePitch: -pitch * 0.25
     };
@@ -78,13 +69,13 @@ const state = {
     initialized: false,
     reducedMotion: false,
     touchUi: false,
-    /** Phone / small tablet — severe quality cut */
+    
     mobile: false,
-    /** Skip post stack (bloom/film) */
+    
     usePost: true,
-    /** Internal render scale (0.55–1) */
+    
     renderScale: 1,
-    /** Draw every Nth frame on mobile (2 = ~30fps) */
+    
     frameSkip: 1,
     frameCount: 0,
     pageVisible: true,
@@ -93,13 +84,13 @@ const state = {
     quality: 1,
     mouse: new THREE.Vector2(0, 0),
     smoothMouse: new THREE.Vector2(0, 0),
-    /** 0..1 page scroll progress (smoothed) */
+    
     scroll: 0,
     smoothScroll: 0,
-    /** 0..1 flight speed (from virtual scroll velocity) */
+    
     speed: 0,
     smoothSpeed: 0,
-    /** smoothed signed direction */
+    
     dir: 0,
     baseBloom: 0.82,
     baseExposure: 1.28,
@@ -113,11 +104,11 @@ const state = {
     composer: null,
     clock: null,
     root: null,
-    /** near / mid / far multiplane groups */
+    
     planeNear: null,
     planeMid: null,
     planeFar: null,
-    /** Anime sky layer: aurora sheets, bokeh orbs, speed lines */
+    
     anime: null,
     backdrop: null,
     veilA: null,
@@ -128,7 +119,7 @@ const state = {
     drift: null,
     bloomPass: null,
     filmPass: null,
-    // Stable viewport (mobile URL bar show/hide must not re-size WebGL)
+
     renderWidth: 0,
     renderHeight: 0,
     lastLayoutWidth: 0,
@@ -140,13 +131,13 @@ const state = {
     _quatTarget: new THREE.Quaternion(),
     _m4: new THREE.Matrix4(),
     _up: new THREE.Vector3(0, 1, 0),
-    /** External frame subscribers (CSS3D stage, etc.) */
+    
     frameHooks: [],
-    /** Latest theatre snapshot for other renderers */
+    
     theatreSnap: null
 };
 
-/** Subscribe to the WebGL render loop. Returns unsubscribe. */
+
 export function onThreeFrame(fn) {
     if (typeof fn !== 'function') return () => {};
     state.frameHooks.push(fn);
@@ -171,7 +162,7 @@ function detectTouchUi() {
     }
 }
 
-/** Aggressive mobile / low-power profile for WebGL */
+
 function detectMobileProfile(touchUi) {
     const narrow =
         Math.min(window.innerWidth || 9999, window.innerHeight || 9999) < 820 ||
@@ -182,17 +173,17 @@ function detectMobileProfile(touchUi) {
     try {
         cores = navigator.hardwareConcurrency || 8;
     } catch {
-        /* ignore */
+        
     }
     try {
         mem = navigator.deviceMemory || 8;
     } catch {
-        /* ignore */
+        
     }
     try {
         saveData = Boolean(navigator.connection?.saveData);
     } catch {
-        /* ignore */
+        
     }
     const lowPower = cores <= 4 || mem <= 4 || saveData;
     return {
@@ -208,7 +199,7 @@ function maxPixelRatio() {
     return Math.min(dpr, 1.6);
 }
 
-/** Layout size for the canvas — ignore transient mobile chrome height flicker. */
+
 function getStableViewport() {
     const w = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1);
     const h = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
@@ -217,14 +208,14 @@ function getStableViewport() {
         return { w, h, changed: w !== state.renderWidth || h !== state.renderHeight };
     }
 
-    // Width change (orientation / real layout) → accept new height fully
+
     const widthChanged = !state.lastLayoutWidth || Math.abs(w - state.lastLayoutWidth) > 24;
     if (widthChanged) {
         state.lastLayoutWidth = w;
         return { w, h, changed: true };
     }
 
-    // Height-only change while scrolling (URL bar) → keep prior render size
+
     if (state.renderWidth && state.renderHeight) {
         return { w: state.renderWidth, h: state.renderHeight, changed: false };
     }
@@ -243,7 +234,7 @@ function pageMode() {
 }
 
 function applyPageCamera(mode) {
-    // Slight framing shifts per page, still full-field
+
     const map = {
         home: { cam: [0, 4, 135], look: [0, -4, -90] },
         features: { cam: [8, 2, 145], look: [-6, -2, -80] },
@@ -259,7 +250,7 @@ function applyPageCamera(mode) {
 }
 
 const NOISE_GLSL = `
-// Gradient-style noise (not raw value-noise) — avoids visible square lattice cells
+
 vec3 hash33(vec3 p) {
     p = vec3(
         dot(p, vec3(127.1, 311.7, 74.7)),
@@ -271,7 +262,7 @@ vec3 hash33(vec3 p) {
 float noise(vec3 p) {
     vec3 i = floor(p);
     vec3 f = fract(p);
-    // Quintic fade — kills blocky corners of classic value noise
+
     vec3 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
 
     float n000 = dot(hash33(i + vec3(0,0,0)), f - vec3(0,0,0));
@@ -292,7 +283,7 @@ float noise(vec3 p) {
 float fbm(vec3 p) {
     float v = 0.0;
     float a = 0.5;
-    // Rotate each octave so lattice axes never stack into a visible grid
+
     for (int i = 0; i < 5; i++) {
         v += a * noise(p);
         p = mat3(
@@ -306,7 +297,7 @@ float fbm(vec3 p) {
 }
 `;
 
-/* Fullscreen abstract field (edge-to-edge washes, not a centerpiece) */
+
 function createBackdrop() {
     const material = new THREE.ShaderMaterial({
         depthWrite: false,
@@ -352,7 +343,7 @@ function createBackdrop() {
                 vec2 p = (gl_FragCoord.xy / max(resolution, vec2(1.0))) * 2.0 - 1.0;
                 p.x *= resolution.x / max(resolution.y, 1.0);
 
-                // Phase morph — indigo → cyan → soft violet (site theme only)
+
                 float s = scroll;
                 float phase = s;
                 float t = time * 0.035 + phase * 0.4;
@@ -404,7 +395,7 @@ function createBackdrop() {
     return mesh;
 }
 
-/* Large translucent veils spanning the volume */
+
 function createVeil(width, height, z, color, opacity, speed) {
     const material = new THREE.ShaderMaterial({
         transparent: true,
@@ -440,7 +431,7 @@ function createVeil(width, height, z, color, opacity, speed) {
                 float t = time * speed;
                 float n = fbm(vec3(uv * 2.4, t));
                 float n2 = fbm(vec3(uv * 4.2 - t * 0.35, t * 0.55));
-                // Soft cloudy sheets — no linear wave / lattice structure
+
                 float sheet = smoothstep(0.18, 0.78, n) * (0.4 + 0.6 * n2);
                 float edge = smoothstep(0.0, 0.14, uv.x) * smoothstep(1.0, 0.86, uv.x)
                            * smoothstep(0.0, 0.12, uv.y) * smoothstep(1.0, 0.88, uv.y);
@@ -458,13 +449,13 @@ function createVeil(width, height, z, color, opacity, speed) {
     return mesh;
 }
 
-/* Wide mist particle volume filling the frustum */
+
 function createMist(count) {
     const positions = new Float32Array(count * 3);
     const seeds = new Float32Array(count * 4);
 
     for (let i = 0; i < count; i++) {
-        // Spread across a large box, not a sphere around origin
+
         positions[i * 3] = (Math.random() - 0.5) * 320;
         positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
         positions[i * 3 + 2] = -40 - Math.random() * 220;
@@ -501,7 +492,7 @@ function createMist(count) {
             void main() {
                 vec3 p = position;
                 float t = time * aSeed.w * 0.25;
-                // Flight pulls field through the camera (depth scroll)
+
                 p.z += scroll * 95.0 + speed * aSeed.z * 18.0;
                 p.x += sin(t + aSeed.x + scroll * 3.0) * 12.0 + mouse.x * 18.0 * aSeed.z;
                 p.y += cos(t * 0.8 + aSeed.x * 0.5) * 8.0 + mouse.y * 12.0 * aSeed.z - scroll * 22.0;
@@ -513,7 +504,7 @@ function createMist(count) {
 
                 vec4 mv = modelViewMatrix * vec4(p, 1.0);
                 gl_Position = projectionMatrix * mv;
-                // Velocity stretches points slightly along flight for motion feel
+
                 float stretch = 1.0 + speed * 1.4;
                 gl_PointSize = aSeed.y * pixelRatio * (175.0 / max(1.0, -mv.z)) * stretch;
             }
@@ -537,18 +528,18 @@ function createMist(count) {
     return points;
 }
 
-/* Horizontal streams that cross the whole frame */
+
 function createStream(count) {
     const positions = new Float32Array(count * 3);
     const seeds = new Float32Array(count * 4);
 
     for (let i = 0; i < count; i++) {
-        // Free-floating field — no discrete lanes/rows
+
         positions[i * 3] = (Math.random() - 0.5) * 360;
         positions[i * 3 + 1] = (Math.random() - 0.5) * 190;
         positions[i * 3 + 2] = -30 - Math.random() * 200;
         seeds[i * 4] = Math.random() * Math.PI * 2;
-        seeds[i * 4 + 1] = 14 + Math.random() * 48; // speed
+        seeds[i * 4 + 1] = 14 + Math.random() * 48;
         seeds[i * 4 + 2] = Math.random();
         seeds[i * 4 + 3] = 0.5 + Math.random() * 1.5;
     }
@@ -609,16 +600,14 @@ function createStream(count) {
     return new THREE.Points(geometry, material);
 }
 
-/**
- * Anime-inspired sky field: soft aurora curtains, bokeh orbs, rush lines.
- * No rings / spirals — layered atmosphere you glide through.
- */
+
+
 function createAnimeSky(opts = {}) {
     const { touchUi = false, quality = 1 } = opts;
     const group = new THREE.Group();
     group.name = 'animeSky';
 
-    // --- Soft aurora / light curtains (pastel sheets) ---
+
     const sheetColors = [
         [PALETTE.primary, 0.14],
         [PALETTE.cyan, 0.12],
@@ -658,7 +647,7 @@ function createAnimeSky(opts = {}) {
                 uniform float opacity;
                 void main() {
                     vec2 uv = vUv;
-                    // Soft vertical aurora bands — organic, not grid
+
                     float wave = sin(uv.x * 4.5 + time * 0.35 + scroll * 2.0) * 0.5
                                + sin(uv.x * 9.0 - time * 0.22 + uv.y * 2.0) * 0.25;
                     float band = smoothstep(0.15, 0.55, 0.45 + wave * 0.35 + uv.y * 0.2);
@@ -684,7 +673,7 @@ function createAnimeSky(opts = {}) {
         sheets.push(mesh);
     }
 
-    // --- Large soft bokeh orbs (anime night / dusk lights) ---
+
     const orbCount = Math.floor((touchUi ? 48 : 90) * quality);
     const orbPos = new Float32Array(orbCount * 3);
     const orbSeed = new Float32Array(orbCount * 4);
@@ -693,9 +682,9 @@ function createAnimeSky(opts = {}) {
         orbPos[i * 3 + 1] = (Math.random() - 0.35) * 160;
         orbPos[i * 3 + 2] = -20 - Math.random() * 220;
         orbSeed[i * 4] = Math.random() * 100;
-        orbSeed[i * 4 + 1] = 1.2 + Math.random() * 3.5; // size
-        orbSeed[i * 4 + 2] = Math.random(); // color mix
-        orbSeed[i * 4 + 3] = 0.35 + Math.random() * 0.8; // drift
+        orbSeed[i * 4 + 1] = 1.2 + Math.random() * 3.5;
+        orbSeed[i * 4 + 2] = Math.random();
+        orbSeed[i * 4 + 3] = 0.35 + Math.random() * 0.8;
     }
     const orbGeo = new THREE.BufferGeometry();
     orbGeo.setAttribute('position', new THREE.BufferAttribute(orbPos, 3));
@@ -723,11 +712,11 @@ function createAnimeSky(opts = {}) {
                 void main() {
                     vec3 p = position;
                     float t = time * aSeed.w * 0.2;
-                    // Gentle float + scroll lift (sakura / light orbs rising)
+
                     p.x += sin(t + aSeed.x) * 8.0;
                     p.y += cos(t * 0.7 + aSeed.x * 0.4) * 6.0 + scroll * 36.0;
                     p.z += scroll * 90.0 + sin(t * 0.5) * 4.0;
-                    // Theme bokeh: indigo / teal / soft violet
+
                     vec3 cA = vec3(0.49, 0.61, 1.0);
                     vec3 cB = vec3(0.37, 0.92, 0.83);
                     vec3 cC = vec3(0.66, 0.55, 0.98);
@@ -746,7 +735,7 @@ function createAnimeSky(opts = {}) {
                 void main() {
                     vec2 uv = gl_PointCoord - 0.5;
                     float d = length(uv);
-                    // Soft bokeh disc with warm falloff
+
                     float a = exp(-d * 3.2) * vAlpha;
                     float rim = smoothstep(0.48, 0.2, d) * 0.15;
                     a += rim * vAlpha;
@@ -760,19 +749,19 @@ function createAnimeSky(opts = {}) {
     orbs.name = 'bokeh';
     group.add(orbs);
 
-    // --- Anime speed lines (appear with scroll velocity) ---
+
     const lineCount = Math.floor((touchUi ? 80 : 160) * quality);
     const linePos = new Float32Array(lineCount * 3);
     const lineSeed = new Float32Array(lineCount * 4);
     for (let i = 0; i < lineCount; i++) {
-        // Radial from center — classic anime rush
+
         const ang = Math.random() * Math.PI * 2;
         const r = 20 + Math.random() * 140;
         linePos[i * 3] = Math.cos(ang) * r;
         linePos[i * 3 + 1] = Math.sin(ang) * r * 0.65;
         linePos[i * 3 + 2] = -10 - Math.random() * 180;
         lineSeed[i * 4] = ang;
-        lineSeed[i * 4 + 1] = 0.6 + Math.random() * 1.8; // length bias
+        lineSeed[i * 4 + 1] = 0.6 + Math.random() * 1.8;
         lineSeed[i * 4 + 2] = Math.random();
         lineSeed[i * 4 + 3] = 0.5 + Math.random();
     }
@@ -801,7 +790,7 @@ function createAnimeSky(opts = {}) {
                 varying vec3 vColor;
                 void main() {
                     vec3 p = position;
-                    // Rush outward + through depth when moving
+
                     float rush = speed * (18.0 + aSeed.y * 40.0);
                     p.x += cos(aSeed.x) * rush;
                     p.y += sin(aSeed.x) * rush * 0.7;
@@ -810,7 +799,7 @@ function createAnimeSky(opts = {}) {
                     vColor = mix(vec3(0.9, 0.95, 1.0), vec3(0.55, 0.9, 1.0), aSeed.z);
                     vec4 mv = modelViewMatrix * vec4(p, 1.0);
                     gl_Position = projectionMatrix * mv;
-                    // Stretch into lines when fast
+
                     gl_PointSize = aSeed.y * pixelRatio * (28.0 / max(1.0, -mv.z))
                         * (1.0 + speed * 14.0);
                 }
@@ -822,7 +811,7 @@ function createAnimeSky(opts = {}) {
                 void main() {
                     if (vAlpha < 0.02) discard;
                     vec2 uv = gl_PointCoord - 0.5;
-                    // Elongated streak (horizontal stretch in point space)
+
                     float d = length(uv * vec2(0.35, 1.6));
                     float a = exp(-d * 5.5) * vAlpha;
                     if (a < 0.012) discard;
@@ -835,7 +824,7 @@ function createAnimeSky(opts = {}) {
     speedLines.name = 'speedLines';
     group.add(speedLines);
 
-    // --- Distant horizon glow band ---
+
     const horizonMat = new THREE.ShaderMaterial({
         transparent: true,
         depthWrite: false,
@@ -884,7 +873,7 @@ function createAnimeSky(opts = {}) {
     return group;
 }
 
-/* Secondary vertical drift particles */
+
 function createDrift(count) {
     const positions = new Float32Array(count * 3);
     const seeds = new Float32Array(count * 4);
@@ -982,9 +971,9 @@ const FilmShader = {
             vec2 uv = vUv;
             vec2 c = uv - 0.5;
             float d = length(c);
-            // Directional motion streak (world-stream feel) — NOT radial zoom
+
             float ab = (0.0008 + speed * 0.0018) * amount * (0.28 + d);
-            // Vertical smear = travel through depth; slight horizontal for truck
+
             vec2 streak = vec2(speed * 0.0025, -speed * 0.0065);
             float r = texture2D(tDiffuse, uv + c * ab + streak).r;
             float g = texture2D(tDiffuse, uv + streak * 0.45).g;
@@ -1001,7 +990,7 @@ const FilmShader = {
 
 function createLights(scene) {
     scene.add(new THREE.AmbientLight(0xb8c8ff, state.mobile ? 0.95 : 0.72));
-    // Mobile: one key light only — point lights are expensive
+
     const L = state.mobile
         ? [[0x7c9bff, 1.1, -40, 30, 10]]
         : [
@@ -1022,10 +1011,10 @@ function animate() {
     if (!state.renderer || !state.scene || !state.camera) return;
     if (!state.pageVisible) return;
 
-    // Mobile: skip frames (~30fps) to cut GPU load
+
     state.frameCount += 1;
     if (state.frameSkip > 1 && state.frameCount % state.frameSkip !== 0) {
-        // Still advance clock lightly so motion doesn't stutter when we resume
+
         state.clock.getDelta();
         return;
     }
@@ -1035,7 +1024,7 @@ function animate() {
     state.time += dt * scale;
     const t = state.time;
 
-    // Pull progress + velocity from the flight / native scroll tracker
+
     const flight = getFlightState();
     state.scroll = flight.progress;
     const scrollFollow = state.mobile ? 0.22 : state.reducedMotion ? 0.18 : 0.14;
@@ -1064,7 +1053,7 @@ function animate() {
         if (u.scroll) u.scroll.value = phase;
     }
 
-    // Stage rotates as a diorama (counter to orbit) — this is the “not zoom” trick
+
     if (state.root) {
         state.root.rotation.y = theatre.stageYaw;
         state.root.rotation.x = theatre.stagePitch;
@@ -1072,7 +1061,7 @@ function animate() {
         state.root.position.y = Math.sin(phase * Math.PI) * 4;
     }
 
-    // Multiplane: lighter on mobile
+
     const mx = state.mobile ? 0 : state.smoothMouse.x;
     const my = state.mobile ? 0 : state.smoothMouse.y;
     if (state.planeNear) {
@@ -1094,7 +1083,7 @@ function animate() {
         state.planeFar.rotation.y = -theatre.yaw * 0.04;
     }
 
-    // Anime sky: weather system on the far plane (desktop only)
+
     if (state.anime && !state.mobile) {
         const { sheets, orbs, speedLines, horizon } = state.anime.userData;
         sheets?.forEach((mesh, i) => {
@@ -1104,14 +1093,14 @@ function animate() {
                 mat.uniforms.scroll.value = phase;
                 mat.uniforms.speed.value = v * 0.6;
                 if (mat.uniforms.opacity) {
-                    // Phase-based presence: mid-act peaks, never white-out
+
                     const act = 0.75 + Math.sin(phase * Math.PI) * 0.35;
                     mat.uniforms.opacity.value = (0.06 + i * 0.012) * act;
                 }
             }
             const baseY = mesh.userData.baseY ?? mesh.position.y;
             const baseZ = mesh.userData.baseZ ?? mesh.position.z;
-            // Curtains drift sideways with the orbit, rise gently with phase
+
             mesh.position.y = baseY + Math.sin(t * 0.12 + i) * 3 + phase * 12;
             mesh.position.z = baseZ;
             mesh.position.x =
@@ -1126,7 +1115,7 @@ function animate() {
             orbs.material.uniforms.speed.value = v * 0.7;
         }
         if (speedLines?.material?.uniforms) {
-            // Only a whisper of lines on fast flicks — not a constant zoom cue
+
             speedLines.material.uniforms.time.value = t;
             speedLines.material.uniforms.scroll.value = phase;
             speedLines.material.uniforms.speed.value = Math.max(0, v - 0.15) * 0.9;
@@ -1160,7 +1149,7 @@ function animate() {
                 );
             }
         }
-        // Float & orbit-local sway (weather, not tunnel)
+
         const ang = theatre.yaw * (0.4 + i * 0.15) + t * 0.05 + i;
         veil.position.x = Math.sin(ang) * (16 + i * 6) + Math.sin(t * 0.07 + i) * 6;
         veil.position.y = Math.cos(t * 0.06 + i * 1.2) * (5 + i * 2) + phase * (3 + i);
@@ -1169,13 +1158,13 @@ function animate() {
         veil.rotation.y = ang * 0.25 + Math.sin(t * 0.04 + i) * 0.08;
     });
 
-    // Weather clock — swirl & rise with phase, mild velocity accent
+
     const weatherT = t + phase * 3.2 + v * 1.2;
     const setParticle = (obj, timeScale = 1, speedMul = 0.7) => {
         if (!obj?.material?.uniforms) return;
         const u = obj.material.uniforms;
         u.time.value = weatherT * timeScale;
-        // Lower scroll-driven Z push so it doesn't read as dive-zoom
+
         if (u.scroll) u.scroll.value = phase * 0.45;
         if (u.speed) u.speed.value = Math.min(0.85, v * speedMul);
         if (u.mouse) u.mouse.value.copy(state.smoothMouse);
@@ -1184,7 +1173,7 @@ function animate() {
     setParticle(state.stream, 1.05, 0.9);
     setParticle(state.drift, 0.9, 0.7);
 
-    // --- Orbital sky theatre camera (fixed FOV) ---
+
     const parallax = state.reducedMotion ? 0.08 : state.touchUi ? 0 : 1;
     const idle = scale;
 
@@ -1205,7 +1194,7 @@ function animate() {
     state.camera.position.y += (state.targetCam.y - state.camera.position.y) * camEase;
     state.camera.position.z += (state.targetCam.z - state.camera.position.z) * camEase;
 
-    // Gaze at the stage focus; mouse peeks around the volume
+
     state._tmpFocus.set(
         theatre.focus.x + state.smoothMouse.x * 12 * parallax,
         theatre.focus.y + 4 + state.smoothMouse.y * 8 * parallax + Math.sin(phase * Math.PI) * 3,
@@ -1215,7 +1204,7 @@ function animate() {
 
     state._m4.lookAt(state.camera.position, state._tmpLook, state._up);
     state._quatTarget.setFromRotationMatrix(state._m4);
-    // Soft dutch from orbit angular velocity, not scroll-zoom bank
+
     const roll = Math.sin(theatre.yaw) * 0.03 + dir * v * 0.02;
     state._tmpCam.set(0, 0, 1);
     state._quat.setFromAxisAngle(state._tmpCam, roll);
@@ -1227,7 +1216,7 @@ function animate() {
         state.camera.updateProjectionMatrix();
     }
 
-    // Fog: night denser mid-act, clears slightly at afterglow
+
     if (state.scene?.fog) {
         const fogBase = 0.0015;
         const night = Math.sin(phase * Math.PI);
@@ -1241,7 +1230,7 @@ function animate() {
     }
 
     if (state.renderer) {
-        // Afterglow slightly warmer exposure, still capped
+
         const exp = state.baseExposure + phase * 0.03 + Math.sin(phase * Math.PI) * 0.02;
         state.renderer.toneMappingExposure = Math.min(exp, state.baseExposure + 0.06);
     }
@@ -1284,7 +1273,7 @@ function animate() {
             try {
                 state.frameHooks[i](payload);
             } catch {
-                /* ignore */
+                
             }
         }
     }
@@ -1297,7 +1286,7 @@ function applyViewportSize(w, h, force = false) {
     state.renderWidth = w;
     state.renderHeight = h;
 
-    // Mobile: lower internal resolution, stretch via CSS
+
     const rs = state.renderScale || 1;
     const bw = Math.max(1, Math.floor(w * rs));
     const bh = Math.max(1, Math.floor(h * rs));
@@ -1354,7 +1343,7 @@ export function initThreeBackground() {
     const profile = detectMobileProfile(state.touchUi);
     state.mobile = profile.mobile || state.reducedMotion;
 
-    // Quality ladder: desktop full → mobile lite → reduced-motion ultra-lite
+
     if (state.reducedMotion) {
         state.motionScale = 0.28;
         state.quality = 0.22;
@@ -1408,7 +1397,7 @@ export function initThreeBackground() {
     state.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     state.baseExposure = state.mobile ? 1.0 : 1.05;
     state.renderer.toneMappingExposure = state.baseExposure;
-    // Avoid expensive shadow / mipmap work
+
     if (state.renderer.shadowMap) state.renderer.shadowMap.enabled = false;
 
     const canvas = state.renderer.domElement;
@@ -1446,7 +1435,7 @@ export function initThreeBackground() {
     state.planeFar.name = 'planeFar';
     state.root.add(state.planeFar, state.planeMid, state.planeNear);
 
-    // Veils: 1 on mobile, 3 on desktop
+
     state.veilA = createVeil(380, 220, -40, PALETTE.primary, state.mobile ? 0.2 : 0.26, 0.38);
     state.veilA.userData.baseOpacity = state.mobile ? 0.2 : 0.26;
     state.veilA.rotation.x = -0.12;
@@ -1464,7 +1453,7 @@ export function initThreeBackground() {
         state.planeFar.add(state.veilC);
     }
 
-    // Particles — huge cut on mobile
+
     const mistN = state.mobile
         ? Math.floor(380 * state.quality)
         : Math.floor((state.reducedMotion ? 900 : 2600) * state.quality);
@@ -1478,13 +1467,13 @@ export function initThreeBackground() {
         state.planeMid.add(state.drift);
     }
 
-    // Anime sky: desktop only (sheets + orbs + speed lines are heavy)
+
     if (!state.mobile && !state.reducedMotion) {
         state.anime = createAnimeSky({ touchUi: false, quality: state.quality });
         state.planeFar.add(state.anime);
     }
 
-    // Post: desktop only — bloom/film is the biggest mobile killer
+
     if (state.usePost) {
         state.composer = new EffectComposer(state.renderer);
         state.composer.addPass(new RenderPass(state.scene, state.camera));
@@ -1536,7 +1525,7 @@ export function initThreeBackground() {
         window.visualViewport.addEventListener('resize', () => scheduleResize(false), { passive: true });
     }
 
-    // Pause WebGL when tab hidden
+
     document.addEventListener('visibilitychange', () => {
         state.pageVisible = document.visibilityState !== 'hidden';
         if (state.pageVisible && state.clock) state.clock.getDelta();

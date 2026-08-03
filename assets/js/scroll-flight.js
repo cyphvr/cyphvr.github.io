@@ -1,9 +1,3 @@
-/**
- * Smooth scroll-flight engine
- * Inertia scroll (Lenis-style) for the page; Three.js reads progress/velocity.
- * No CSS3D stage — normal document layout + hidden scrollbar.
- */
-
 const flight = {
     initialized: false,
     reduced: false,
@@ -20,7 +14,7 @@ const flight = {
     touchY: null,
     touchActive: false,
     listeners: new Set(),
-    // Soft, full-range smooth scroll (not the old hard caps)
+
     lerp: 0.085,
     wheelScale: 0.95,
     touchScale: 1.05,
@@ -92,7 +86,7 @@ function publish() {
         try {
             fn(snap);
         } catch {
-            /* ignore */
+
         }
     });
 }
@@ -109,7 +103,7 @@ function tick(now) {
     flight.target = clamp(flight.target, 0, flight.max);
 
     const prev = flight.current;
-    // Smooth exponential follow
+
     const k = 1 - Math.pow(1 - flight.lerp, dt * 60);
     flight.current += (flight.target - flight.current) * k;
 
@@ -251,7 +245,7 @@ function onKey(e) {
 }
 
 function onNativeScroll() {
-    // When virtual flight is animating, ignore native echoes
+
     if (flight.enabled && flight.raf) return;
     if (flight.touchActive) return;
 
@@ -262,13 +256,12 @@ function onNativeScroll() {
     flight.target = flight.current;
     flight.progress = clamp(flight.current / flight.max, 0, 1);
 
-    // Estimate velocity from native deltas (mobile path)
     if (!flight.enabled) {
         const dy = flight.current - prev;
-        flight.velocity = dy * 45; // rough px/s feel for Three.js
+        flight.velocity = dy * 45;
         if (Math.abs(flight.velocity) < 0.5) flight.velocity = 0;
         flight.direction = flight.velocity > 2 ? 1 : flight.velocity < -2 ? -1 : flight.direction * 0.9;
-        // Don't snap smoothProgress — pump eases it
+
         if (Math.abs(flight.progress - flight.smoothProgress) < 0.00001) {
             flight.smoothProgress = flight.progress;
         }
@@ -334,7 +327,7 @@ export function scrollToY(y, immediate = false) {
     }
 
     flight.target = next;
-    // Long jumps (Top button): ease in without fighting reverse inertia
+
     if (Math.abs(flight.target - flight.current) > 600) {
         flight.current += (flight.target - flight.current) * 0.12;
     }
@@ -362,7 +355,7 @@ export function initScrollFlight() {
     if (flight.initialized || typeof window === 'undefined') return getFlightState;
     flight.initialized = true;
     flight.reduced = prefersReduced();
-    // Mobile: native scroll only — virtual wheel/touch hijack is a major lag source
+
     const touch = isTouchDevice();
     flight.enabled = !flight.reduced && !touch;
 
@@ -378,12 +371,11 @@ export function initScrollFlight() {
     }
 
     if (flight.enabled) {
-        // Desktop smooth inertia
+
         window.addEventListener('wheel', onWheel, { passive: false });
         window.addEventListener('keydown', onKey, { passive: false });
     }
 
-    // Always track native scroll (mobile primary path; desktop external/sync)
     window.addEventListener('scroll', onNativeScroll, { passive: true });
     document.addEventListener('scroll', onNativeScroll, { passive: true, capture: true });
     window.addEventListener('resize', onResize, { passive: true });
@@ -398,17 +390,16 @@ export function initScrollFlight() {
     }
     window.addEventListener('load', onResize, { once: true });
 
-    // Mobile: smooth CSS scroll is fine; keep progress fresh while finger-scrolling
     if (!flight.enabled) {
         let last = performance.now();
         const pump = (now) => {
             const dt = Math.min(0.05, (now - last) / 1000);
             last = now;
-            // Decay velocity for Three.js when using native scroll
+
             if (Math.abs(flight.velocity) > 0.5) {
                 flight.velocity *= Math.pow(0.88, dt * 60);
                 if (Math.abs(flight.velocity) < 0.5) flight.velocity = 0;
-                // smooth progress eases toward native
+
                 flight.smoothProgress += (flight.progress - flight.smoothProgress) * Math.min(1, dt * 10);
                 publish();
             } else if (Math.abs(flight.progress - flight.smoothProgress) > 0.0005) {

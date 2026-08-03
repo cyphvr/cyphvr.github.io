@@ -7,7 +7,7 @@
 }
 
 :root {
-    /* Cool “signal” theme — navy void + indigo + cyan */
+
     --ink: #eef2ff;
     --ink-dim: #a4b0c8;
     --ink-faint: #6b7691;
@@ -17,7 +17,6 @@
     --line: rgba(238, 242, 255, 0.09);
     --line-strong: rgba(238, 242, 255, 0.16);
 
-    /* Primary accent (kept as --ember for existing class names) */
     --ember: #7c9bff;
     --ember-soft: rgba(124, 155, 255, 0.15);
     --amber: #5eead4;
@@ -41,11 +40,10 @@
 
     --gradient-accent: linear-gradient(135deg, #7c9bff 0%, #5eead4 100%);
     --gradient-soft: linear-gradient(145deg, rgba(124, 155, 255, 0.14), rgba(94, 234, 212, 0.08));
-    /* original pill logo gradient */
+
     --gradient-1: linear-gradient(135deg, #8bdcff 0%, #d6f2ff 55%, #ffffff 100%);
     --gradient-2: linear-gradient(135deg, #5a7dff 0%, #8bdcff 60%, #d6f2ff 100%);
 
-    /* legacy aliases (original navbar + scripts) */
     --primary-color: var(--ember);
     --secondary-color: var(--amber);
     --bg-dark: var(--paper-2);
@@ -56,7 +54,6 @@
     --font-display: var(--font-serif);
 }
 
-/* shared layout container used by original navbar */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -69,9 +66,9 @@
 html {
     background: var(--paper);
     color: var(--ink);
-    /* Flight engine owns smoothing — don't double-smooth with CSS */
+
     scroll-behavior: auto;
-    /* No visible scrollbar — Three.js field reacts to scroll instead */
+
     scrollbar-width: none;
     -ms-overflow-style: none;
     --cy-scroll: 0;
@@ -114,11 +111,10 @@ body:has(#three-bg-canvas) {
     inset: 0;
     z-index: 0 !important;
     pointer-events: none;
-    /* Let the WebGL scene read clearly; content sits above via z-index */
+
     opacity: 0.95;
 }
 
-/* Light vignette only — keep the 3D field visible */
 body::before {
     content: '';
     position: fixed;

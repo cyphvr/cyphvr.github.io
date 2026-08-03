@@ -1,5 +1,5 @@
 function getScrollY() {
-    // Helium / some Chromium forks can disagree on the scroll root.
+
     const doc = document.documentElement;
     const body = document.body;
     return (
@@ -15,7 +15,7 @@ export function initButtons() {
     const riseBtn = document.getElementById('cyRise') || document.getElementById('backToTop');
 
     if (riseBtn) {
-        // Normalize class if an older page still has the legacy id
+
         riseBtn.classList.add('cy-rise');
         riseBtn.setAttribute('type', riseBtn.getAttribute('type') || 'button');
         riseBtn.setAttribute('aria-label', riseBtn.getAttribute('aria-label') || 'Back to top');
@@ -34,7 +34,6 @@ export function initButtons() {
             riseBtn.appendChild(label);
         }
 
-        // Hysteresis so the button doesn’t flicker near the threshold
         const SHOW_AT = 320;
         const HIDE_AT = 200;
         let visible = false;
@@ -60,7 +59,7 @@ export function initButtons() {
         window.addEventListener('scroll', onScroll, { passive: true });
         document.addEventListener('scroll', onScroll, { passive: true, capture: true });
         window.addEventListener('resize', onScroll, { passive: true });
-        // Helium can settle layout after fonts/canvas init
+
         window.addEventListener('load', sync, { once: true });
         sync();
 

@@ -1,20 +1,8 @@
-/**
- * CSS3D Stage — page content in Three.js space.
- *
- * Alignment rule (critical):
- *   1 CSS pixel = 1 world unit on the z=0 plane
- *   cameraZ = (viewportHeight / 2) / tan(FOV/2)
- *   plate.y = -(documentTop + height/2)
- *   camera.y = -(scrollY + viewportHeight/2)
- *
- * That keeps FOV honest and content lined up with native scroll.
- */
 import * as THREE from 'three';
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 import { getFlightState, refreshScrollMetrics } from './scroll-flight.js?v=20260801v29';
 import { onThreeFrame, sampleTheatre } from './three-bg-advanced.js?v=20260801v29';
 
-/** Fixed vertical FOV — distance is derived from this so scale stays correct */
 const FOV = 45;
 
 const stage = {
@@ -29,7 +17,7 @@ const stage = {
     width: 0,
     height: 0,
     unsub: null,
-    /** soft decorative orbit only (does not affect scroll lock) */
+
     softYaw: 0,
     softPitch: 0
 };
@@ -53,7 +41,6 @@ function isCoarse() {
     }
 }
 
-/** Distance so a plane at z=0 fills the viewport height exactly for this FOV */
 function cameraDistance(viewH, fov = FOV) {
     const h = Math.max(1, viewH);
     return h / (2 * Math.tan(THREE.MathUtils.degToRad(fov * 0.5)));
@@ -88,13 +75,13 @@ function collectBlocks() {
 function placeObject(obj, metrics, index, total) {
     const { top, height, width } = metrics;
     const t = total <= 1 ? 0 : index / (total - 1);
-    // Even = hinge from left, odd = hinge from right
+
     const side = index % 2 === 0 ? -1 : 1;
 
     obj.position.x = 0;
     obj.position.y = -(top + height * 0.5);
     obj.position.z = -24 - Math.sin(t * Math.PI) * 16;
-    // Start slightly closed so first frames can flap open
+
     obj.rotation.set(0, side * 0.55, 0);
     obj.userData = {
         index,
@@ -103,23 +90,22 @@ function placeObject(obj, metrics, index, total) {
         top,
         height,
         width,
-        /** 0 = closed (edge-on), 1 = open (face camera) */
+
         flap: 0,
         flapV: 0
     };
 }
 
-/** How open a plate should be from scroll position (0 closed → 1 open) */
 function targetFlap(top, height, scrollY, viewH) {
     const plateCenter = top + height * 0.5;
     const viewCenter = scrollY + viewH * 0.5;
-    // +1 = well below view, 0 = centered, -1 = well above
+
     const d = (plateCenter - viewCenter) / Math.max(viewH, 1);
     if (d >= 0) {
-        // Approaching from below: closed far away → flaps open into view
+
         return 1 - THREE.MathUtils.smoothstep(0.1, 0.95, d);
     }
-    // Past center: stay mostly open, soft close only when far above
+
     return 1 - THREE.MathUtils.smoothstep(0.45, 1.2, -d) * 0.4;
 }
 
@@ -129,18 +115,17 @@ function buildStage() {
 
     const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
 
-    // Apply plate class WHILE still in document flow so metrics include final styles
     blocks.forEach((el) => {
         el.classList.add('css3d-plate');
     });
-    // Force layout
+
     void document.body.offsetHeight;
 
     const metrics = blocks.map((el) => {
         const rect = el.getBoundingClientRect();
         return {
             el,
-            // temporary — compacted below so page scroll isn't endless
+
             top: rect.top + scrollY,
             height: rect.height,
             width: rect.width,
@@ -148,7 +133,6 @@ function buildStage() {
         };
     });
 
-    // Compact stack: original layout often leaves huge empty scroll between sections
     const navPad = 88;
     const gap = 36;
     let cursor = navPad;
@@ -159,7 +143,6 @@ function buildStage() {
     const maxBottom = cursor + 48;
     makeSpacer(maxBottom);
 
-    // Lock plate widths so CSS3D reparent doesn't reflow text width
     metrics.forEach((m) => {
         m.el.style.width = `${m.width}px`;
         m.el.style.maxWidth = `${m.width}px`;
@@ -184,25 +167,21 @@ function buildStage() {
         main.style.display = 'none';
         main.dataset.css3dMoved = '1';
     }
-    // Footer was moved into CSS3D — hide empty host if it somehow remains
+
     if (footer && footer.parentElement === document.body && !document.body.contains(footer)) {
-        /* already moved */
+
     }
 
     document.body.classList.add('has-css3d-stage');
-    // Expand scroll range to match spacer (avoids “limited scroll” after reparent)
+
     try {
         refreshScrollMetrics();
     } catch {
-        /* flight may not be ready */
+
     }
     return true;
 }
 
-/**
- * Camera: FOV-correct distance + scroll-locked Y.
- * Plates: side hinge “flap in” (Y-axis door swing) — not stiff up/down tilt.
- */
 function syncCamera(theatre, flight, dt = 0.016) {
     if (!stage.camera || !stage.root) return;
 
@@ -214,7 +193,6 @@ function syncCamera(theatre, flight, dt = 0.016) {
     const viewCenterY = scrollY + h * 0.5;
     const z = cameraDistance(h, FOV);
 
-    // Very light camera yaw only — no pitch bob (that read as up/down tilt)
     const targetYaw = (theatre?.yaw || 0) * 0.08;
     stage.softYaw += (targetYaw - stage.softYaw) * 0.06;
     const yaw = stage.softYaw;
@@ -240,11 +218,10 @@ function syncCamera(theatre, flight, dt = 0.016) {
         const height = ud.height ?? 200;
         const width = ud.width ?? 600;
 
-        // Springy flap 0→1 (not a stiff snap)
         const want = targetFlap(top, height, scrollY, h);
         ud.flap = ud.flap ?? 0;
         ud.flapV = ud.flapV ?? 0;
-        // critically damped-ish spring
+
         const stiffness = 22;
         const damping = 0.78;
         ud.flapV += (want - ud.flap) * stiffness * step;
@@ -253,15 +230,13 @@ function syncCamera(theatre, flight, dt = 0.016) {
         ud.flap = THREE.MathUtils.clamp(ud.flap, 0, 1.15);
 
         const f = THREE.MathUtils.clamp(ud.flap, 0, 1);
-        // Closed: swung away from camera on its side; open: nearly face-on
-        // left hinge (side -1): closed = negative Y rot; right hinge: positive
-        const closedAng = side * 1.15; // ~66° edge-on
-        const openAng = side * 0.04; // slight rest angle
+
+        const closedAng = side * 1.15;
+        const openAng = side * 0.04;
         const ang = THREE.MathUtils.lerp(closedAng, openAng, f);
-        // Soft overshoot from spring velocity → “flap” feel
+
         const flapKick = ud.flapV * 0.012 * side;
 
-        // Hinge shift: pivot from left/right edge while rotating around center
         const halfW = width * 0.5;
         const hinge = (1 - Math.cos(ang)) * halfW * 0.35 * side;
 
@@ -269,7 +244,6 @@ function syncCamera(theatre, flight, dt = 0.016) {
         obj.position.y = -(top + height * 0.5);
         obj.position.z = (ud.baseZ || 0) - (1 - f) * 40 - v * 2;
 
-        // Y-axis only — door flap, not pitch up/down
         obj.rotation.x = 0;
         obj.rotation.y = ang + flapKick;
         obj.rotation.z = side * (1 - f) * 0.03;
@@ -299,7 +273,7 @@ function onFrame(payload) {
 }
 
 function remeasurePlates() {
-    // Re-pack compact stack after resize so scroll length stays tight
+
     const gap = 36;
     let cursor = 88;
     stage.objects.forEach((obj) => {
@@ -322,7 +296,7 @@ function remeasurePlates() {
     try {
         refreshScrollMetrics();
     } catch {
-        /* ignore */
+
     }
 }
 

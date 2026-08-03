@@ -2,7 +2,6 @@ import { API_BASE } from './api-config.js?v=20260803v1';
 
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/** Soft reflow after command filter/search — first 12 visible only */
 let cmdAnimTimer = 0;
 function animateCommandRows() {
     if (reduced()) return;
@@ -139,7 +138,6 @@ function wireFilters(root) {
     };
 
     if (search) {
-        // Fresh listener each load — clone node to drop prior handlers if re-init
         const next = search.cloneNode(true);
         search.parentNode.replaceChild(next, search);
         next.addEventListener('input', () => {

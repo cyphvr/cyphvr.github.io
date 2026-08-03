@@ -1,8 +1,3 @@
-/**
- * Live Discord-style ops deck:
- * typing bubble (3 bouncing dots) + label + command typewriter + reply loop.
- */
-
 const CMD = '/channel lock #general';
 const LOGO = 'images/cypher rebrand logo round (No BG).png';
 
@@ -16,7 +11,7 @@ function show(el) {
     if (!el) return;
     el.hidden = false;
     el.classList.remove('is-enter');
-    // reflow for re-triggering entrance
+
     void el.offsetWidth;
     el.classList.add('is-enter');
 }
@@ -49,7 +44,7 @@ export function initDeckDemo() {
     const reduced = prefersReducedMotion();
 
     const setTyping = (who) => {
-        // who: 'admin' | 'cypher' | null
+
         if (!who) {
             hide(typing);
             return;
@@ -99,17 +94,14 @@ export function initDeckDemo() {
             await wait(reduced ? 200 : 420);
             if (token !== runId) return;
 
-            // 1) Cypher status
             show(botReady);
             await wait(reduced ? 500 : 1300);
             if (token !== runId) return;
 
-            // 2) admin typing indicator
             setTyping('admin');
             await wait(reduced ? 450 : 1150);
             if (token !== runId) return;
 
-            // 3) slash command with typewriter
             hide(typing);
             show(adminCmd);
             await typeCommand(token);
@@ -117,12 +109,10 @@ export function initDeckDemo() {
             await wait(reduced ? 280 : 650);
             if (token !== runId) return;
 
-            // 4) Cypher typing (Discord bubble + label)
             setTyping('cypher');
             await wait(reduced ? 650 : 1550);
             if (token !== runId) return;
 
-            // 5) reply embed
             hide(typing);
             show(botReply);
             await wait(reduced ? 1400 : 3000);
@@ -147,7 +137,7 @@ export function initDeckDemo() {
 
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
-            runId += 1; // cancel loop
+            runId += 1;
         } else {
             start();
         }

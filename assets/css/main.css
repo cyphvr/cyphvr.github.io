@@ -1,4 +1,3 @@
-/* Cache-bust nested sheets — browsers often keep old @imports forever */
 @import url('base.css?v=20260803v1');
 @import url('navbar.css?v=20260803v1');
 @import url('chrome.css?v=20260803v1');

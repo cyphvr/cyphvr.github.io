@@ -1,15 +1,6 @@
-/**
- * Cypher motion engine v2
- * - Hierarchical reveals (groups + units) → less stacked fade-up spam
- * - One scroll-progress driver
- * - Shared pointer-glow + magnetic CTA
- * - Debounced command reflow
- */
-
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-/** Major single blocks — one entrance each */
 const UNITS = [
     ['.page-intro', null],
     ['.about-mast', null],
@@ -31,10 +22,6 @@ const UNITS = [
     ['.features-nav', 'left'],
 ];
 
-/**
- * Groups: parent becomes the observer target; children cascade once.
- * Avoids marking both parent AND every child as separate IO targets.
- */
 const GROUPS = [
     { root: '.stat-wall', child: ':scope > article', util: 'lift' },
     { root: '.bullet-grid', child: ':scope > li', util: 'lift' },
@@ -57,7 +44,6 @@ function skip(el) {
 function markMotionTree() {
     const seen = new Set();
 
-    // Groups first
     GROUPS.forEach(({ root, child, util, directional }) => {
         document.querySelectorAll(root).forEach((parent) => {
             if (skip(parent) || seen.has(parent)) return;
@@ -74,22 +60,21 @@ function markMotionTree() {
         });
     });
 
-    // Units
     UNITS.forEach(([selector, variant]) => {
         document.querySelectorAll(selector).forEach((el, i) => {
             if (skip(el) || seen.has(el)) return;
-            // don't double-wrap if already a group child
+
             if (el.classList.contains('reveal-child') || el.classList.contains('reveal-group')) return;
             seen.add(el);
             el.classList.add('reveal-unit');
             if (variant === 'left') el.classList.add('reveal-unit--left');
             if (variant === 'right') el.classList.add('reveal-unit--right');
             if (variant === 'scale') el.classList.add('reveal-unit--scale');
-            // gentle cascade for repeated units (feature rows / chapters)
+
             if (el.matches('.feature-row, .feature-chapter')) {
                 el.style.setProperty('--reveal-delay', `${Math.min(i, 5) * 0.07}s`);
             }
-            // interactive cards get shared util classes once
+
             if (el.matches('.cmd-app, .status-orb, .history-panel, .legal-doc, .diag-panel')) {
                 el.classList.add('glow-border', 'pointer-glow');
             }
@@ -99,12 +84,10 @@ function markMotionTree() {
         });
     });
 
-    // History bars: index via CSS var (no 30 keyframe delay rules)
     document.querySelectorAll('.history-bar .history-item').forEach((item, i) => {
         item.style.setProperty('--hi', String(i));
     });
 
-    // Shared interactive surfaces
     document.querySelectorAll('.value-card, .status-tile, .bullet-grid li, .stat-wall article').forEach((el) => {
         if (!el.classList.contains('lift') && el.matches('.status-tile, .stat-wall article, .bullet-grid li')) {
             el.classList.add('lift');
@@ -151,7 +134,7 @@ function initReveals() {
 }
 
 function initScrollProgress() {
-    // Intentionally minimal — progress was fighting the pill trail visuals.
+
 }
 
 function initMarquee() {
@@ -284,7 +267,6 @@ function initParallaxDeck() {
     const visual = deck.closest('.hero-split__visual') || deck.parentElement;
     let floating = true;
 
-    // Pause CSS float while user is steering the deck
     visual.addEventListener('pointerenter', () => {
         floating = false;
         deck.style.animationPlayState = 'paused';

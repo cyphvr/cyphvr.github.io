@@ -1,13 +1,5 @@
-/**
- * Live slash-command catalogue from Discord's application commands API.
- * Always reflects what is actually registered for the bot — no hand list.
- *
- * GET /api/commands
- */
-
 const DISCORD_API = 'https://discord.com/api/v10';
 
-/** CHAT_INPUT only (skip context-menu USER/MESSAGE commands). */
 const TYPE_CHAT_INPUT = 1;
 const TYPE_SUB_COMMAND = 1;
 const TYPE_SUB_COMMAND_GROUP = 2;
@@ -31,7 +23,7 @@ function isDevCommand(name, description) {
   const d = (description || '').toLowerCase();
   if (n === 'dev' || n.startsWith('dev ')) return true;
   if (d.includes('dev command')) return true;
-  // Owner-only utilities that should not appear on the public site
+
   const leaf = n.includes(' ') ? n.slice(n.lastIndexOf(' ') + 1) : n;
   if (leaf === 'deploy' || leaf === 'pronoun' || leaf === 'update') return true;
   return false;
@@ -56,11 +48,6 @@ function titleCase(slug) {
     .join(' ');
 }
 
-/**
- * Flatten Discord application command tree into display rows.
- * Groups become `/parent sub` (or `/parent group sub`).
- * Category = parent group name for subcommands, else "general".
- */
 function flattenCommands(commands) {
   const rows = [];
 
@@ -101,7 +88,6 @@ function flattenCommands(commands) {
       continue;
     }
 
-    // Top-level slash command (no subcommands)
     rows.push({
       name: `/${cmd.name}`,
       description: cmd.description || '',
@@ -163,13 +149,12 @@ export default async function handler(request, env, ctx) {
     return json({ error: 'Bot token not configured' }, 500);
   }
 
-  // Edge cache — Discord app-command payloads rarely change
   const cache = caches.default;
   const cacheKey = new Request('https://cyphvr-github-io.internal/api/commands?v=1');
   try {
     const cached = await cache.match(cacheKey);
     if (cached) {
-      // Re-attach CORS in case a stored response predates header changes
+
       const headers = new Headers(cached.headers);
       headers.set('Access-Control-Allow-Origin', '*');
       headers.set('X-Cache', 'HIT');
@@ -180,7 +165,7 @@ export default async function handler(request, env, ctx) {
   }
 
   try {
-    // Resolve application id (equals bot user id for classic bot apps)
+
     const meRes = await discordFetch('/users/@me', botToken);
     if (!meRes.ok) {
       const errText = await meRes.text();
@@ -233,7 +218,7 @@ export default async function handler(request, env, ctx) {
       if (ctx && typeof ctx.waitUntil === 'function') {
         ctx.waitUntil(cache.put(cacheKey, response.clone()));
       } else {
-        // Best-effort without waitUntil
+
         await cache.put(cacheKey, response.clone());
       }
     } catch (err) {

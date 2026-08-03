@@ -1,11 +1,3 @@
-/**
- * Cloudflare Worker entry — routes match the old Vercel paths:
- *   GET /api/server-count
- *   GET /api/status
- *   GET /api/commands
- *   GET /api/monitor  (+ cron every minute)
- */
-
 import handleServerCount from './server-count.js';
 import handleStatus from './status.js';
 import handleMonitor from './monitor.js';

@@ -1,8 +1,3 @@
-/* =========================================================
-   Cypher motion system v2
-   Hierarchical reveals · shared utilities · less repetition
-   ========================================================= */
-
 :root {
     --motion-duration: 0.7s;
     --motion-stagger: 0.065s;
@@ -12,7 +7,6 @@
     --motion-nudge: translateX(4px);
 }
 
-/* ---------- Shared utilities (one definition, many uses) ---------- */
 .lift,
 .nudge,
 .glow-border {
@@ -36,7 +30,6 @@
     }
 }
 
-/* ---------- Page enter / leave ---------- */
 body.page-ready .site-main {
     animation: page-in 0.5s var(--motion-ease) both;
 }
@@ -54,7 +47,6 @@ body.page-leaving .site-main {
     to { opacity: 0; transform: translateY(-6px); }
 }
 
-/* ---------- Hero (load choreography only — not scroll-reveal) ---------- */
 .hero-split__copy > * {
     animation: rise 0.75s var(--motion-ease) both;
 }
@@ -75,7 +67,6 @@ body.page-leaving .site-main {
     will-change: transform;
 }
 
-/* Static decks only — live deck is driven by deck-demo.js */
 .deck:not(.deck--live) .deck__body .msg {
     opacity: 0;
     animation: rise 0.6s var(--motion-ease) both;
@@ -90,11 +81,6 @@ body.page-leaving .site-main {
     50% { transform: translateY(-6px); }
 }
 
-/* ---------- Hierarchical scroll reveals ---------- */
-/*
-  .reveal-unit  — one block fades in
-  .reveal-group — parent gate; children cascade when parent is .is-visible
-*/
 .reveal-unit,
 .reveal-group > .reveal-child {
     opacity: 0;
@@ -122,7 +108,6 @@ body.page-leaving .site-main {
     transform: none;
 }
 
-/* Directional children inside a group (optional) */
 .reveal-group > .reveal-child.from-left { transform: translate3d(-20px, 0, 0); }
 .reveal-group > .reveal-child.from-right { transform: translate3d(20px, 0, 0); }
 .reveal-group.is-visible > .reveal-child.from-left,
@@ -130,7 +115,6 @@ body.page-leaving .site-main {
     transform: none;
 }
 
-/* Title line draw when band heads enter */
 .band__head.is-visible .kicker::before,
 .page-intro.is-visible .eyebrow::before,
 .about-mast.is-visible .eyebrow::before {
@@ -146,7 +130,6 @@ body.page-leaving .site-main {
     to { transform: scaleX(1); }
 }
 
-/* Clip-style title emphasis once per major heading */
 .reveal-unit.is-visible > h1,
 .reveal-unit.is-visible > h2,
 .band__head.is-visible h2,
@@ -166,7 +149,6 @@ body.page-leaving .site-main {
     }
 }
 
-/* ---------- Ambient (only where it earns its keep) ---------- */
 .marquee__track span {
     transition: color 0.25s ease, background 0.25s ease;
 }
@@ -184,8 +166,6 @@ body.page-leaving .site-main {
 .navbar {
     animation: rise 0.55s var(--motion-ease) both;
 }
-
-/* ---------- Focused micro-interactions ---------- */
 
 .btn {
     transition:
@@ -208,7 +188,6 @@ body.page-leaving .site-main {
     transform: translateX(3px);
 }
 
-/* Feature rows — unique index accent, not generic lift copy */
 .feature-row {
     transition: background 0.35s ease;
 }
@@ -325,7 +304,6 @@ body.page-leaving .site-main {
     transition: color 0.2s ease;
 }
 
-/* Soft list reflow after filter — only a few rows, not a wall of identical pops */
 .cmd-row.cmd-enter {
     animation: rise 0.32s var(--motion-ease) both;
 }
@@ -377,7 +355,6 @@ body.page-leaving .site-main {
     transition: transform 0.3s var(--motion-ease), box-shadow 0.3s ease;
 }
 
-/* 404 — one signature loop, not competing effects */
 .lost h1 {
     animation: glitch-soft 5s ease-in-out infinite;
 }
@@ -423,9 +400,6 @@ body.page-leaving .site-main {
     to { transform: scale(1.04); opacity: 1; }
 }
 
-/* cy-rise enter/exit is handled with CSS transitions in chrome.css (no keyframes) */
-
-/* Pointer glow on interactive surfaces (driven by --mx/--my from JS) */
 .pointer-glow {
     position: relative;
     overflow: hidden;
@@ -455,7 +429,6 @@ body.page-leaving .site-main {
     z-index: 1;
 }
 
-/* Deck hover depth without fighting float keyframes when idle */
 .deck {
     transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
@@ -465,7 +438,6 @@ body.page-leaving .site-main {
     box-shadow: 0 36px 90px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 155, 255, 0.08);
 }
 
-/* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
