@@ -33,9 +33,6 @@ export default async function handler(request, env) {
     });
   } catch (err) {
     console.error('Status proxy error:', err);
-    return json(
-      { error: 'Bad gateway', details: err instanceof Error ? err.message : String(err) },
-      502
-    );
+    return json({ error: 'Bad gateway' }, 502);
   }
 }

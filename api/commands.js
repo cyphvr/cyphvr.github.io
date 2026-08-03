@@ -228,12 +228,6 @@ export default async function handler(request, env, ctx) {
     return response;
   } catch (error) {
     console.error('Error fetching commands:', error);
-    return json(
-      {
-        error: 'Internal server error',
-        details: error instanceof Error ? error.message : String(error),
-      },
-      500
-    );
+    return json({ error: 'Internal server error' }, 500);
   }
 }

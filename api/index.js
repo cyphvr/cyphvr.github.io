@@ -6,7 +6,10 @@ import handleCommands from './commands.js';
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
   });
 }
 
@@ -18,6 +21,15 @@ function corsHeaders() {
   };
 }
 
+function monitorAuthorized(request, env) {
+  const secret = env.MONITOR_SECRET;
+  if (!secret) return false;
+  const header = request.headers.get('x-monitor-secret') || '';
+  const auth = request.headers.get('authorization') || '';
+  const bearer = auth.toLowerCase().startsWith('bearer ') ? auth.slice(7).trim() : '';
+  return header === secret || bearer === secret;
+}
+
 export default {
   async fetch(request, env, ctx) {
     const path = new URL(request.url).pathname.replace(/\/$/, '') || '/';
@@ -27,10 +39,15 @@ export default {
     }
 
     try {
-      if (path === '/api/server-count') return handleServerCount(request, env);
+      if (path === '/api/server-count') return handleServerCount(request, env, ctx);
       if (path === '/api/status') return handleStatus(request, env);
       if (path === '/api/commands') return handleCommands(request, env, ctx);
-      if (path === '/api/monitor') return handleMonitor(request, env);
+      if (path === '/api/monitor') {
+        if (!monitorAuthorized(request, env)) {
+          return json({ error: 'Not found' }, 404);
+        }
+        return handleMonitor(request, env);
+      }
       if (path === '/' || path === '/health') {
         return json({ ok: true, service: 'cyphvr-github-io' });
       }
