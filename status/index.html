@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher - Status</title>
     <meta name="description" content="Live Cypher bot status, uptime, and health history.">
-    <link rel="stylesheet" href="../assets/css/main.css?v=20260801v36">
+    <link rel="stylesheet" href="../assets/css/main.css?v=20260822v13">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <style>
         :root { --status-ok: #6dcaa0; --status-warn: #e8b86d; }
@@ -37,18 +37,22 @@
 
 <main class="site-main">
         <div class="shell status-board">
-            <p class="eyebrow">Telemetry</p>
-            <div class="status-hero-panel" style="margin-top:0.75rem;">
+            <div class="status-board__head">
+                <p class="eyebrow">Telemetry</p>
+                <span class="status-chip" id="statusChip">
+                    <span class="status-chip__dot" aria-hidden="true"></span>
+                    <span id="statusChipLabel">Checking</span>
+                </span>
+            </div>
+            <div class="status-hero-panel">
                 <section class="status-orb" id="statusOrb">
                     <div>
                         <p class="kicker">Cypher runtime</p>
                         <h1 id="statusText">Checking systems…</h1>
                     </div>
-                    <div>
-                        <div class="status-live">
-                            <span class="dot" id="statusIndicator" aria-hidden="true"></span>
-                            <span id="statusMessage">Establishing connection with status endpoint.</span>
-                        </div>
+                    <div class="status-live">
+                        <span class="dot" id="statusIndicator" aria-hidden="true"></span>
+                        <span id="statusMessage">Establishing connection with status endpoint.</span>
                     </div>
                 </section>
                 <div class="status-side">
@@ -64,7 +68,6 @@
                     </article>
                 </div>
             </div>
-
             <section class="history-panel">
                 <header>
                     <h2>30-day history</h2>
@@ -79,7 +82,6 @@
                     <div class="history-item"></div><div class="history-item"></div><div class="history-item"></div><div class="history-item"></div><div class="history-item"></div>
                 </div>
             </section>
-
             <p class="status-meta">Last update: <strong id="lastUpdatedLabel">Just now</strong> · next check in <strong><span id="refreshInLabel">60</span>s</strong></p>
         </div>
     </main>
@@ -132,7 +134,7 @@
       }
     }
     </script>
-    <script type="module" src="../assets/js/main.js?v=20260801v36"></script>
+    <script type="module" src="../assets/js/main.js?v=20260822v10"></script>
     <script type="module">
         import { API_BASE } from '../assets/js/api-config.js';
         const CONFIG = {
@@ -159,6 +161,13 @@
             if (lastUpdatedLabel) lastUpdatedLabel.textContent = value || 'Just now';
         }
 
+        function setChip(online) {
+            const chip = document.getElementById('statusChip');
+            const label = document.getElementById('statusChipLabel');
+            if (chip) chip.classList.toggle('is-down', !online);
+            if (label) label.textContent = online ? 'Live' : 'Degraded';
+        }
+
         function updateOnlineStatus() {
             const orb = document.getElementById('statusOrb');
             const text = document.getElementById('statusText');
@@ -171,6 +180,7 @@
                 uptime.style.color = 'var(--status-ok)';
             }
             if (message) message.textContent = 'Cypher is online and responding normally.';
+            setChip(true);
         }
 
         function updateOfflineStatus(reason) {
@@ -185,6 +195,7 @@
                 uptime.style.color = 'var(--status-warn)';
             }
             if (message) message.textContent = reason || 'Connection issue while checking status endpoint.';
+            setChip(false);
         }
 
         function displayCachedStatus() {

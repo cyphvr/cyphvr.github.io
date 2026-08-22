@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher</title>
     <meta name="description" content="Cypher is a free all-in-one Discord bot for moderation, utilities, search, AI, and community tools.">
-    <link rel="stylesheet" href="assets/css/main.css?v=20260803v2">
+    <link rel="stylesheet" href="assets/css/main.css?v=20260822v13">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,7 @@
 <main class="site-main">
         <section class="shell hero-split">
             <div class="hero-split__copy">
-                <p class="eyebrow">Discord bot · free forever</p>
+                <p class="eyebrow">Discord bot</p>
                 <h1>Decode the chaos.<span>Run the room.</span></h1>
                 <p class="hero-split__lead">
                     Cypher folds moderation, utilities, search, AI, and creative tools into one calm operator console for your server.
@@ -66,6 +66,7 @@
             </div>
 
             <div class="hero-split__visual">
+                <div class="deck-tilt">
                 <div class="deck deck--live" id="opsDeck" aria-hidden="true">
                     <div class="deck__bar">
                         <span class="deck__dot"></span>
@@ -124,6 +125,7 @@
                             <p class="typing__label"><strong id="deckTypingName">Cypher</strong> is typing<span class="typing__ellipsis" aria-hidden="true"></span></p>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </section>
@@ -318,7 +320,7 @@
                         <span>Slash commands for the whole stack</span>
                     </article>
                 </div>
-                <div style="margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+                <div class="band__actions band__actions--follow">
                     <a class="btn btn--ember" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite Cypher</a>
                     <a class="btn btn--ghost" href="/features">Deep dive features</a>
                     <a class="btn btn--line" href="/about">Read the story</a>
@@ -332,7 +334,7 @@
             <div class="footer-invite">
                 <div>
                     <h2>Put Cypher on duty tonight.</h2>
-                    <p>Free, always-on tooling for communities that take moderation and velocity seriously.</p>
+                    <p>Always-on tooling for communities that take moderation and velocity seriously.</p>
                 </div>
                 <a class="btn btn--ember" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite to Discord</a>
             </div>
@@ -382,7 +384,7 @@
       }
     }
     </script>
-    <script type="module" src="assets/js/main.js?v=20260803v3"></script>
+    <script type="module" src="assets/js/main.js?v=20260822v10"></script>
     <script type="module">
         import { API_BASE } from './assets/js/api-config.js';
         async function fetchServerCount() {

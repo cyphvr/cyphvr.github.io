@@ -111,8 +111,7 @@ body:has(#three-bg-canvas) {
     inset: 0;
     z-index: 0 !important;
     pointer-events: none;
-
-    opacity: 0.95;
+    opacity: 1;
 }
 
 body::before {
@@ -122,10 +121,8 @@ body::before {
     z-index: 1;
     pointer-events: none;
     background:
-        radial-gradient(ellipse 100% 70% at 50% -15%, rgba(124, 155, 255, 0.12), transparent 55%),
-        radial-gradient(ellipse 70% 50% at 100% 20%, rgba(94, 234, 212, 0.08), transparent 50%),
-        radial-gradient(ellipse 60% 45% at 0% 80%, rgba(167, 139, 250, 0.07), transparent 48%),
-        linear-gradient(180deg, rgba(6, 8, 15, 0.08) 0%, transparent 28%, transparent 62%, rgba(6, 8, 15, 0.45) 100%);
+        radial-gradient(ellipse 55% 48% at 24% 36%, rgba(6, 8, 15, 0.42), transparent 70%),
+        linear-gradient(180deg, rgba(6, 8, 15, 0.12) 0%, transparent 26%, transparent 70%, rgba(6, 8, 15, 0.4) 100%);
 }
 
 img {

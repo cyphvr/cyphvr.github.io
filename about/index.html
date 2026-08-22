@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher - About</title>
     <meta name="description" content="The story, numbers, and values behind Cypher - the Discord bot shipping since 2023.">
-    <link rel="stylesheet" href="../assets/css/main.css?v=20260801v36">
+    <link rel="stylesheet" href="../assets/css/main.css?v=20260822v13">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <section class="band band--tight">
+        <section class="band">
             <div class="shell">
                 <div class="band__head">
                     <div>
@@ -123,36 +123,44 @@
                     </div>
                     <p>Scroll sideways - principles on rails.</p>
                 </div>
-                <div class="values-scroll">
-                    <article class="value-card">
-                        <h3>Reliability</h3>
-                        <p>Uptime and stability so Cypher is present when your community needs it most.</p>
-                    </article>
-                    <article class="value-card">
-                        <h3>Security</h3>
-                        <p>Encrypted communications and security-minded defaults for server data.</p>
-                    </article>
-                    <article class="value-card">
-                        <h3>Innovation</h3>
-                        <p>Constant iteration - community feedback becomes practical releases.</p>
-                    </article>
-                    <article class="value-card">
-                        <h3>Community</h3>
-                        <p>Support and product direction shaped by people who actually run servers.</p>
-                    </article>
-                    <article class="value-card">
-                        <h3>Accessibility</h3>
-                        <p>Free to use and designed for servers of every size.</p>
-                    </article>
-                    <article class="value-card">
-                        <h3>Global impact</h3>
-                        <p>Used worldwide to create cleaner, more consistent Discord experiences.</p>
-                    </article>
+                <div class="values-rail">
+                    <button type="button" class="values-rail__nav" data-dir="-1" aria-label="Previous values">
+                        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="values-scroll" id="valuesScroll">
+                        <article class="value-card">
+                            <h3>Reliability</h3>
+                            <p>Uptime and stability so Cypher is present when your community needs it most.</p>
+                        </article>
+                        <article class="value-card">
+                            <h3>Security</h3>
+                            <p>Encrypted communications and security-minded defaults for server data.</p>
+                        </article>
+                        <article class="value-card">
+                            <h3>Innovation</h3>
+                            <p>Constant iteration - community feedback becomes practical releases.</p>
+                        </article>
+                        <article class="value-card">
+                            <h3>Community</h3>
+                            <p>Support and product direction shaped by people who actually run servers.</p>
+                        </article>
+                        <article class="value-card">
+                            <h3>Accessibility</h3>
+                            <p>Free to use and designed for servers of every size.</p>
+                        </article>
+                        <article class="value-card">
+                            <h3>Global impact</h3>
+                            <p>Used worldwide to create cleaner, more consistent Discord experiences.</p>
+                        </article>
+                    </div>
+                    <button type="button" class="values-rail__nav" data-dir="1" aria-label="Next values">
+                        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
                 </div>
             </div>
         </section>
 
-        <section class="band band--tight">
+        <section class="band">
             <div class="shell">
                 <div class="band__head">
                     <div>
@@ -161,7 +169,7 @@
                     </div>
                     <p>Feedback, bugs, feature ideas - all welcome.</p>
                 </div>
-                <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
+                <div class="band__actions">
                     <a class="btn btn--ember" href="https://discord.gg/Zygr52jpme">Join support server</a>
                     <a class="btn btn--ghost" href="https://top.gg/bot/1121314550969532476/vote">Vote on top.gg</a>
                     <a class="btn btn--line" href="https://discord.com/oauth2/authorize?client_id=1121314550969532476">Invite Cypher</a>
@@ -225,6 +233,6 @@
       }
     }
     </script>
-    <script type="module" src="../assets/js/main.js?v=20260801v36"></script>
+    <script type="module" src="../assets/js/main.js?v=20260822v10"></script>
 </body>
 </html>

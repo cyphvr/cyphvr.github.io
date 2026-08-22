@@ -40,18 +40,45 @@ function clamp(v, a, b) {
     return Math.min(b, Math.max(a, v));
 }
 
+function overflowCan(value) {
+    return value === 'auto' || value === 'scroll' || value === 'overlay';
+}
+
 function isScrollableAncestor(el) {
     let node = el instanceof Element ? el : null;
     while (node && node !== document.body && node !== document.documentElement) {
         const style = window.getComputedStyle(node);
-        const oy = style.overflowY;
         const canY =
-            (oy === 'auto' || oy === 'scroll' || oy === 'overlay') &&
+            overflowCan(style.overflowY) &&
             node.scrollHeight > node.clientHeight + 2;
-        if (canY) return node;
+        const canX =
+            overflowCan(style.overflowX) &&
+            node.scrollWidth > node.clientWidth + 2;
+        if (canY || canX) return node;
         node = node.parentElement;
     }
     return null;
+}
+
+function feedHorizontalScroll(scroller, e) {
+    const style = window.getComputedStyle(scroller);
+    const canX = overflowCan(style.overflowX) && scroller.scrollWidth > scroller.clientWidth + 2;
+    const canY = overflowCan(style.overflowY) && scroller.scrollHeight > scroller.clientHeight + 2;
+    if (!canX) return false;
+
+    const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (canY ? 0 : e.deltaY);
+    if (!dx) return false;
+
+    const max = scroller.scrollWidth - scroller.clientWidth;
+    const next = clamp(scroller.scrollLeft + dx, 0, max);
+    const moving =
+        (dx > 0 && scroller.scrollLeft < max - 0.5) ||
+        (dx < 0 && scroller.scrollLeft > 0.5);
+    if (!moving) return false;
+
+    e.preventDefault();
+    scroller.scrollLeft = next;
+    return true;
 }
 
 function readNativeY() {
@@ -153,7 +180,12 @@ function kick() {
 function onWheel(e) {
     if (flight.reduced || !flight.enabled) return;
     if (e.ctrlKey) return;
-    if (isScrollableAncestor(e.target)) return;
+    const nested = isScrollableAncestor(e.target);
+    if (nested) {
+        if (feedHorizontalScroll(nested, e)) return;
+        const style = window.getComputedStyle(nested);
+        if (overflowCan(style.overflowY) && nested.scrollHeight > nested.clientHeight + 2) return;
+    }
 
     e.preventDefault();
 

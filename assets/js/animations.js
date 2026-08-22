@@ -133,10 +133,6 @@ function initReveals() {
     });
 }
 
-function initScrollProgress() {
-
-}
-
 function initMarquee() {
     document.querySelectorAll('.marquee').forEach((el) => {
         const track = el.querySelector('.marquee__track');
@@ -243,50 +239,6 @@ function initPointerGlow() {
     });
 }
 
-function initMagneticButtons() {
-    if (reduced() || !finePointer()) return;
-
-    document.querySelectorAll('.btn--ember').forEach((btn) => {
-        btn.addEventListener('pointermove', (e) => {
-            const r = btn.getBoundingClientRect();
-            const x = e.clientX - r.left - r.width / 2;
-            const y = e.clientY - r.top - r.height / 2;
-            btn.style.transform = `translate(${x * 0.1}px, ${y * 0.14}px)`;
-        });
-        btn.addEventListener('pointerleave', () => {
-            btn.style.transform = '';
-        });
-    });
-}
-
-function initParallaxDeck() {
-    if (reduced() || !finePointer()) return;
-    const deck = document.querySelector('.hero-split__visual .deck');
-    if (!deck) return;
-
-    const visual = deck.closest('.hero-split__visual') || deck.parentElement;
-    let floating = true;
-
-    visual.addEventListener('pointerenter', () => {
-        floating = false;
-        deck.style.animationPlayState = 'paused';
-    });
-    visual.addEventListener('pointerleave', () => {
-        floating = true;
-        deck.style.animationPlayState = 'running';
-        deck.style.transform = '';
-        deck.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1)';
-    });
-    visual.addEventListener('pointermove', (e) => {
-        if (floating) return;
-        const r = visual.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width - 0.5;
-        const py = (e.clientY - r.top) / r.height - 0.5;
-        deck.style.transition = 'transform 0.12s ease-out';
-        deck.style.transform = `rotateY(${px * 7}deg) rotateX(${-py * 5}deg) translateY(-4px)`;
-    });
-}
-
 function initAnchorPulse() {
     document.querySelectorAll('a[href^="#"]').forEach((a) => {
         a.addEventListener('click', () => {
@@ -305,11 +257,8 @@ function initAnchorPulse() {
 export function initAnimations() {
     markMotionTree();
     initReveals();
-    initScrollProgress();
     initMarquee();
     initCounters();
     initPointerGlow();
-    initMagneticButtons();
-    initParallaxDeck();
     initAnchorPulse();
 }

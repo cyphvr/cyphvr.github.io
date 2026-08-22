@@ -1,11 +1,11 @@
-import { initNavigation } from './navigation.js?v=20260803v3';
-import { initAnimations } from './animations.js?v=20260803v3';
-import { initCards } from './cards.js?v=20260803v3';
-import { initButtons } from './buttons.js?v=20260803v3';
-import { initCommands } from './commands.js?v=20260803v3';
-import { initDeckDemo } from './deck-demo.js?v=20260803v3';
-import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260803v3';
-import { initThreeBackground } from './three-bg-advanced.js?v=20260803v3';
+import { initNavigation } from './navigation.js?v=20260822v10';
+import { initAnimations } from './animations.js?v=20260822v10';
+import { initCards } from './cards.js?v=20260822v10';
+import { initButtons } from './buttons.js?v=20260822v10';
+import { initCommands } from './commands.js?v=20260822v10';
+import { initDeckDemo } from './deck-demo.js?v=20260822v10';
+import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260822v10';
+import { initThreeBackground } from './three-bg-advanced.js?v=20260822v10';
 
 try {
     initScrollFlight();

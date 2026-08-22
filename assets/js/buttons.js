@@ -79,18 +79,19 @@ export function initButtons() {
         });
     }
 
-    document.querySelectorAll('.btn').forEach((button) => {
+    document.querySelectorAll('.btn, .navbar-invite').forEach((button) => {
         button.addEventListener('click', function (e) {
             const ripple = document.createElement('span');
             const rect = this.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height);
             const x = e.clientX - rect.left - size / 2;
             const y = e.clientY - rect.top - size / 2;
+            const fill = getComputedStyle(this).getPropertyValue('--ripple').trim() || 'rgba(255,255,255,0.28)';
 
             ripple.style.cssText = `
                 width:${size}px;height:${size}px;left:${x}px;top:${y}px;
                 position:absolute;border-radius:50%;
-                background:rgba(255,255,255,0.35);
+                background:${fill};
                 transform:scale(0);pointer-events:none;
                 animation:ripple-animation 0.55s ease-out forwards;
             `;
