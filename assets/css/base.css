@@ -121,8 +121,8 @@ body::before {
     z-index: 1;
     pointer-events: none;
     background:
-        radial-gradient(ellipse 55% 48% at 24% 36%, rgba(6, 8, 15, 0.42), transparent 70%),
-        linear-gradient(180deg, rgba(6, 8, 15, 0.12) 0%, transparent 26%, transparent 70%, rgba(6, 8, 15, 0.4) 100%);
+        radial-gradient(ellipse 50% 44% at 22% 36%, rgba(6, 8, 15, 0.38), transparent 72%),
+        linear-gradient(180deg, rgba(6, 8, 15, 0.1) 0%, transparent 24%, transparent 72%, rgba(6, 8, 15, 0.38) 100%);
 }
 
 img {

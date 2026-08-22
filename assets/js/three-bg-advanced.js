@@ -3,27 +3,26 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { getFlightState } from './scroll-flight.js?v=20260822v10';
+import { getFlightState } from './scroll-flight.js?v=20260822v15';
 
 const PALETTE = {
-    deep: 0x05070e,
-    mid: 0x0c1428,
-    primary: 0x7c9bff,
+    deep: 0x05070d,
+    mid: 0x0a1222,
+    ember: 0x7c9bff,
     cyan: 0x5eead4,
-    violet: 0xa78bfa,
-    mint: 0x67e8f9
+    violet: 0xa78bfa
 };
 
 export function sampleTheatre(s, v = 0, dir = 0) {
     const p = Math.min(1, Math.max(0, s));
     const e = p * p * (3 - 2 * p);
-    const yaw = -0.55 + e * 1.35 + dir * v * 0.14;
-    const pitch = 0.04 + e * 0.32 + Math.sin(e * Math.PI) * 0.05;
-    const radius = 92 + Math.sin(e * Math.PI) * 18 - v * 6;
+    const yaw = -0.62 + e * 1.55 + dir * v * 0.18;
+    const pitch = 0.05 + Math.sin(e * Math.PI) * 0.22 + e * 0.18;
+    const radius = 78 + Math.cos(e * Math.PI) * 22 - v * 8;
     const focus = {
-        x: Math.sin(e * 1.4) * 10,
-        y: 4 + e * 16,
-        z: -20 - e * 28
+        x: Math.sin(e * 1.7) * 14,
+        y: 3 + e * 22,
+        z: -12 - e * 36
     };
     const cp = Math.cos(pitch);
     const sp = Math.sin(pitch);
@@ -36,12 +35,12 @@ export function sampleTheatre(s, v = 0, dir = 0) {
         focus,
         cam: {
             x: focus.x + sy * radius * cp,
-            y: focus.y + sp * radius * 0.7 + 4,
+            y: focus.y + sp * radius * 0.62 + 5,
             z: focus.z + cy * radius * cp
         },
         phase: e,
-        stageYaw: -yaw * 0.5,
-        stagePitch: -pitch * 0.22
+        stageYaw: -yaw * 0.48,
+        stagePitch: -pitch * 0.2
     };
 }
 
@@ -59,9 +58,7 @@ const state = {
     quality: 1,
     mouse: new THREE.Vector2(),
     smoothMouse: new THREE.Vector2(),
-    scroll: 0,
     smoothScroll: 0,
-    speed: 0,
     smoothSpeed: 0,
     dir: 0,
     camera: null,
@@ -70,23 +67,19 @@ const state = {
     composer: null,
     clock: null,
     volume: null,
-    auroraA: null,
-    auroraB: null,
-    dust: null,
-    rivers: null,
+    motes: null,
+    embers: null,
+    ash: null,
     bloomPass: null,
     gradePass: null,
     renderWidth: 0,
     renderHeight: 0,
-    lastLayoutWidth: 0,
-    resizeRaf: 0,
     frameHooks: [],
     theatreSnap: null,
     targetCam: new THREE.Vector3(),
     _look: new THREE.Vector3(),
     _up: new THREE.Vector3(0, 1, 0),
     _m4: new THREE.Matrix4(),
-    _quat: new THREE.Quaternion(),
     _quatTarget: new THREE.Quaternion()
 };
 
@@ -124,43 +117,50 @@ float noise(vec3 p) {
 float fbm(vec3 p) {
     float v = 0.0;
     float a = 0.5;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 5; i++) {
         v += a * noise(p);
-        p = p * 2.07 + vec3(17.1, 9.4, 3.7);
-        a *= 0.5;
+        p = p * 2.03 + vec3(11.7, 5.3, 19.1);
+        a *= 0.51;
     }
     return v * 0.5 + 0.5;
 }
 `;
 
+function coverGeometry() {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+        -1, -1, 0, 3, -1, 0, -1, 3, 0
+    ]), 3));
+    return geo;
+}
+
 function createVolume(mobile) {
-    const steps = mobile ? 6 : 10;
-    const material = new THREE.ShaderMaterial({
+    const steps = mobile ? 8 : 14;
+    const mat = new THREE.ShaderMaterial({
         depthWrite: false,
         depthTest: false,
         uniforms: {
             time: { value: 0 },
             scroll: { value: 0 },
+            speed: { value: 0 },
             mouse: { value: new THREE.Vector2() },
             resolution: { value: new THREE.Vector2(1, 1) },
             colorDeep: { value: new THREE.Color(PALETTE.deep) },
             colorMid: { value: new THREE.Color(PALETTE.mid) },
-            colorA: { value: new THREE.Color(PALETTE.primary) },
+            colorA: { value: new THREE.Color(PALETTE.ember) },
             colorB: { value: new THREE.Color(PALETTE.cyan) },
             colorC: { value: new THREE.Color(PALETTE.violet) }
         },
         vertexShader: `
-            varying vec2 vUv;
             void main() {
-                vUv = uv;
                 gl_Position = vec4(position.xy, 0.0, 1.0);
             }
         `,
         fragmentShader: `
             precision highp float;
-            varying vec2 vUv;
             uniform float time;
             uniform float scroll;
+            uniform float speed;
             uniform vec2 mouse;
             uniform vec2 resolution;
             uniform vec3 colorDeep;
@@ -170,114 +170,77 @@ function createVolume(mobile) {
             uniform vec3 colorC;
             ${NOISE}
             void main() {
-                vec2 p = (gl_FragCoord.xy / max(resolution, vec2(1.0))) * 2.0 - 1.0;
+                vec2 uv = gl_FragCoord.xy / max(resolution, vec2(1.0));
+                vec2 p = uv * 2.0 - 1.0;
                 p.x *= resolution.x / max(resolution.y, 1.0);
-                float t = time * 0.05 + scroll * 0.7;
-                vec3 ro = vec3(0.35 + mouse.x * 0.2, 0.1 + mouse.y * 0.1, 2.0 - scroll * 0.35);
-                vec3 rd = normalize(vec3(p * 0.9, -1.42));
-                vec3 col = mix(colorDeep, colorMid, 0.35 + vUv.y * 0.28);
+
+                float t = time * 0.06 + scroll * 1.15;
+                vec3 ro = vec3(0.42 + mouse.x * 0.22, 0.08 + mouse.y * 0.12, 1.65 - scroll * 0.55);
+                vec3 rd = normalize(vec3(p * 0.92, -1.38));
+
+                vec3 col = mix(colorDeep, colorMid, 0.28 + uv.y * 0.35);
                 float trans = 1.0;
-                float z = 0.1;
+                float z = 0.06;
+                float energy = 0.14 + scroll * 0.1 + speed * 0.05;
+
                 for (int i = 0; i < ${steps}; i++) {
                     vec3 pos = ro + rd * z;
-                    pos += vec3(t * 0.18, scroll * 0.55, t * 0.12);
-                    vec3 q = pos;
-                    q.xy += 0.28 * vec2(fbm(pos + t * 0.7), fbm(pos.zyx - t * 0.55));
-                    float n = fbm(q * 0.62);
-                    float dens = smoothstep(0.36, 0.74, n);
-                    dens *= smoothstep(2.6, 0.4, length(pos.xy));
+                    pos += vec3(t * 0.21, scroll * 0.85, t * 0.13);
+                    vec3 w = pos;
+                    float n1 = fbm(pos * 0.55);
+                    w.xy += (n1 - 0.5) * 0.55;
+                    w.z += fbm(pos.zyx + t * 0.4) * 0.35;
+                    float n = fbm(w * 0.7);
+                    float dens = smoothstep(0.34, 0.78, n);
+                    dens *= smoothstep(2.7, 0.35, length(pos.xy));
+                    dens *= 0.55 + 0.45 * fbm(pos * 1.4 - t);
+
                     vec3 emit = mix(colorA, colorB, n);
-                    emit = mix(emit, colorC, smoothstep(0.62, 1.0, n));
-                    col += emit * dens * trans * 0.2;
-                    trans *= 1.0 - dens * 0.14;
-                    z += 0.18 + (1.0 - n) * 0.07;
+                    emit = mix(emit, colorC, smoothstep(0.45, 1.0, scroll + n * 0.35));
+                    float glow = pow(dens, 1.35);
+                    col += emit * glow * trans * energy;
+                    trans *= 1.0 - dens * 0.13;
+                    z += 0.13 + (1.0 - n) * 0.08;
                 }
-                float well = exp(-length((p - vec2(-0.58, 0.04)) * vec2(1.55, 1.2)) * 2.35);
-                col = mix(col, colorDeep, well * 0.62);
-                float vig = smoothstep(1.85, 0.22, length(p * vec2(0.7, 1.0)));
-                col *= 0.82 + vig * 0.22;
-                col = min(col, vec3(0.62));
+
+                float well = exp(-length((p - vec2(-0.58, 0.02)) * vec2(1.5, 1.15)) * 2.2);
+                col = mix(col, colorDeep, well * 0.58);
+                float vig = smoothstep(1.82, 0.2, length(p * vec2(0.68, 1.0)));
+                col *= 0.78 + vig * 0.28;
+                col = min(col, vec3(0.72));
                 gl_FragColor = vec4(col, 1.0);
             }
         `
     });
-    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+    const mesh = new THREE.Mesh(coverGeometry(), mat);
     mesh.frustumCulled = false;
-    mesh.renderOrder = -20;
+    mesh.renderOrder = -40;
+    mesh.matrixAutoUpdate = false;
     mesh.onBeforeRender = () => { mesh.matrixWorld.identity(); };
-    mesh.userData.mat = material;
-    return mesh;
-}
-
-function createAurora(width, height, color, opacity, z) {
-    const geo = new THREE.PlaneGeometry(width, height, 80, 28);
-    const mat = new THREE.ShaderMaterial({
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-        side: THREE.DoubleSide,
-        uniforms: {
-            time: { value: 0 },
-            scroll: { value: 0 },
-            color: { value: new THREE.Color(color) },
-            opacity: { value: opacity }
-        },
-        vertexShader: `
-            uniform float time;
-            uniform float scroll;
-            varying vec2 vUv;
-            varying float vLift;
-            ${NOISE}
-            void main() {
-                vUv = uv;
-                vec3 p = position;
-                float n = fbm(vec3(uv * 3.2, time * 0.12 + scroll));
-                p.z += (n - 0.5) * 28.0;
-                p.y += sin(uv.x * 6.283 + time * 0.4 + scroll * 2.0) * 10.0;
-                vLift = n;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
-            }
-        `,
-        fragmentShader: `
-            precision highp float;
-            uniform vec3 color;
-            uniform float opacity;
-            uniform float time;
-            varying vec2 vUv;
-            varying float vLift;
-            void main() {
-                float band = pow(sin(vUv.x * 3.14159), 1.4);
-                float fall = smoothstep(0.0, 0.18, vUv.y) * smoothstep(1.0, 0.12, vUv.y);
-                float shimmer = 0.7 + 0.3 * sin(vUv.x * 18.0 + time * 1.4 + vLift * 6.0);
-                float a = band * fall * shimmer * opacity * (0.45 + vLift);
-                if (a < 0.012) discard;
-                gl_FragColor = vec4(color * (0.85 + vLift * 0.4), a);
-            }
-        `
-    });
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.z = z;
-    mesh.frustumCulled = false;
     mesh.userData.mat = mat;
     return mesh;
 }
 
-function createField(count, mode) {
+function createField(count, kind) {
     const pos = new Float32Array(count * 3);
     const seed = new Float32Array(count * 4);
     for (let i = 0; i < count; i++) {
-        pos[i * 3] = (Math.random() - 0.5) * 240;
-        pos[i * 3 + 1] = (Math.random() - 0.45) * 140;
-        pos[i * 3 + 2] = -20 - Math.random() * 180;
+        const a = Math.random() * Math.PI * 2;
+        const r = Math.pow(Math.random(), 0.55) * 150;
+        pos[i * 3] = Math.cos(a) * r * (0.7 + Math.random() * 0.8);
+        pos[i * 3 + 1] = (Math.random() - 0.42) * 120;
+        pos[i * 3 + 2] = -8 - Math.random() * 190;
         seed[i * 4] = Math.random() * 100;
-        seed[i * 4 + 1] = mode === 'river' ? 1.2 + Math.random() * 2.4 : 0.5 + Math.random() * 1.6;
+        seed[i * 4 + 1] = 0.45 + Math.random() * (kind === 'ember' ? 2.4 : 1.5);
         seed[i * 4 + 2] = Math.random();
-        seed[i * 4 + 3] = 0.4 + Math.random();
+        seed[i * 4 + 3] = 0.35 + Math.random();
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4));
-    const river = mode === 'river';
+
+    const ember = kind === 'ember';
+    const ash = kind === 'ash';
     const mat = new THREE.ShaderMaterial({
         transparent: true,
         depthWrite: false,
@@ -298,24 +261,28 @@ function createField(count, mode) {
             varying vec3 vColor;
             void main() {
                 vec3 p = position;
-                float t = time * aSeed.w * ${river ? '0.55' : '0.18'};
-                ${river ? `
-                    float span = 260.0;
-                    p.x = mod(p.x + t * (22.0 + aSeed.y * 18.0) + scroll * 80.0 + span * 0.5, span) - span * 0.5;
-                    p.y += sin(p.x * 0.04 + t + aSeed.x) * 7.0;
-                    p.z += scroll * 40.0;
-                ` : `
-                    p.x += sin(t + aSeed.x) * 10.0;
-                    p.y += cos(t * 0.7 + aSeed.z * 4.0) * 6.0 + scroll * 24.0;
-                    p.z += scroll * 90.0 + sin(t * 0.4) * 5.0;
-                `}
-                vAlpha = ${river ? '0.34' : '0.2'} + aSeed.z * 0.28 + speed * 0.1;
-                vColor = mix(vec3(0.49, 0.61, 1.0), vec3(0.37, 0.92, 0.83), aSeed.z);
-                vColor = mix(vColor, vec3(0.66, 0.55, 0.98), step(0.72, aSeed.z));
+                float t = time * aSeed.w * ${ember ? '0.55' : ash ? '0.22' : '0.16'};
+                float flow = 10.0 + scroll * 18.0 + speed * 24.0;
+                p.x += sin(t + aSeed.x + p.y * 0.04) * ${ember ? '14.0' : '7.0'};
+                p.y += cos(t * 0.71 + aSeed.z * 5.0) * ${ember ? '9.0' : '5.0'} + scroll * ${ember ? '36.0' : '18.0'};
+                p.z += scroll * flow + sin(t * 0.4 + aSeed.x) * 6.0;
+                ${ember ? `
+                    p.x += sin(t * 1.7 + aSeed.z * 8.0) * 4.0;
+                    p.y += t * aSeed.y * 2.2;
+                ` : ''}
+                float life = 0.5 + 0.5 * sin(t * 0.8 + aSeed.x);
+                vAlpha = (${ember ? '0.28' : ash ? '0.1' : '0.16'} + aSeed.z * 0.32) * (0.55 + life * 0.45);
+                vAlpha *= 0.62 + scroll * 0.22 + speed * 0.08;
+                vec3 cA = vec3(0.49, 0.61, 1.0);
+                vec3 cB = vec3(0.37, 0.92, 0.83);
+                vec3 cC = vec3(0.66, 0.55, 0.98);
+                vColor = mix(cA, cB, aSeed.z);
+                vColor = mix(vColor, cC, smoothstep(0.55, 1.0, scroll * 0.7 + aSeed.z));
                 vec4 mv = modelViewMatrix * vec4(p, 1.0);
                 gl_Position = projectionMatrix * mv;
-                gl_PointSize = aSeed.y * pixelRatio * (${river ? '70.0' : '140.0'} / max(1.0, -mv.z))
-                    * (1.0 + speed * ${river ? '1.8' : '0.4'});
+                float size = aSeed.y * pixelRatio * (${ember ? '88.0' : ash ? '46.0' : '120.0'} / max(1.0, -mv.z));
+                size *= 0.85 + speed * 0.55 + life * 0.2;
+                gl_PointSize = size;
             }
         `,
         fragmentShader: `
@@ -324,9 +291,13 @@ function createField(count, mode) {
             varying vec3 vColor;
             void main() {
                 vec2 uv = gl_PointCoord - 0.5;
-                float d = length(uv * vec2(${river ? '0.32, 1.5' : '1.0, 1.0'}));
-                float a = exp(-d * ${river ? '5.2' : '3.4'}) * vAlpha;
-                if (a < 0.01) discard;
+                float d = length(uv);
+                float edge = 0.48 + 0.04 * sin(uv.x * 12.0 + uv.y * 9.0);
+                if (d > edge) discard;
+                float core = exp(-d * ${ember ? '3.1' : '4.2'});
+                float halo = exp(-d * 1.6) * 0.35;
+                float a = (core + halo) * vAlpha;
+                if (a < 0.012) discard;
                 gl_FragColor = vec4(vColor, a);
             }
         `
@@ -341,7 +312,7 @@ const GradeShader = {
     uniforms: {
         tDiffuse: { value: null },
         time: { value: 0 },
-        amount: { value: 1 },
+        scroll: { value: 0 },
         speed: { value: 0 }
     },
     vertexShader: `
@@ -355,21 +326,23 @@ const GradeShader = {
         precision highp float;
         uniform sampler2D tDiffuse;
         uniform float time;
-        uniform float amount;
+        uniform float scroll;
         uniform float speed;
         varying vec2 vUv;
         void main() {
             vec2 uv = vUv;
             vec2 c = uv - 0.5;
             float d = length(c);
-            float ab = (0.0014 + speed * 0.0024) * amount * d;
+            float ab = (0.0012 + speed * 0.003 + scroll * 0.0008) * d;
             float r = texture2D(tDiffuse, uv + c * ab).r;
             float g = texture2D(tDiffuse, uv).g;
             float b = texture2D(tDiffuse, uv - c * ab).b;
             vec3 col = vec3(r, g, b);
-            col += (fract(sin(dot(uv * 900.0, vec2(12.9, 78.2)) + time) * 43758.5) - 0.5) * 0.03 * amount;
-            col *= mix(0.78, 1.0, smoothstep(0.05, 0.7, d));
-            gl_FragColor = vec4(min(col, vec3(0.85)), 1.0);
+            col += (fract(sin(dot(uv * 740.0 + time, vec2(12.9, 78.2))) * 43758.5) - 0.5) * 0.028;
+            float pulse = 0.97 + 0.03 * sin(time * 1.3 + scroll * 6.0);
+            col *= pulse;
+            col *= mix(0.76, 1.0, smoothstep(0.05, 0.72, d));
+            gl_FragColor = vec4(min(col, vec3(0.92)), 1.0);
         }
     `
 };
@@ -396,29 +369,27 @@ function animate() {
     state.time += dt * state.motionScale;
     const t = state.time;
     const flight = getFlightState();
-    state.smoothScroll += (flight.smoothProgress - state.smoothScroll) * (state.mobile ? 0.2 : 0.12);
-    state.smoothSpeed += (flight.speed - state.smoothSpeed) * 0.12;
+    const homing = flight.target <= 8 && flight.y > 140;
+    if (homing) {
+        state.smoothScroll += (0 - state.smoothScroll) * 0.28;
+        state.smoothSpeed *= 0.7;
+    } else {
+        state.smoothScroll += (flight.smoothProgress - state.smoothScroll) * (state.mobile ? 0.18 : 0.1);
+        state.smoothSpeed += (Math.min(0.45, flight.speed) - state.smoothSpeed) * 0.12;
+    }
     state.dir += ((flight.direction || 0) - state.dir) * 0.08;
     const theatre = sampleTheatre(state.smoothScroll, state.smoothSpeed, state.dir);
-    state.smoothMouse.lerp(state.mouse, 0.045);
+    state.smoothMouse.lerp(state.mouse, 0.05);
 
     const uVol = state.volume?.userData?.mat?.uniforms;
     if (uVol) {
         uVol.time.value = t;
         uVol.scroll.value = theatre.phase;
+        uVol.speed.value = state.smoothSpeed;
         uVol.mouse.value.copy(state.smoothMouse);
         uVol.resolution.value.set(state.renderWidth, state.renderHeight);
     }
-    [state.auroraA, state.auroraB].forEach((mesh, i) => {
-        if (!mesh) return;
-        const u = mesh.userData.mat.uniforms;
-        u.time.value = t;
-        u.scroll.value = theatre.phase;
-        mesh.rotation.y = theatre.yaw * (0.25 + i * 0.1);
-        mesh.position.y = 6 + i * 8 + Math.sin(t * 0.15 + i) * 4 + theatre.phase * 10;
-        mesh.position.x = 28 + i * 16 + Math.sin(theatre.yaw + i) * 10;
-    });
-    [state.dust, state.rivers].forEach((pts) => {
+    [state.motes, state.embers, state.ash].forEach((pts) => {
         if (!pts?.userData?.mat?.uniforms) return;
         const u = pts.userData.mat.uniforms;
         u.time.value = t;
@@ -428,25 +399,29 @@ function animate() {
 
     const par = state.mobile ? 0 : 1;
     state.targetCam.set(
-        theatre.cam.x + state.smoothMouse.x * 14 * par,
-        theatre.cam.y + state.smoothMouse.y * 8 * par,
+        theatre.cam.x + state.smoothMouse.x * 16 * par,
+        theatre.cam.y + state.smoothMouse.y * 9 * par,
         theatre.cam.z
     );
-    state.camera.position.lerp(state.targetCam, 0.07);
+    state.camera.position.lerp(state.targetCam, 0.065 + state.smoothSpeed * 0.04);
     state._look.set(
-        theatre.focus.x + state.smoothMouse.x * 10 * par,
-        theatre.focus.y + 2,
+        theatre.focus.x + state.smoothMouse.x * 11 * par,
+        theatre.focus.y + 2 + Math.sin(theatre.phase * Math.PI) * 4,
         theatre.focus.z
     );
     state._m4.lookAt(state.camera.position, state._look, state._up);
     state._quatTarget.setFromRotationMatrix(state._m4);
-    state.camera.quaternion.slerp(state._quatTarget, 0.08);
+    state.camera.quaternion.slerp(state._quatTarget, 0.075);
 
     if (state.bloomPass) {
-        state.bloomPass.strength = 0.46 + Math.sin(theatre.phase * Math.PI) * 0.06;
+        const bloom = homing
+            ? 0.28
+            : 0.34 + theatre.phase * 0.08 + state.smoothSpeed * 0.05;
+        state.bloomPass.strength = bloom;
     }
     if (state.gradePass) {
         state.gradePass.uniforms.time.value = t;
+        state.gradePass.uniforms.scroll.value = theatre.phase;
         state.gradePass.uniforms.speed.value = state.smoothSpeed;
     }
 
@@ -486,6 +461,10 @@ function applySize(w, h) {
     const canvas = state.renderer.domElement;
     canvas.style.width = '100%';
     canvas.style.height = '100%';
+    const pr = Math.min(window.devicePixelRatio || 1, state.mobile ? 1 : 1.6);
+    [state.motes, state.embers, state.ash].forEach((pts) => {
+        if (pts?.userData?.mat?.uniforms?.pixelRatio) pts.userData.mat.uniforms.pixelRatio.value = pr;
+    });
 }
 
 export function initThreeBackground() {
@@ -494,15 +473,15 @@ export function initThreeBackground() {
     state.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     state.mobile = detectMobile() || state.reducedMotion;
     if (state.reducedMotion) {
-        state.motionScale = 0.3;
-        state.quality = 0.28;
+        state.motionScale = 0.28;
+        state.quality = 0.3;
         state.renderScale = 0.55;
         state.frameSkip = 3;
         state.usePost = false;
     } else if (state.mobile) {
-        state.motionScale = 0.65;
-        state.quality = 0.4;
-        state.renderScale = 0.62;
+        state.motionScale = 0.7;
+        state.quality = 0.42;
+        state.renderScale = 0.64;
         state.frameSkip = 2;
         state.usePost = false;
     }
@@ -510,24 +489,23 @@ export function initThreeBackground() {
     document.getElementById('three-bg-canvas')?.remove();
     state.clock = new THREE.Clock();
     state.scene = new THREE.Scene();
-    state.scene.fog = new THREE.FogExp2(PALETTE.deep, 0.012);
 
     const w = Math.max(1, window.innerWidth);
     const h = Math.max(1, window.innerHeight);
-    state.camera = new THREE.PerspectiveCamera(52, w / h, 0.4, 800);
-    state.camera.position.set(0, 6, 88);
+    state.camera = new THREE.PerspectiveCamera(54, w / h, 0.35, 900);
+    state.camera.position.set(0, 6, 72);
     state.targetCam.copy(state.camera.position);
 
     state.renderer = new THREE.WebGLRenderer({
-        antialias: !state.mobile,
+        antialias: false,
         alpha: false,
         powerPreference: state.mobile ? 'low-power' : 'high-performance',
-        depth: true
+        depth: false
     });
     state.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, state.mobile ? 1 : 1.6));
     state.renderer.setClearColor(PALETTE.deep, 1);
     state.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    state.renderer.toneMappingExposure = 1.05;
+    state.renderer.toneMappingExposure = 1.08;
     const canvas = state.renderer.domElement;
     canvas.id = 'three-bg-canvas';
     canvas.setAttribute('aria-hidden', 'true');
@@ -538,27 +516,20 @@ export function initThreeBackground() {
     document.body.prepend(canvas);
 
     state.volume = createVolume(state.mobile);
-    state.volume.matrixAutoUpdate = false;
     state.scene.add(state.volume);
 
-    state.auroraA = createAurora(300, 120, PALETTE.primary, state.mobile ? 0.2 : 0.32, -80);
-    state.auroraB = createAurora(340, 140, PALETTE.cyan, state.mobile ? 0.16 : 0.26, -120);
-    state.auroraA.rotation.x = -0.18;
-    state.auroraB.rotation.x = 0.12;
-    state.scene.add(state.auroraA, state.auroraB);
-
-    const dustN = Math.floor((state.mobile ? 500 : 1800) * state.quality);
-    const riverN = Math.floor((state.mobile ? 400 : 1400) * state.quality);
-    state.dust = createField(Math.max(180, dustN), 'dust');
-    state.rivers = createField(Math.max(160, riverN), 'river');
-    state.scene.add(state.dust, state.rivers);
+    const q = state.quality;
+    state.motes = createField(Math.max(220, Math.floor((state.mobile ? 700 : 2200) * q)), 'mote');
+    state.embers = createField(Math.max(160, Math.floor((state.mobile ? 420 : 1400) * q)), 'ember');
+    state.ash = createField(Math.max(120, Math.floor((state.mobile ? 280 : 900) * q)), 'ash');
+    state.scene.add(state.motes, state.embers, state.ash);
 
     if (state.usePost) {
         const bw = Math.max(1, Math.floor(w * state.renderScale));
         const bh = Math.max(1, Math.floor(h * state.renderScale));
         state.composer = new EffectComposer(state.renderer);
         state.composer.addPass(new RenderPass(state.scene, state.camera));
-        state.bloomPass = new UnrealBloomPass(new THREE.Vector2(bw, bh), 0.48, 0.5, 0.42);
+        state.bloomPass = new UnrealBloomPass(new THREE.Vector2(bw, bh), 0.36, 0.42, 0.48);
         state.composer.addPass(state.bloomPass);
         state.gradePass = new ShaderPass(GradeShader);
         state.composer.addPass(state.gradePass);
@@ -567,16 +538,13 @@ export function initThreeBackground() {
     if (!state.mobile) {
         document.addEventListener('pointermove', (e) => {
             if (e.pointerType && e.pointerType !== 'mouse') return;
-            state.mouse.set((e.clientX / w) * 2 - 1, -(e.clientY / h) * 2 + 1);
+            const rw = state.renderWidth || w;
+            const rh = state.renderHeight || h;
+            state.mouse.set((e.clientX / rw) * 2 - 1, -(e.clientY / rh) * 2 + 1);
         }, { passive: true });
     }
 
-    const onResize = () => {
-        const nw = Math.max(1, window.innerWidth);
-        const nh = Math.max(1, window.innerHeight);
-        applySize(nw, nh);
-    };
-    window.addEventListener('resize', onResize, { passive: true });
+    window.addEventListener('resize', () => applySize(Math.max(1, window.innerWidth), Math.max(1, window.innerHeight)), { passive: true });
     document.addEventListener('visibilitychange', () => {
         state.pageVisible = document.visibilityState !== 'hidden';
         if (state.pageVisible) state.clock.getDelta();
