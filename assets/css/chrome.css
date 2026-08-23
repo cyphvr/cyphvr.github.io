@@ -180,6 +180,32 @@
     will-change: opacity, transform, filter;
 }
 
+@media (max-width: 768px) {
+    .cy-rise,
+    .cy-rise:hover,
+    .cy-rise:focus,
+    .cy-rise:focus-visible,
+    .cy-rise:active {
+        --rise-pad-x: 14px;
+        --rise-gap: 0px;
+        padding: 0 14px;
+        gap: 0;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        will-change: auto;
+        filter: none;
+    }
+
+    .cy-rise__label,
+    .cy-rise:hover .cy-rise__label,
+    .cy-rise:focus .cy-rise__label,
+    .cy-rise:focus-visible .cy-rise__label {
+        max-width: 0 !important;
+        opacity: 0 !important;
+        transform: none !important;
+    }
+}
+
 .cy-rise.is-on {
     opacity: 1;
     visibility: visible;
@@ -200,26 +226,36 @@
         gap 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.cy-rise:hover,
 .cy-rise:focus-visible {
-    --rise-pad-x: 1.05rem;
-    --rise-gap: 0.55rem;
-    border-color: rgba(124, 155, 255, 0.45);
-    color: #eef2ff;
-    background: rgba(22, 30, 50, 0.97);
     outline: none;
-    padding: 0 var(--rise-pad-x);
-    gap: var(--rise-gap);
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.42),
-        0 0 18px rgba(124, 155, 255, 0.12);
-}
-
-.cy-rise:focus-visible {
     box-shadow:
         0 0 0 2px var(--paper),
         0 0 0 4px rgba(124, 155, 255, 0.55),
         0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .cy-rise:hover,
+    .cy-rise:focus-visible {
+        --rise-pad-x: 1.05rem;
+        --rise-gap: 0.55rem;
+        border-color: rgba(124, 155, 255, 0.45);
+        color: #eef2ff;
+        background: rgba(22, 30, 50, 0.97);
+        outline: none;
+        padding: 0 var(--rise-pad-x);
+        gap: var(--rise-gap);
+        box-shadow:
+            0 12px 30px rgba(0, 0, 0, 0.42),
+            0 0 18px rgba(124, 155, 255, 0.12);
+    }
+
+    .cy-rise:focus-visible {
+        box-shadow:
+            0 0 0 2px var(--paper),
+            0 0 0 4px rgba(124, 155, 255, 0.55),
+            0 12px 30px rgba(0, 0, 0, 0.4);
+    }
 }
 
 .cy-rise svg {
@@ -232,9 +268,11 @@
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.cy-rise:hover svg,
-.cy-rise:focus-visible svg {
-    transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+    .cy-rise:hover svg,
+    .cy-rise:focus-visible svg {
+        transform: translateY(-1px);
+    }
 }
 
 .cy-rise__label {
@@ -258,25 +296,27 @@
     pointer-events: none;
 }
 
-.cy-rise:hover .cy-rise__label,
-.cy-rise:focus-visible .cy-rise__label {
-    max-width: 8.5rem;
-    opacity: 1;
-    color: var(--ink);
-    transform: translate3d(0, 0, 0);
-    transition:
-        max-width 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-        opacity 0.45s ease 0.08s,
-        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.04s,
-        color 0.4s ease 0.08s;
-}
+@media (hover: hover) and (pointer: fine) {
+    .cy-rise:hover .cy-rise__label,
+    .cy-rise:focus-visible .cy-rise__label {
+        max-width: 8.5rem;
+        opacity: 1;
+        color: var(--ink);
+        transform: translate3d(0, 0, 0);
+        transition:
+            max-width 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.45s ease 0.08s,
+            transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.04s,
+            color 0.4s ease 0.08s;
+    }
 
-.cy-rise:not(:hover):not(:focus-visible) .cy-rise__label {
-    transition:
-        max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-        opacity 0.25s ease,
-        transform 0.35s ease,
-        color 0.25s ease;
+    .cy-rise:not(:hover):not(:focus-visible) .cy-rise__label {
+        transition:
+            max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.25s ease,
+            transform 0.35s ease,
+            color 0.25s ease;
+    }
 }
 
 @keyframes pulse-ok {

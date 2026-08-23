@@ -3,7 +3,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { getFlightState } from './scroll-flight.js?v=20260822v15';
+import { getFlightState } from './scroll-flight.js?v=20260822v17';
 
 const PALETTE = {
     deep: 0x05070d,
@@ -13,7 +13,7 @@ const PALETTE = {
     violet: 0xa78bfa
 };
 
-export function sampleTheatre(s, v = 0, dir = 0) {
+function sampleTheatre(s, v = 0, dir = 0) {
     const p = Math.min(1, Math.max(0, s));
     const e = p * p * (3 - 2 * p);
     const yaw = -0.62 + e * 1.55 + dir * v * 0.18;
@@ -74,26 +74,12 @@ const state = {
     gradePass: null,
     renderWidth: 0,
     renderHeight: 0,
-    frameHooks: [],
-    theatreSnap: null,
     targetCam: new THREE.Vector3(),
     _look: new THREE.Vector3(),
     _up: new THREE.Vector3(0, 1, 0),
     _m4: new THREE.Matrix4(),
     _quatTarget: new THREE.Quaternion()
 };
-
-export function onThreeFrame(fn) {
-    if (typeof fn !== 'function') return () => {};
-    state.frameHooks.push(fn);
-    return () => {
-        state.frameHooks = state.frameHooks.filter((f) => f !== fn);
-    };
-}
-
-export function getTheatreSnapshot() {
-    return state.theatreSnap;
-}
 
 const NOISE = `
 vec3 hash33(vec3 p) {
@@ -425,27 +411,8 @@ function animate() {
         state.gradePass.uniforms.speed.value = state.smoothSpeed;
     }
 
-    state.theatreSnap = {
-        s: state.smoothScroll,
-        v: state.smoothSpeed,
-        dir: state.dir,
-        phase: theatre.phase,
-        yaw: theatre.yaw,
-        pitch: theatre.pitch,
-        stageYaw: theatre.stageYaw,
-        stagePitch: theatre.stagePitch,
-        time: t
-    };
-
     if (state.usePost && state.composer) state.composer.render();
     else state.renderer.render(state.scene, state.camera);
-
-    if (state.frameHooks.length) {
-        const payload = { camera: state.camera, theatre: state.theatreSnap, width: state.renderWidth, height: state.renderHeight };
-        for (let i = 0; i < state.frameHooks.length; i++) {
-            try { state.frameHooks[i](payload); } catch { /* */ }
-        }
-    }
 }
 
 function applySize(w, h) {
@@ -469,6 +436,15 @@ function applySize(w, h) {
 
 export function initThreeBackground() {
     if (state.initialized || typeof window === 'undefined' || !document.body) return;
+    try {
+        const lite =
+            document.documentElement.classList.contains('cy-lite') ||
+            window.matchMedia('(max-width: 768px)').matches ||
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (lite) return;
+    } catch {
+        if ((window.innerWidth || 0) <= 768) return;
+    }
     state.initialized = true;
     state.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     state.mobile = detectMobile() || state.reducedMotion;

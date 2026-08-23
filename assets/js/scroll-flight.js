@@ -13,7 +13,6 @@ const flight = {
     lastT: 0,
     touchY: null,
     touchActive: false,
-    listeners: new Set(),
 
     lerp: 0.085,
     wheelScale: 0.95,
@@ -107,15 +106,6 @@ function publish() {
     root.style.setProperty('--cy-scroll-v', Math.min(1, Math.abs(flight.velocity) / 2400).toFixed(4));
     root.style.setProperty('--cy-scroll-dir', String(flight.direction));
     root.dataset.cyFlight = '1';
-
-    const snap = getFlightState();
-    flight.listeners.forEach((fn) => {
-        try {
-            fn(snap);
-        } catch {
-
-        }
-    });
 }
 
 function tick(now) {
@@ -174,6 +164,42 @@ function kick() {
     if (!flight.raf) {
         flight.lastT = 0;
         flight.raf = requestAnimationFrame(tick);
+    }
+}
+
+let nativeRaf = 0;
+let nativeLast = 0;
+
+function nativePump(now) {
+    nativeRaf = 0;
+    if (flight.enabled || flight.reduced) return;
+
+    const t = now || performance.now();
+    const dt = nativeLast ? Math.min(0.05, (t - nativeLast) / 1000) : 0.016;
+    nativeLast = t;
+
+    let keep = false;
+    if (Math.abs(flight.velocity) > 0.5) {
+        flight.velocity *= Math.pow(0.88, dt * 60);
+        if (Math.abs(flight.velocity) < 0.5) flight.velocity = 0;
+        else keep = true;
+        flight.smoothProgress += (flight.progress - flight.smoothProgress) * Math.min(1, dt * 10);
+        publish();
+    } else if (Math.abs(flight.progress - flight.smoothProgress) > 0.0005) {
+        flight.smoothProgress += (flight.progress - flight.smoothProgress) * Math.min(1, dt * 10);
+        publish();
+        keep = Math.abs(flight.progress - flight.smoothProgress) > 0.0005;
+    }
+
+    if (keep) nativeRaf = requestAnimationFrame(nativePump);
+    else nativeLast = 0;
+}
+
+function kickNativePump() {
+    if (flight.enabled || flight.reduced) return;
+    if (!nativeRaf) {
+        nativeLast = 0;
+        nativeRaf = requestAnimationFrame(nativePump);
     }
 }
 
@@ -277,7 +303,7 @@ function onKey(e) {
 }
 
 function onNativeScroll() {
-
+    if (nativeTweening) return;
     if (flight.enabled && flight.raf) return;
     if (flight.touchActive) return;
 
@@ -302,6 +328,7 @@ function onNativeScroll() {
         flight.velocity = 0;
     }
     publish();
+    if (!flight.enabled) kickNativePump();
 }
 
 function onResize() {
@@ -311,16 +338,6 @@ function onResize() {
     flight.progress = clamp(flight.current / flight.max, 0, 1);
     publish();
     if (flight.enabled && !flight.reduced) kick();
-}
-
-export function refreshScrollMetrics() {
-    flight.max = measureMax();
-    flight.target = clamp(flight.target, 0, flight.max);
-    flight.current = clamp(flight.current, 0, flight.max);
-    flight.progress = clamp(flight.current / flight.max, 0, 1);
-    flight.smoothProgress = flight.progress;
-    writeNativeY(flight.current);
-    publish();
 }
 
 export function getFlightState() {
@@ -338,9 +355,59 @@ export function getFlightState() {
     };
 }
 
-export function onFlightFrame(fn) {
-    if (typeof fn === 'function') flight.listeners.add(fn);
-    return () => flight.listeners.delete(fn);
+let nativeTween = 0;
+let nativeTweening = false;
+
+function cancelNativeTween() {
+    if (nativeTween) {
+        cancelAnimationFrame(nativeTween);
+        nativeTween = 0;
+    }
+    nativeTweening = false;
+}
+
+function nativeSmoothTo(next) {
+    cancelNativeTween();
+    flight.max = measureMax();
+    const start = readNativeY();
+    const dist = next - start;
+    if (Math.abs(dist) < 2) {
+        flight.current = next;
+        flight.target = next;
+        flight.progress = clamp(next / Math.max(1, flight.max), 0, 1);
+        flight.smoothProgress = flight.progress;
+        writeNativeY(next);
+        publish();
+        return;
+    }
+
+    const duration = Math.min(460, Math.max(280, Math.abs(dist) * 0.2));
+    const t0 = performance.now();
+    nativeTweening = true;
+
+    const step = (now) => {
+        const u = Math.min(1, (now - t0) / duration);
+        const ease = 1 - (1 - u) ** 3;
+        const y = start + dist * ease;
+        writeNativeY(y);
+        flight.current = y;
+        flight.target = next;
+        flight.progress = clamp(y / Math.max(1, flight.max), 0, 1);
+        flight.smoothProgress = flight.progress;
+        publish();
+        if (u < 1) {
+            nativeTween = requestAnimationFrame(step);
+            return;
+        }
+        writeNativeY(next);
+        flight.current = next;
+        flight.target = next;
+        nativeTween = 0;
+        nativeTweening = false;
+        publish();
+    };
+
+    nativeTween = requestAnimationFrame(step);
 }
 
 export function scrollToY(y, immediate = false) {
@@ -348,13 +415,19 @@ export function scrollToY(y, immediate = false) {
     const next = clamp(typeof y === 'number' ? y : 0, 0, flight.max);
     flight.velocity = 0;
 
-    if (flight.reduced || immediate || !flight.enabled) {
+    if (flight.reduced || immediate) {
+        cancelNativeTween();
         flight.current = next;
         flight.target = next;
-        flight.progress = clamp(next / flight.max, 0, 1);
+        flight.progress = clamp(next / Math.max(1, flight.max), 0, 1);
         flight.smoothProgress = flight.progress;
         writeNativeY(next);
         publish();
+        return;
+    }
+
+    if (!flight.enabled) {
+        nativeSmoothTo(next);
         return;
     }
 
@@ -364,10 +437,6 @@ export function scrollToY(y, immediate = false) {
         flight.current += (flight.target - flight.current) * 0.12;
     }
     kick();
-}
-
-export function scrollByY(dy, immediate = false) {
-    scrollToY(flight.target + dy, immediate);
 }
 
 function isTouchDevice() {
@@ -403,9 +472,20 @@ export function initScrollFlight() {
     }
 
     if (flight.enabled) {
-
         window.addEventListener('wheel', onWheel, { passive: false });
         window.addEventListener('keydown', onKey, { passive: false });
+    } else {
+        window.addEventListener('touchstart', () => {
+            if (!nativeTweening) return;
+            cancelNativeTween();
+            const y = readNativeY();
+            flight.max = measureMax();
+            flight.current = y;
+            flight.target = y;
+            flight.progress = clamp(y / Math.max(1, flight.max), 0, 1);
+            flight.smoothProgress = flight.progress;
+            publish();
+        }, { passive: true });
     }
 
     window.addEventListener('scroll', onNativeScroll, { passive: true });
@@ -421,27 +501,6 @@ export function initScrollFlight() {
         }).catch(() => {});
     }
     window.addEventListener('load', onResize, { once: true });
-
-    if (!flight.enabled) {
-        let last = performance.now();
-        const pump = (now) => {
-            const dt = Math.min(0.05, (now - last) / 1000);
-            last = now;
-
-            if (Math.abs(flight.velocity) > 0.5) {
-                flight.velocity *= Math.pow(0.88, dt * 60);
-                if (Math.abs(flight.velocity) < 0.5) flight.velocity = 0;
-
-                flight.smoothProgress += (flight.progress - flight.smoothProgress) * Math.min(1, dt * 10);
-                publish();
-            } else if (Math.abs(flight.progress - flight.smoothProgress) > 0.0005) {
-                flight.smoothProgress += (flight.progress - flight.smoothProgress) * Math.min(1, dt * 10);
-                publish();
-            }
-            requestAnimationFrame(pump);
-        };
-        requestAnimationFrame(pump);
-    }
 
     publish();
     return getFlightState;

@@ -143,11 +143,18 @@
     transition: color 0.15s, border-color 0.15s, background 0.15s;
 }
 
-.features-nav a:hover,
 .features-nav a.is-active {
     color: var(--ink);
     border-left-color: var(--ember);
     background: rgba(124, 155, 255, 0.05);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .features-nav a:hover {
+        color: var(--ink);
+        border-left-color: var(--ember);
+        background: rgba(124, 155, 255, 0.05);
+    }
 }
 
 .feature-chapter {
@@ -889,6 +896,7 @@
         border-left-width: 1px;
         border-radius: 999px;
         white-space: nowrap;
+        transform: none;
     }
 
     .timeline {

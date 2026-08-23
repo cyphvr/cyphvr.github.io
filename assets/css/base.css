@@ -63,6 +63,14 @@
     z-index: 1;
 }
 
+html.cy-lite body {
+    background:
+        radial-gradient(120% 90% at 8% -8%, rgba(124, 155, 255, 0.16), transparent 46%),
+        radial-gradient(90% 70% at 110% 10%, rgba(94, 234, 212, 0.08), transparent 44%),
+        radial-gradient(80% 55% at 50% 110%, rgba(167, 139, 250, 0.07), transparent 52%),
+        var(--paper);
+}
+
 html {
     background: var(--paper);
     color: var(--ink);

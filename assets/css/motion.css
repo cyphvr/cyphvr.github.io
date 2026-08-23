@@ -142,6 +142,24 @@ body.page-leaving .site-main {
     animation: title-settle 0.85s var(--motion-ease) both;
 }
 
+.feature-chapter,
+.feature-chapter.reveal-unit,
+.feature-chapter .reveal-unit,
+.feature-chapter .reveal-group > .reveal-child,
+.feature-chapter .lift,
+.feature-chapter .reveal-child {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+    will-change: auto;
+}
+
+.feature-chapter__icon,
+.feature-chapter:hover .feature-chapter__icon {
+    transform: none !important;
+}
+
 @keyframes title-settle {
     from {
         letter-spacing: -0.04em;
@@ -257,19 +275,21 @@ body.page-leaving .site-main {
     transition: transform 0.4s var(--motion-ease), border-color 0.3s ease, box-shadow 0.35s ease;
 }
 
-.feature-chapter:hover .feature-chapter__icon {
-    transform: rotate(-6deg) scale(1.06);
-    border-color: rgba(124, 155, 255, 0.4);
-    box-shadow: 0 10px 24px rgba(124, 155, 255, 0.15);
-}
-
 .features-nav a {
     transition: color 0.2s ease, border-color 0.25s ease, background 0.25s ease, transform 0.25s var(--motion-ease);
 }
 
-.features-nav a:hover,
-.features-nav a.is-active {
-    transform: translateX(2px);
+@media (hover: hover) and (pointer: fine) {
+    .feature-chapter:hover .feature-chapter__icon {
+        transform: rotate(-6deg) scale(1.06);
+        border-color: rgba(124, 155, 255, 0.4);
+        box-shadow: 0 10px 24px rgba(124, 155, 255, 0.15);
+    }
+
+    .features-nav a:hover,
+    .features-nav a.is-active {
+        transform: translateX(2px);
+    }
 }
 
 .cmd-rail button,
@@ -430,6 +450,37 @@ body.page-leaving .site-main {
 .deck:hover {
     border-color: rgba(124, 155, 255, 0.35);
     box-shadow: 0 36px 90px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 155, 255, 0.08);
+}
+
+@media (max-width: 768px) {
+    .deck-tilt,
+    .hero-split__visual .deck {
+        animation: none !important;
+    }
+
+    .marquee__track {
+        animation-duration: 70s;
+    }
+
+    .reveal-unit,
+    .reveal-group > .reveal-child,
+    .reveal-unit.reveal-unit--left,
+    .reveal-unit.reveal-unit--right,
+    .reveal-unit.reveal-unit--scale,
+    .reveal-group > .reveal-child.from-left,
+    .reveal-group > .reveal-child.from-right {
+        transform: none;
+        will-change: auto;
+        transition: opacity 1.15s ease;
+    }
+
+    .reveal-unit.is-visible > h1,
+    .reveal-unit.is-visible > h2,
+    .band__head.is-visible h2,
+    .page-intro.is-visible h1,
+    .about-mast.is-visible h1 {
+        animation: none;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

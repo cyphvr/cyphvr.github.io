@@ -1,11 +1,27 @@
-import { initNavigation } from './navigation.js?v=20260822v15';
-import { initAnimations } from './animations.js?v=20260822v15';
-import { initCards } from './cards.js?v=20260822v15';
-import { initButtons } from './buttons.js?v=20260822v15';
+import { initNavigation } from './navigation.js?v=20260822v22';
+import { initAnimations } from './animations.js?v=20260822v18';
+import { initCards } from './cards.js?v=20260822v17';
+import { initButtons } from './buttons.js?v=20260822v17';
 import { initCommands } from './commands.js?v=20260822v15';
-import { initDeckDemo } from './deck-demo.js?v=20260822v15';
-import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260822v15';
-import { initThreeBackground } from './three-bg-advanced.js?v=20260822v15';
+import { initDeckDemo } from './deck-demo.js?v=20260822v16';
+import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260822v17';
+import { initThreeBackground } from './three-bg-advanced.js?v=20260822v17';
+
+function isLiteRuntime() {
+    try {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
+        if (window.matchMedia('(max-width: 768px)').matches) return true;
+        if (navigator.connection && navigator.connection.saveData) return true;
+        const coarse = window.matchMedia('(pointer: coarse)').matches;
+        const short = Math.min(window.innerWidth || 0, window.innerHeight || 0) < 900;
+        return coarse && short;
+    } catch {
+        return (window.innerWidth || 0) <= 768;
+    }
+}
+
+const lite = isLiteRuntime();
+if (lite) document.documentElement.classList.add('cy-lite');
 
 try {
     initScrollFlight();
@@ -15,10 +31,12 @@ try {
 
 window.__cyScrollTo = scrollToY;
 
-try {
-    initThreeBackground();
-} catch (error) {
-    console.error('Three.js background failed to initialize:', error);
+if (!lite) {
+    try {
+        initThreeBackground();
+    } catch (error) {
+        console.error('Three.js background failed to initialize:', error);
+    }
 }
 
 function initPageTransitions() {

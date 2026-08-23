@@ -45,7 +45,6 @@ export function initButtons() {
             else if (visible && y < HIDE_AT) visible = false;
 
             riseBtn.classList.toggle('is-on', visible);
-            riseBtn.classList.toggle('show', visible);
             riseBtn.setAttribute('aria-hidden', visible ? 'false' : 'true');
             ticking = false;
         };
@@ -65,17 +64,12 @@ export function initButtons() {
 
         riseBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            riseBtn.blur();
             if (typeof window.__cyScrollTo === 'function') {
                 window.__cyScrollTo(0);
                 return;
             }
-            try {
-                window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-            } catch {
-                window.scrollTo(0, 0);
-            }
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
+            window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
         });
     }
 

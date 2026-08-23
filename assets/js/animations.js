@@ -8,7 +8,6 @@ const UNITS = [
     ['.about-split > *:last-child', 'right'],
     ['.band__head', null],
     ['.feature-row', null],
-    ['.feature-chapter', null],
     ['.marquee', null],
     ['.cmd-app', 'scale'],
     ['.status-orb', 'scale'],
@@ -37,7 +36,9 @@ function skip(el) {
     return Boolean(
         el.closest('.hero-split') ||
         el.closest('.navbar') ||
-        el.closest('.page-transition-overlay')
+        el.closest('.page-transition-overlay') ||
+        el.closest('.feature-chapter') ||
+        el.matches('.feature-chapter')
     );
 }
 
@@ -89,6 +90,7 @@ function markMotionTree() {
     });
 
     document.querySelectorAll('.value-card, .status-tile, .bullet-grid li, .stat-wall article').forEach((el) => {
+        if (skip(el)) return;
         if (!el.classList.contains('lift') && el.matches('.status-tile, .stat-wall article, .bullet-grid li')) {
             el.classList.add('lift');
         }
@@ -134,7 +136,21 @@ function initReveals() {
 }
 
 function initMarquee() {
-    document.querySelectorAll('.marquee').forEach((el) => {
+    const marquees = document.querySelectorAll('.marquee');
+    if (!marquees.length) return;
+
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                const track = entry.target.querySelector('.marquee__track');
+                if (!track) return;
+                track.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+            });
+        }, { threshold: 0.01 });
+        marquees.forEach((el) => io.observe(el));
+    }
+
+    marquees.forEach((el) => {
         const track = el.querySelector('.marquee__track');
         if (!track) return;
         el.addEventListener('mouseenter', () => {

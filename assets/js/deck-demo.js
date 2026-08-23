@@ -129,13 +129,24 @@ export function initDeckDemo() {
         wait(650).then(() => cycle(token));
     };
 
-    start();
-
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
+    let visible = true;
+    const sync = () => {
+        if (document.hidden || !visible) {
             runId += 1;
-        } else {
-            start();
+            return;
         }
-    });
+        start();
+    };
+
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+            visible = entries.some((entry) => entry.isIntersecting);
+            sync();
+        }, { threshold: 0.12 });
+        io.observe(deck);
+    } else {
+        start();
+    }
+
+    document.addEventListener('visibilitychange', sync);
 }
