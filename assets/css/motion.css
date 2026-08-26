@@ -147,7 +147,11 @@ body.page-leaving .site-main {
 .feature-chapter .reveal-unit,
 .feature-chapter .reveal-group > .reveal-child,
 .feature-chapter .lift,
-.feature-chapter .reveal-child {
+.feature-chapter .reveal-child,
+.legal-doc,
+.legal-toc,
+html.cy-lite .reveal-unit,
+html.cy-lite .reveal-group > .reveal-child {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;

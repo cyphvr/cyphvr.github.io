@@ -99,6 +99,32 @@ body::-webkit-scrollbar {
     }
 }
 
+html.cy-flight:not(.cy-flight--native),
+html.cy-flight:not(.cy-flight--native) body,
+html.cy-flight:not(.cy-flight--native) body * {
+    overscroll-behavior: none;
+    touch-action: none;
+}
+
+html.cy-flight:not(.cy-flight--native) input,
+html.cy-flight:not(.cy-flight--native) textarea,
+html.cy-flight:not(.cy-flight--native) select {
+    touch-action: auto;
+}
+
+html.cy-flight--touch,
+html.cy-flight--touch body {
+    height: 100%;
+    height: 100svh;
+    overflow: hidden;
+}
+
+html.cy-flight--touch .cy-scroll-shift {
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translate3d(0, var(--cy-y, 0px), 0);
+}
+
 body {
     font-family: var(--font-sans);
     background: var(--paper);

@@ -11,13 +11,25 @@ const flight = {
     direction: 0,
     raf: 0,
     lastT: 0,
+    touchX: null,
     touchY: null,
     touchActive: false,
 
     lerp: 0.085,
     wheelScale: 0.95,
-    touchScale: 1.05,
-    maxWheel: 180
+    touchScale: 1,
+    maxWheel: 180,
+    touch: false,
+    touchLock: null,
+    touchStartX: 0,
+    touchStartY: 0,
+    touchVy: 0,
+    touchT: 0,
+    writing: false,
+    dragged: false,
+    ignoreNativeUntil: 0,
+    virtual: false,
+    shift: null
 };
 
 function prefersReduced() {
@@ -29,8 +41,13 @@ function prefersReduced() {
 }
 
 function measureMax() {
+    if (flight.virtual && flight.shift) {
+        const view = document.body?.clientHeight || window.innerHeight || 1;
+        const total = Math.max(flight.shift.scrollHeight || 0, flight.shift.offsetHeight || 0, view);
+        return Math.max(1, total - view);
+    }
     const doc = document.documentElement;
-    const view = window.innerHeight || doc.clientHeight || 1;
+    const view = doc.clientHeight || window.innerHeight || 1;
     const total = Math.max(doc.scrollHeight || 0, document.body?.scrollHeight || 0, view);
     return Math.max(1, total - view);
 }
@@ -45,7 +62,12 @@ function overflowCan(value) {
 
 function isScrollableAncestor(el) {
     let node = el instanceof Element ? el : null;
-    while (node && node !== document.body && node !== document.documentElement) {
+    while (
+        node &&
+        node !== document.body &&
+        node !== document.documentElement &&
+        !node.classList.contains('cy-scroll-shift')
+    ) {
         const style = window.getComputedStyle(node);
         const canY =
             overflowCan(style.overflowY) &&
@@ -57,6 +79,32 @@ function isScrollableAncestor(el) {
         node = node.parentElement;
     }
     return null;
+}
+
+function feedScroller(el, dx, dy) {
+    const node = isScrollableAncestor(el);
+    if (!node) return false;
+    const style = window.getComputedStyle(node);
+    const canY = overflowCan(style.overflowY) && node.scrollHeight > node.clientHeight + 2;
+    const canX = overflowCan(style.overflowX) && node.scrollWidth > node.clientWidth + 2;
+
+    if (canY && Math.abs(dy) >= Math.abs(dx)) {
+        const max = node.scrollHeight - node.clientHeight;
+        const next = clamp(node.scrollTop + dy, 0, max);
+        if (Math.abs(next - node.scrollTop) < 0.4) return false;
+        node.scrollTop = next;
+        return true;
+    }
+
+    if (canX && Math.abs(dx) > Math.abs(dy)) {
+        const max = node.scrollWidth - node.clientWidth;
+        const next = clamp(node.scrollLeft + dx, 0, max);
+        if (Math.abs(next - node.scrollLeft) < 0.4) return false;
+        node.scrollLeft = next;
+        return true;
+    }
+
+    return false;
 }
 
 function feedHorizontalScroll(scroller, e) {
@@ -81,6 +129,7 @@ function feedHorizontalScroll(scroller, e) {
 }
 
 function readNativeY() {
+    if (flight.virtual) return flight.current;
     return (
         window.scrollY ||
         window.pageYOffset ||
@@ -90,13 +139,71 @@ function readNativeY() {
     );
 }
 
+function paintVirtual(y) {
+    if (!flight.shift) return;
+    flight.shift.style.setProperty('--cy-y', `${-y}px`);
+}
+
 function writeNativeY(y) {
     const v = clamp(y, 0, flight.max);
-    document.documentElement.scrollTop = v;
-    document.body.scrollTop = v;
-    if (Math.abs(readNativeY() - v) > 1) {
+    if (flight.virtual) {
+        paintVirtual(v);
+        return;
+    }
+    if (Math.abs(readNativeY() - v) < 0.25) return;
+    flight.ignoreNativeUntil = performance.now() + 120;
+    flight.writing = true;
+    try {
+        window.scrollTo({ top: v, left: 0, behavior: 'instant' });
+    } catch {
         window.scrollTo(0, v);
     }
+    if (Math.abs(readNativeY() - v) >= 0.5) {
+        document.documentElement.scrollTop = v;
+    }
+    flight.writing = false;
+}
+
+function keepOutsideShift(node) {
+    if (!(node instanceof Element)) return false;
+    const tag = node.tagName;
+    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'LINK') return true;
+    if (node.id === 'threeui-bg') return true;
+    if (node.classList.contains('navbar')) return true;
+    if (node.classList.contains('cy-rise')) return true;
+    if (node.classList.contains('page-transition-overlay')) return true;
+    if (node.classList.contains('cy-scroll-shift')) return true;
+    return false;
+}
+
+function installShift() {
+    if (flight.shift) return flight.shift;
+    const existing = document.querySelector('.cy-scroll-shift');
+    if (existing) {
+        flight.shift = existing;
+        return existing;
+    }
+    const body = document.body;
+    if (!body) return null;
+    const shift = document.createElement('div');
+    shift.className = 'cy-scroll-shift';
+    const migrate = [];
+    for (const child of [...body.childNodes]) {
+        if (keepOutsideShift(child)) continue;
+        migrate.push(child);
+    }
+    for (const node of migrate) shift.appendChild(node);
+    body.appendChild(shift);
+    flight.shift = shift;
+    return shift;
+}
+
+function stopRaf() {
+    if (flight.raf) {
+        cancelAnimationFrame(flight.raf);
+        flight.raf = 0;
+    }
+    flight.lastT = 0;
 }
 
 function publish() {
@@ -106,6 +213,9 @@ function publish() {
     root.style.setProperty('--cy-scroll-v', Math.min(1, Math.abs(flight.velocity) / 2400).toFixed(4));
     root.style.setProperty('--cy-scroll-dir', String(flight.direction));
     root.dataset.cyFlight = '1';
+    if (flight.virtual) {
+        window.dispatchEvent(new Event('scroll'));
+    }
 }
 
 function tick(now) {
@@ -115,6 +225,11 @@ function tick(now) {
     const t = now || performance.now();
     const dt = flight.lastT ? Math.min(0.05, (t - flight.lastT) / 1000) : 0.016;
     flight.lastT = t;
+
+    if (flight.touchActive) {
+        flight.raf = requestAnimationFrame(tick);
+        return;
+    }
 
     flight.max = measureMax();
     flight.target = clamp(flight.target, 0, flight.max);
@@ -231,35 +346,125 @@ function onWheel(e) {
 
 function onTouchStart(e) {
     if (flight.reduced || !flight.enabled) return;
-    if (isScrollableAncestor(e.target)) {
+    if (e.touches?.length > 1) {
         flight.touchActive = false;
+        flight.touchLock = null;
+        flight.touchX = null;
         flight.touchY = null;
         return;
     }
     if (!e.touches?.[0]) return;
+
+    stopRaf();
     flight.touchActive = true;
+    flight.touchLock = null;
+    flight.dragged = false;
+    flight.touchStartX = e.touches[0].clientX;
+    flight.touchStartY = e.touches[0].clientY;
+    flight.touchX = e.touches[0].clientX;
     flight.touchY = e.touches[0].clientY;
+    flight.touchVy = 0;
+    flight.touchT = performance.now();
+    flight.velocity = 0;
+
+    const y = readNativeY();
+    if (Math.abs(y - flight.current) > 1) {
+        flight.current = clamp(y, 0, flight.max);
+    }
+    flight.target = flight.current;
 }
 
 function onTouchMove(e) {
     if (!flight.touchActive || flight.reduced || !flight.enabled) return;
-    if (!e.touches?.[0] || flight.touchY == null) return;
-    if (isScrollableAncestor(e.target)) return;
+    if (!e.touches?.[0] || flight.touchY == null || flight.touchX == null) return;
+    if (e.touches.length > 1) {
+        flight.touchActive = false;
+        flight.touchLock = null;
+        return;
+    }
 
+    const x = e.touches[0].clientX;
     const y = e.touches[0].clientY;
+    const dxTotal = x - flight.touchStartX;
+    const dyTotal = y - flight.touchStartY;
+    const dx = flight.touchX - x;
     const dy = (flight.touchY - y) * flight.touchScale;
-    flight.touchY = y;
-    if (Math.abs(dy) < 0.2) return;
 
-    e.preventDefault();
+    if (!flight.touchLock) {
+        if (Math.hypot(dxTotal, dyTotal) < 8) return;
+        flight.touchLock = Math.abs(dxTotal) > Math.abs(dyTotal) * 1.15 ? 'x' : 'y';
+    }
+
+    const now = performance.now();
+    const dt = Math.max(8, now - (flight.touchT || now));
+
+    if (flight.touchLock === 'x') {
+        if (feedScroller(e.target, dx, 0)) {
+            if (e.cancelable) e.preventDefault();
+            flight.dragged = true;
+        }
+        flight.touchX = x;
+        flight.touchY = y;
+        flight.touchT = now;
+        return;
+    }
+
+    if (e.cancelable) e.preventDefault();
+
+    flight.touchVy = flight.touchVy * 0.55 + (dy / dt * 16.67) * 0.45;
+    flight.touchX = x;
+    flight.touchY = y;
+    flight.touchT = now;
+
+    if (Math.abs(dy) < 0.15) return;
+
+    flight.dragged = true;
+
+    if (feedScroller(e.target, 0, dy)) return;
+
     flight.max = measureMax();
-    flight.target = clamp(flight.target + dy, 0, flight.max);
+    const next = clamp(flight.current + dy, 0, flight.max);
+    flight.current = next;
+    flight.target = next;
+    flight.velocity = dy / (dt / 1000);
+    flight.direction = dy > 0.2 ? 1 : dy < -0.2 ? -1 : flight.direction;
+    flight.progress = clamp(flight.current / Math.max(1, flight.max), 0, 1);
+    flight.smoothProgress = flight.progress;
+    writeNativeY(flight.current);
+    if (now - (flight.lastPub || 0) > 80) {
+        flight.lastPub = now;
+        publish();
+    }
+}
+
+function onTouchEnd(e) {
+    const wasActive = flight.touchActive;
+    const wasDrag = flight.dragged;
+    const lock = flight.touchLock;
+    const vy = flight.touchVy;
+    const canceled = e.type === 'touchcancel';
+
+    flight.touchActive = false;
+    flight.touchX = null;
+    flight.touchY = null;
+    flight.touchLock = null;
+    flight.touchVy = 0;
+
+    if (!wasActive || canceled || lock !== 'y' || !wasDrag) return;
+
+    const flick = vy * 12;
+    if (Math.abs(flick) < 10) return;
+
+    flight.max = measureMax();
+    flight.target = clamp(flight.current + flick, 0, flight.max);
     kick();
 }
 
-function onTouchEnd() {
-    flight.touchActive = false;
-    flight.touchY = null;
+function onDragClick(e) {
+    if (!flight.dragged) return;
+    e.preventDefault();
+    e.stopPropagation();
+    flight.dragged = false;
 }
 
 function onKey(e) {
@@ -303,41 +508,51 @@ function onKey(e) {
 }
 
 function onNativeScroll() {
-    if (nativeTweening) return;
-    if (flight.enabled && flight.raf) return;
+    if (flight.virtual) return;
+    if (flight.writing || nativeTweening) return;
     if (flight.touchActive) return;
+    if (performance.now() < flight.ignoreNativeUntil) return;
 
     const y = readNativeY();
     flight.max = measureMax();
+
+    if (flight.enabled) {
+        if (flight.raf) return;
+        if (Math.abs(y - flight.current) < 2) return;
+        flight.current = clamp(y, 0, flight.max);
+        flight.target = flight.current;
+        flight.progress = clamp(flight.current / flight.max, 0, 1);
+        flight.smoothProgress = flight.progress;
+        flight.velocity = 0;
+        publish();
+        return;
+    }
+
     const prev = flight.current;
     flight.current = clamp(y, 0, flight.max);
     flight.target = flight.current;
     flight.progress = clamp(flight.current / flight.max, 0, 1);
-
-    if (!flight.enabled) {
-        const dy = flight.current - prev;
-        flight.velocity = dy * 45;
-        if (Math.abs(flight.velocity) < 0.5) flight.velocity = 0;
-        flight.direction = flight.velocity > 2 ? 1 : flight.velocity < -2 ? -1 : flight.direction * 0.9;
-
-        if (Math.abs(flight.progress - flight.smoothProgress) < 0.00001) {
-            flight.smoothProgress = flight.progress;
-        }
-    } else {
+    const dy = flight.current - prev;
+    flight.velocity = dy * 45;
+    if (Math.abs(flight.velocity) < 0.5) flight.velocity = 0;
+    flight.direction = flight.velocity > 2 ? 1 : flight.velocity < -2 ? -1 : flight.direction * 0.9;
+    if (Math.abs(flight.progress - flight.smoothProgress) < 0.00001) {
         flight.smoothProgress = flight.progress;
-        flight.velocity = 0;
     }
     publish();
-    if (!flight.enabled) kickNativePump();
+    kickNativePump();
 }
 
 function onResize() {
+    const prevMax = flight.max;
     flight.max = measureMax();
     flight.target = clamp(flight.target, 0, flight.max);
     flight.current = clamp(flight.current, 0, flight.max);
-    flight.progress = clamp(flight.current / flight.max, 0, 1);
+    if (flight.virtual) paintVirtual(flight.current);
+    if (flight.touchActive || flight.raf) return;
+    if (Math.abs(flight.max - prevMax) < 2) return;
+    flight.progress = clamp(flight.current / Math.max(1, flight.max), 0, 1);
     publish();
-    if (flight.enabled && !flight.reduced) kick();
 }
 
 export function getFlightState() {
@@ -452,28 +667,55 @@ function isTouchDevice() {
     }
 }
 
+function useVirtualScroll() {
+    try {
+        return (
+            window.matchMedia('(pointer: coarse)').matches ||
+            window.matchMedia('(max-width: 960px)').matches
+        );
+    } catch {
+        return isTouchDevice();
+    }
+}
+
 export function initScrollFlight() {
     if (flight.initialized || typeof window === 'undefined') return getFlightState;
     flight.initialized = true;
     flight.reduced = prefersReduced();
 
-    const touch = isTouchDevice();
-    flight.enabled = !flight.reduced && !touch;
-
-    flight.max = measureMax();
-    flight.current = clamp(readNativeY(), 0, flight.max);
-    flight.target = flight.current;
-    flight.progress = clamp(flight.current / flight.max, 0, 1);
-    flight.smoothProgress = flight.progress;
+    flight.touch = isTouchDevice();
+    flight.enabled = !flight.reduced;
+    flight.lerp = 0.085;
+    flight.touchScale = 1;
+    flight.virtual = flight.enabled && useVirtualScroll();
 
     document.documentElement.classList.add('cy-flight');
     if (!flight.enabled) {
         document.documentElement.classList.add('cy-flight--native');
     }
 
+    if (flight.virtual) {
+        document.documentElement.classList.add('cy-flight--touch');
+        installShift();
+        paintVirtual(0);
+    }
+
+    window.__cyScrollY = () => flight.current;
+
+    flight.max = measureMax();
+    flight.current = flight.virtual ? 0 : clamp(readNativeY(), 0, flight.max);
+    flight.target = flight.current;
+    flight.progress = clamp(flight.current / flight.max, 0, 1);
+    flight.smoothProgress = flight.progress;
+
     if (flight.enabled) {
         window.addEventListener('wheel', onWheel, { passive: false });
         window.addEventListener('keydown', onKey, { passive: false });
+        window.addEventListener('touchstart', onTouchStart, { passive: true, capture: true });
+        window.addEventListener('touchmove', onTouchMove, { passive: false, capture: true });
+        window.addEventListener('touchend', onTouchEnd, { passive: true, capture: true });
+        window.addEventListener('touchcancel', onTouchEnd, { passive: true, capture: true });
+        document.addEventListener('click', onDragClick, true);
     } else {
         window.addEventListener('touchstart', () => {
             if (!nativeTweening) return;
@@ -489,11 +731,7 @@ export function initScrollFlight() {
     }
 
     window.addEventListener('scroll', onNativeScroll, { passive: true });
-    document.addEventListener('scroll', onNativeScroll, { passive: true, capture: true });
     window.addEventListener('resize', onResize, { passive: true });
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', onResize, { passive: true });
-    }
 
     if (document.fonts?.ready) {
         document.fonts.ready.then(() => {

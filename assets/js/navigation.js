@@ -7,10 +7,11 @@ export function initNavigation() {
             if (!target) return;
             e.preventDefault();
             const instant = target.classList.contains('feature-chapter');
-            const top =
-                target.getBoundingClientRect().top +
-                (window.scrollY || document.documentElement.scrollTop || 0) -
-                88;
+            const nowY =
+                typeof window.__cyScrollY === 'function'
+                    ? window.__cyScrollY()
+                    : window.scrollY || document.documentElement.scrollTop || 0;
+            const top = target.getBoundingClientRect().top + nowY - 88;
             if (typeof window.__cyScrollTo === 'function') {
                 window.__cyScrollTo(Math.max(0, top), instant);
                 return;
@@ -41,7 +42,10 @@ export function initNavigation() {
             return;
         }
 
-        const currentScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+        const currentScrollY =
+            typeof window.__cyScrollY === 'function'
+                ? window.__cyScrollY()
+                : window.scrollY || document.documentElement.scrollTop || 0;
         const isScrolled = navbar.classList.contains('scrolled');
 
         if (!isScrolled && currentScrollY > SCROLL_ENTER) {

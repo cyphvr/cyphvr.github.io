@@ -1,10 +1,10 @@
-import { initNavigation } from './navigation.js?v=20260822v22';
-import { initAnimations } from './animations.js?v=20260822v18';
+import { initNavigation } from './navigation.js?v=20260826v4';
+import { initAnimations } from './animations.js?v=20260826v5';
 import { initCards } from './cards.js?v=20260822v17';
-import { initButtons } from './buttons.js?v=20260822v17';
+import { initButtons } from './buttons.js?v=20260826v4';
 import { initCommands } from './commands.js?v=20260823v16';
 import { initDeckDemo } from './deck-demo.js?v=20260822v16';
-import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260822v17';
+import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260826v4';
 
 function isLiteRuntime() {
     try {

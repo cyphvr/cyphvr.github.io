@@ -1,4 +1,5 @@
 function getScrollY() {
+    if (typeof window.__cyScrollY === 'function') return window.__cyScrollY();
 
     const doc = document.documentElement;
     const body = document.body;

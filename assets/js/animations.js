@@ -38,7 +38,10 @@ function skip(el) {
         el.closest('.navbar') ||
         el.closest('.page-transition-overlay') ||
         el.closest('.feature-chapter') ||
-        el.matches('.feature-chapter')
+        el.matches('.feature-chapter') ||
+        el.closest('.legal-layout') ||
+        el.matches('.legal-doc') ||
+        el.matches('.legal-toc')
     );
 }
 
@@ -108,7 +111,7 @@ function initReveals() {
 
     if (!targets.length) return;
 
-    if (reduced()) {
+    if (reduced() || document.documentElement.classList.contains('cy-lite')) {
         targets.forEach((el) => el.classList.add('is-visible'));
         return;
     }
@@ -121,14 +124,15 @@ function initReveals() {
                 io.unobserve(entry.target);
             });
         },
-        { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.14 }
+        { root: null, rootMargin: '20% 0px', threshold: 0 }
     );
 
     targets.forEach((el) => {
         const rect = el.getBoundingClientRect();
-        const nearTop = rect.top < window.innerHeight * 0.6 && rect.bottom > 40;
-        if (nearTop) {
-            requestAnimationFrame(() => el.classList.add('is-visible'));
+        const view = window.innerHeight || 800;
+        const onScreen = rect.bottom > 0 && rect.top < view;
+        if (onScreen) {
+            el.classList.add('is-visible');
         } else {
             io.observe(el);
         }
