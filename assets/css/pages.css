@@ -204,6 +204,14 @@
     margin-bottom: 1.25rem;
 }
 
+.feature-chapter .d-embed {
+    margin-top: 0.35rem;
+}
+
+.feature-chapter .d-embed__title {
+    display: none;
+}
+
 .bullet-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -248,21 +256,13 @@
 .about-split {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
-    border-bottom: 1px solid var(--line);
+    gap: 1rem;
+    padding-bottom: 1.5rem;
 }
 
 .about-split > * {
-    padding: 2.5rem 0;
-}
-
-.about-split > *:first-child {
-    padding-right: 2rem;
-    border-right: 1px solid var(--line);
-}
-
-.about-split > *:last-child {
-    padding-left: 2rem;
+    padding: 0;
+    border: 0;
 }
 
 .about-split h2 {
@@ -419,26 +419,9 @@
 
 .value-card {
     scroll-snap-align: start;
-    flex: 0 0 min(320px, 72vw);
-    width: min(320px, 72vw);
+    flex: 0 0 min(340px, 78vw);
+    width: min(340px, 78vw);
     min-height: 220px;
-    padding: 1.35rem;
-    border: 1px solid var(--line);
-    background: var(--paper-2);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.value-card h3 {
-    font-family: var(--font-serif);
-    font-size: 1.55rem;
-}
-
-.value-card p {
-    color: var(--ink-dim);
-    font-size: 0.92rem;
 }
 
 .status-board {

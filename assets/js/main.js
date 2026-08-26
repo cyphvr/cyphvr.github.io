@@ -2,10 +2,9 @@ import { initNavigation } from './navigation.js?v=20260822v22';
 import { initAnimations } from './animations.js?v=20260822v18';
 import { initCards } from './cards.js?v=20260822v17';
 import { initButtons } from './buttons.js?v=20260822v17';
-import { initCommands } from './commands.js?v=20260822v15';
+import { initCommands } from './commands.js?v=20260823v16';
 import { initDeckDemo } from './deck-demo.js?v=20260822v16';
 import { initScrollFlight, scrollToY } from './scroll-flight.js?v=20260822v17';
-import { initThreeBackground } from './three-bg-advanced.js?v=20260822v17';
 
 function isLiteRuntime() {
     try {
@@ -32,11 +31,11 @@ try {
 window.__cyScrollTo = scrollToY;
 
 if (!lite) {
-    try {
-        initThreeBackground();
-    } catch (error) {
-        console.error('Three.js background failed to initialize:', error);
-    }
+    import('./threeui-bg.js?v=20260823v17')
+        .then(({ initThreeBackground }) => initThreeBackground())
+        .catch((error) => {
+            console.error('ThreeUI background failed to initialize:', error);
+        });
 }
 
 function initPageTransitions() {

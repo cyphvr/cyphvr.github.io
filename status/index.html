@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cypher - Status</title>
     <meta name="description" content="Live Cypher bot status, uptime, and health history.">
-    <link rel="stylesheet" href="../assets/css/main.css?v=20260822v31">
+    <link rel="stylesheet" href="../assets/css/main.css?v=20260823v17">
     <link rel="icon" type="image/png" href="/images/cypher rebrand logo round (No BG).png">
     <style>
         :root { --status-ok: #6dcaa0; --status-warn: #e8b86d; }
@@ -59,30 +59,37 @@
                     <span id="statusChipLabel">Checking</span>
                 </span>
             </div>
-            <div class="status-hero-panel">
-                <section class="status-orb" id="statusOrb">
-                    <div>
-                        <p class="kicker">Cypher runtime</p>
-                        <h1 id="statusText">Checking systems…</h1>
+            <article class="d-post">
+                <img class="d-post__avatar" src="../images/cypher rebrand logo round (No BG).png" alt="">
+                <div>
+                    <div class="d-post__head">
+                        <span class="d-post__name">Cypher</span>
+                        <span class="d-post__tag">App</span>
+                        <span class="d-post__time">/status</span>
                     </div>
-                    <div class="status-live">
-                        <span class="dot" id="statusIndicator" aria-hidden="true"></span>
-                        <span id="statusMessage">Establishing connection with status endpoint.</span>
+                    <div class="d-embed d-embed--wide d-embed--ok" id="statusOrb">
+                        <div class="d-embed__bar"></div>
+                        <div class="d-embed__body">
+                            <h3 class="d-embed__title" id="statusText">Checking systems…</h3>
+                            <p class="d-embed__desc" id="statusMessage">Establishing connection with status endpoint.</p>
+                            <div class="d-embed__fields">
+                                <div class="d-embed__field">
+                                    <h4>Uptime</h4>
+                                    <p id="uptimeText">Checking…</p>
+                                </div>
+                                <div class="d-embed__field">
+                                    <h4>Refresh cycle</h4>
+                                    <p><span id="refreshIn">60</span>s</p>
+                                </div>
+                            </div>
+                            <div class="d-embed__footer">
+                                <img src="../images/cypher rebrand logo round (No BG).png" alt="">
+                                <span>Cypher runtime</span>
+                            </div>
+                        </div>
                     </div>
-                </section>
-                <div class="status-side">
-                    <article class="status-tile">
-                        <div class="label">Uptime</div>
-                        <div class="value" id="uptimeText">Checking…</div>
-                        <p class="hint">Availability estimate for the bot runtime.</p>
-                    </article>
-                    <article class="status-tile">
-                        <div class="label">Refresh cycle</div>
-                        <div class="value"><span id="refreshIn">60</span>s</div>
-                        <p class="hint">Automatic polling interval for status refresh.</p>
-                    </article>
                 </div>
-            </div>
+            </article>
             <section class="history-panel">
                 <header>
                     <h2>30-day history</h2>
@@ -144,12 +151,16 @@
     <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
+        "react": "https://esm.sh/react@19.2.8",
+        "react/jsx-runtime": "https://esm.sh/react@19.2.8/jsx-runtime",
+        "react-dom": "https://esm.sh/react-dom@19.2.8",
+        "react-dom/client": "https://esm.sh/react-dom@19.2.8/client",
+        "@designcodeio/threeui/components/FluidFieldBackground": "https://cdn.jsdelivr.net/npm/@designcodeio/threeui@0.3.0/lib-dist/package-components/FluidFieldBackground.js",
+        "three128": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js"
       }
     }
     </script>
-    <script type="module" src="../assets/js/main.js?v=20260822v25"></script>
+    <script type="module" src="../assets/js/main.js?v=20260823v17"></script>
     <script type="module">
         import { API_BASE } from '../assets/js/api-config.js';
         const CONFIG = {

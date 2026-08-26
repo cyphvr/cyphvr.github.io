@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "@designcodeio/threeui": "^0.3.0"
+    "@designcodeio/threeui": "^0.3.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   }
 }
