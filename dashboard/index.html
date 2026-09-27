@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Cypher · Logging</title>
+  <link rel="icon" type="image/png" href="https://cyphvr.xyz/images/cypher%20rebrand%20logo%20round%20(No%20BG).png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/dashboard/app.css" />
+</head>
+<body>
+  <section class="gate" id="gate">
+    <aside class="gate-brand">
+      <p class="kicker">Cypher · ops stack</p>
+      <h1>Decode the paper trail.</h1>
+      <p class="lede">One console for every event the room throws. Bans, deletes, joins — routed, not dumped.</p>
+      <ol class="ghost-logs" aria-hidden="true">
+        <li><span>04:02:11</span> member banned · #mod-logs</li>
+        <li><span>04:02:08</span> message deleted · #mod-logs</li>
+        <li><span>04:01:44</span> user joined · #join-leave</li>
+        <li><span>04:01:12</span> role updated · #server-logs</li>
+      </ol>
+    </aside>
+    <div class="gate-panel">
+      <div id="wrongHost" class="hide">
+        <p class="kicker">Wrong host</p>
+        <h2>This isn’t the dashboard.</h2>
+        <p>Port 5500 is a file preview. The real app is the bot’s dashboard — start Cypher and open:</p>
+        <p class="mono uri">http://127.0.0.1:10002/dashboard</p>
+      </div>
+      <div id="setup">
+        <p class="kicker">One-time setup</p>
+        <h2>Connect Discord OAuth</h2>
+        <p>Use the <strong>existing Cypher application</strong> in the Developer Portal — not a new app.</p>
+        <ol class="steps">
+          <li>Open <a href="https://discord.com/developers/applications" target="_blank" rel="noopener">discord.com/developers/applications</a></li>
+          <li>Select <strong>Cypher</strong> (client ID <span class="mono" id="clientId">1121314550969532476</span>)</li>
+          <li>Left sidebar → <strong>OAuth2</strong></li>
+          <li>Under <strong>Redirects</strong>, add exactly:<br /><code class="uri" id="redirectUri">https://cyphvr.xyz/dashboard/auth/callback</code></li>
+          <li>Save changes</li>
+          <li><strong>Reset Secret</strong>, copy it once, paste into <span class="mono">core/keys.py</span> as <span class="mono">DISCORD_CLIENT_SECRET</span></li>
+          <li>Restart the bot, then come back here</li>
+        </ol>
+      </div>
+      <div id="signIn" class="hide">
+        <p class="kicker">Staff only</p>
+        <h2>Sign in</h2>
+        <p>Discord OAuth. You only see servers you can manage where Cypher is already in the room.</p>
+        <a class="solid" id="loginBtn" href="/dashboard/auth/login">Continue with Discord</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="shell hide" id="page">
+    <aside class="rail">
+      <a class="brand" href="https://cyphvr.xyz" target="_blank" rel="noopener">
+        <img class="mark-img" src="https://cyphvr.xyz/images/cypher%20rebrand%20logo%20round%20(No%20BG).png" width="36" height="36" alt="Cypher" />
+        <div>
+          <strong>Cypher</strong>
+          <span>Logging</span>
+        </div>
+      </a>
+      <p class="rail-label">Servers</p>
+      <div class="servers" id="guilds"></div>
+      <div class="rail-foot">
+        <img id="avatar" alt="" hidden />
+        <div>
+          <div id="username"></div>
+          <button type="button" id="logout">Sign out</button>
+        </div>
+      </div>
+    </aside>
+    <main class="workspace">
+      <header>
+        <p class="kicker">01 · Event routing</p>
+        <h1 id="guildName">Logging</h1>
+        <p class="sub">Bulk for everything. A group when you want a split. One event when it has to be surgical. Off goes quiet.</p>
+      </header>
+      <div class="toolbar">
+        <div class="tabs" id="tabs"></div>
+        <div class="tools">
+          <input class="search" id="search" placeholder="Find an event" />
+          <label class="send">All events
+            <select id="defaultChannel"></select>
+          </label>
+          <span class="mono stat" id="summary"></span>
+        </div>
+      </div>
+      <div class="list" id="list"></div>
+    </main>
+  </div>
+
+  <div class="save" id="save">
+    <p>Unsaved routing</p>
+    <button class="no" type="button" id="discard">Discard</button>
+    <button class="go" type="button" id="saveBtn">Save</button>
+  </div>
+  <div class="toast" id="toast">Saved</div>
+  <script src="/dashboard/app.js" defer></script>
+</body>
+</html>
